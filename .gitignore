@@ -1,0 +1,6 @@
+# binary
+etime
+
+# development
+.env
+*.swp
