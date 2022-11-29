@@ -44,6 +44,11 @@ func main() {
 		log.Panicf("Error: EMPORIA_DEVICE environment variable not set\n")
 	}
 
+	available, _ := EmporiaStatus()
+	if !available {
+		log.Panicf("Error: Cannot measure energy during Emporia maintenance\n")
+	}
+
 	// perform and observe the command
 	startTime := time.Now().UTC()
 

@@ -36,3 +36,19 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 
 	return e.chart.UsageList, nil
 }
+
+// EmporiaStatus returns if the Emporia API is available
+func EmporiaStatus() (bool, error) {
+
+	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
+	EmporiaStatusURL := "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/maintenance/maintenance.json"
+
+	resp, err := http.Get(EmporiaStatusURL)
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	status := resp.StatusCode == 403
+	return status, nil
+}
