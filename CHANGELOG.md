@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Check the status of Emporia's API before performing command
+
 ## [0.0.1] - 2022-11-27
 
 ### Added
