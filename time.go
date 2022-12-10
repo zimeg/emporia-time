@@ -57,15 +57,18 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error: Failed to execute command (%v)\n", err)
 	}
+
 	endTime := time.Now().UTC()
-	e.elapsedTime = endTime.Sub(startTime)
+	elapsedTime := endTime.Sub(startTime)
 
 	// query emporia for usage stats
 	time.Sleep(2 * time.Second) // delay to respect latency
-	_, err = e.LookupEnergyUsage(startTime, endTime)
+	chart, err := e.LookupEnergyUsage(startTime, endTime)
 	if err != nil {
 		log.Panicf("Error: Failed to gather energy usage data (%v)\n", err)
 	}
 
-	fmt.Printf("%12.2f watt %11.1f%% sure\n", e.usage, e.sureness*100)
+	// display the estimated usage stats
+	usage, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+	fmt.Printf("%12.2f watt %11.1f%% sure\n", usage, sureness*100)
 }
