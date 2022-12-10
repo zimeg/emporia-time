@@ -22,8 +22,8 @@ $ export EMPORIA_DEVICE=your-deviceGid
 5. From a directory for development, download the source and compile `etime`:
 
 ```sh
-$ git clone https://github.com/e-zim/etime.git
-$ cd etime
+$ git clone https://github.com/e-zim/emporia-time.git
+$ cd emporia-time
 $ make build
 ```
 
@@ -31,7 +31,7 @@ $ make build
 `/bin` to run the command globally:
 
 ```sh
-$ ln -s ~/path/to/repo/etime /usr/local/bin
+$ ln -s ~/path/to/emporia-time/etime /usr/local/bin
 
 $ mv etime /usr/local/bin
 ```
