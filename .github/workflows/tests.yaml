@@ -15,6 +15,11 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: '1.19.x'
-      - run: test -z $(gofmt -l .)
-      - run: go test
-
+      - name: Install dependencies
+        run: go get
+      - name: Build binary
+        run: go build
+      - name: Check formatting
+        run: test -z $(gofmt -l .)
+      - name: Run tests
+        run: go test
