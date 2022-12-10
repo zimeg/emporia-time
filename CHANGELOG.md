@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Check the status of Emporia's API before performing command
+- Tests for energy conversions and usage extrapolation
+- Linting checks and automated tests added on GitHub Actions
+
+### Changed
+
+- Repository name changed to `emporia-time`
+- Go version updated to 1.19
 
 ## [0.0.1] - 2022-11-27
 
@@ -23,5 +30,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the MIT license
 - Created a CHANGELOG
 
-[Unreleased]: https://github.com/e-zim/etime/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/e-zim/etime/releases/tag/v0.0.1
+[Unreleased]: https://github.com/e-zim/emporia-time/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/e-zim/emporia-time/releases/tag/v0.0.1

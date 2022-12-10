@@ -1,3 +1,3 @@
-module github.com/e-zim/etime
+module github.com/e-zim/emporia-etime
 
-go 1.18
+go 1.19
