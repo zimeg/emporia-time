@@ -33,16 +33,9 @@ func TimeExec(args ...string) error {
 
 // main executes the command and displays energy stats
 func main() {
-	e := &Emporia{
-		token:  os.Getenv("EMPORIA_TOKEN"),
-		device: os.Getenv("EMPORIA_DEVICE"),
-	}
-	if e.token == "" {
-		log.Panicf("Error: EMPORIA_TOKEN environment variable not set\n")
-	}
-	if e.device == "" {
-		log.Panicf("Error: EMPORIA_DEVICE environment variable not set\n")
-	}
+	e := new(Emporia)
+	e.SetToken()
+	e.SetDevice()
 
 	available, _ := EmporiaStatus()
 	if !available {
