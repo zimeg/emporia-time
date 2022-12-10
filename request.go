@@ -12,6 +12,38 @@ import (
 
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
 
+type Emporia struct {
+	device      string
+	token       string
+	resp        EmporiaUsageResp
+	chart       []float64
+	usage       float64
+	elapsedTime time.Duration
+	sureness    float64
+}
+
+type EmporiaUsageResp struct {
+	Message           string
+	FirstUsageInstant string
+	UsageList         []float64
+}
+
+// LookupEnergyUsage gathers device usage stats between the start and end times
+func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
+	params := formatUsageParams(e.device, start, end)
+	chart, err := e.getEnergyUsage(params)
+	if err != nil {
+		return []float64{}, err
+	}
+
+	for ii, kwh := range chart {
+		chart[ii] = ScaleKWhToWs(kwh)
+	}
+
+	e.usage, e.sureness = ExtrapolateUsage(chart, e.elapsedTime.Seconds())
+	return chart, nil
+}
+
 // getEnergyUsage performs a GET request to `/AppAPI` with configured params
 func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	EmporiaURL := fmt.Sprintf("%s/AppAPI?%s", EmporiaBaseURL, params.Encode())
