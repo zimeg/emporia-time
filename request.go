@@ -7,9 +7,42 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
+
+type Emporia struct {
+	device      string
+	token       string
+	resp        EmporiaUsageResp
+	chart       []float64
+	usage       float64
+	elapsedTime time.Duration
+	sureness    float64
+}
+
+type EmporiaUsageResp struct {
+	Message           string
+	FirstUsageInstant string
+	UsageList         []float64
+}
+
+// LookupEnergyUsage gathers device usage stats between the start and end times
+func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
+	params := formatUsageParams(e.device, start, end)
+	chart, err := e.getEnergyUsage(params)
+	if err != nil {
+		return []float64{}, err
+	}
+
+	for ii, kwh := range chart {
+		chart[ii] = ScaleKWhToWs(kwh)
+	}
+
+	e.usage, e.sureness = ExtrapolateUsage(chart, e.elapsedTime.Seconds())
+	return chart, nil
+}
 
 // getEnergyUsage performs a GET request to `/AppAPI` with configured params
 func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
@@ -26,15 +59,30 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 
-	err = json.Unmarshal(body, &e.chart)
+	err = json.Unmarshal(body, &e.resp)
 	if err != nil {
 		return []float64{}, err
 	}
-	if e.chart.Message != "" {
-		return []float64{}, errors.New(e.chart.Message)
+	if e.resp.Message != "" {
+		return []float64{}, errors.New(e.resp.Message)
 	}
 
-	return e.chart.UsageList, nil
+	return e.resp.UsageList, nil
+}
+
+func formatUsageParams(device string, start time.Time, end time.Time) url.Values {
+
+	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
+	params := url.Values{}
+	params.Set("apiMethod", "getChartUsage")
+	params.Set("deviceGid", device)
+	params.Set("channel", "1,2,3") // ?
+	params.Set("start", start.Format(time.RFC3339))
+	params.Set("end", end.Format(time.RFC3339))
+	params.Set("scale", "1S")
+	params.Set("energyUnit", "KilowattHours")
+
+	return params
 }
 
 // EmporiaStatus returns if the Emporia API is available

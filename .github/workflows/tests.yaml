@@ -1,0 +1,25 @@
+name: lint-and-test
+run-name: Lint and test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.19.x'
+      - name: Install dependencies
+        run: go get
+      - name: Build binary
+        run: go build
+      - name: Check formatting
+        run: test -z $(gofmt -l .)
+      - name: Run tests
+        run: go test
