@@ -5,8 +5,11 @@ BIN=etime
 build:
 	go build -o $(BIN)
 
-test: build
+run: build
 	./$(BIN) sleep 4
+
+test: build
+	go test
 
 clean:
 	rm -f $(BIN)
