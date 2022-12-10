@@ -1,0 +1,17 @@
+name: lint-and-test
+run-name: Lint and test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: test -z $(gofmt -l .)
+      - run: go test
+
