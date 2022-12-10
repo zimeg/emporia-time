@@ -21,7 +21,12 @@ type EmporiaUsageResp struct {
 	UsageList         []float64
 }
 
+var HourToSeconds float64 = 3600
+var KiloToUnit float64 = 1000
 
+func ScaleKWhToWs(kwh float64) float64 {
+	return kwh * KiloToUnit * HourToSeconds
+}
 
 // LookupEnergyUsage gathers device usage stats between the start and end times
 func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
@@ -31,28 +36,31 @@ func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, 
 		return []float64{}, err
 	}
 
-	_ = e.extrapolateUsage()
+	for ii, kwh := range chart {
+		chart[ii] = ScaleKWhToWs(kwh)
+	}
+
+	e.usage, e.sureness = ExtrapolateUsage(chart, e.elapsedTime.Seconds())
 	return chart, nil
 }
 
 // extrapolateUsage scales the average measured energy rate over the elapsed
 // time to account for missing measurements, returning estimated watts
-func (e *Emporia) extrapolateUsage() float64 {
-	var measuredUsage float64 = 0
-	for _, uu := range e.chart.UsageList {
-		measuredUsage += uu * 3600 * 1000 // convert kWh to W
+func ExtrapolateUsage(measured []float64, durr float64) (float64, float64) {
+	var sum float64 = 0
+	for _, mm := range measured {
+		sum += mm
 	}
 
 	// scale the summation across the entire duration
-	var seconds float64 = e.elapsedTime.Seconds()
-	var measurements = len(e.chart.UsageList)
-	e.usage = measuredUsage * (seconds / float64(measurements))
+	measurements := len(measured)
+	estimated := sum * (durr / float64(measurements))
 
-	// share the observed-to-expected measurement ratio
-	e.sureness = 0
-	if e.usage > 0.0 {
-		e.sureness = float64(measurements) / math.Ceil(seconds)
+	// calculate the observed-to-expected measurement ratio
+	var sureness float64 = 0
+	if estimated > 0.0 {
+		sureness = float64(measurements) / math.Ceil(durr)
 	}
 
-	return e.usage
+	return estimated, sureness
 }
