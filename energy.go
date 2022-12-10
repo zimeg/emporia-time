@@ -2,38 +2,30 @@ package main
 
 import (
 	"math"
-	"net/url"
 	"time"
 )
 
 type Emporia struct {
 	device      string
 	token       string
-	chart       EmporiaUsageChart
+	resp        EmporiaUsageResp
+	chart       []float64
 	usage       float64
 	elapsedTime time.Duration
 	sureness    float64
 }
 
-type EmporiaUsageChart struct {
+type EmporiaUsageResp struct {
 	Message           string
 	FirstUsageInstant string
 	UsageList         []float64
 }
 
+
+
 // LookupEnergyUsage gathers device usage stats between the start and end times
 func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
-
-	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
-	params := url.Values{}
-	params.Set("apiMethod", "getChartUsage")
-	params.Set("deviceGid", e.device)
-	params.Set("channel", "1,2,3") // ?
-	params.Set("start", start.Format(time.RFC3339))
-	params.Set("end", end.Format(time.RFC3339))
-	params.Set("scale", "1S")
-	params.Set("energyUnit", "KilowattHours")
-
+	params := formatUsageParams(e.device, start, end)
 	chart, err := e.getEnergyUsage(params)
 	if err != nil {
 		return []float64{}, err

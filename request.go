@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
@@ -26,15 +27,30 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 
-	err = json.Unmarshal(body, &e.chart)
+	err = json.Unmarshal(body, &e.resp)
 	if err != nil {
 		return []float64{}, err
 	}
-	if e.chart.Message != "" {
-		return []float64{}, errors.New(e.chart.Message)
+	if e.resp.Message != "" {
+		return []float64{}, errors.New(e.resp.Message)
 	}
 
-	return e.chart.UsageList, nil
+	return e.resp.UsageList, nil
+}
+
+func formatUsageParams(device string, start time.Time, end time.Time) url.Values {
+
+	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
+	params := url.Values{}
+	params.Set("apiMethod", "getChartUsage")
+	params.Set("deviceGid", device)
+	params.Set("channel", "1,2,3") // ?
+	params.Set("start", start.Format(time.RFC3339))
+	params.Set("end", end.Format(time.RFC3339))
+	params.Set("scale", "1S")
+	params.Set("energyUnit", "KilowattHours")
+
+	return params
 }
 
 // EmporiaStatus returns if the Emporia API is available
