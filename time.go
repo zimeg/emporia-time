@@ -34,8 +34,7 @@ func TimeExec(args ...string) error {
 // main executes the command and displays energy stats
 func main() {
 	e := new(Emporia)
-	e.SetToken()
-	e.SetDevice()
+	e.Init()
 
 	available, _ := EmporiaStatus()
 	if !available {

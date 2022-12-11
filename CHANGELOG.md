@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Config file stored in `~/.config/etime/settings.json`
+- Config file respects `$XDG_CONFIG_HOME` environment variable
 - Repository name changed to `emporia-time`
 - Go version updated to 1.19
 

@@ -13,9 +13,8 @@ import (
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
 
 type Emporia struct {
-	device string
-	token  string
 	resp   EmporiaUsageResp
+	config *EmporiaConfig
 }
 
 type EmporiaUsageResp struct {
@@ -26,7 +25,7 @@ type EmporiaUsageResp struct {
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
 func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
-	params := formatUsageParams(e.device, start, end)
+	params := formatUsageParams(e.config.EmporiaDevice, start, end)
 	chart, err := e.getEnergyUsage(params)
 	if err != nil {
 		return []float64{}, err
@@ -61,7 +60,7 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", EmporiaURL, nil)
-	req.Header.Add("authToken", e.token)
+	req.Header.Add("authToken", e.config.EmporiaToken)
 
 	resp, err := client.Do(req)
 	if err != nil {
