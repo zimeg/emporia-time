@@ -10,7 +10,7 @@ The `time` command, with energy awareness.
 tab.
 
 3. Open "Inspect Element" then open the "Network" tab. Click on an `AppAPI`
-request and locate the `authToken` and `deviceGid`. Save these for later.
+request and locate the `deviceGid` you want to use. Save these for later.
 
 4. From a directory for development, download the source and compile `etime`:
 
@@ -29,13 +29,14 @@ $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
 $ mv etime /usr/local/bin
 ```
 
-6. Update your `~/.config/etime/settings.json` file with your Emporia info from
-step 3:
+6. Update your `~/.config/etime/settings.json` file with your `deviceGid` from
+step 3 and Emporia credentials:
 
 ```json
 {
   "EmporiaDevice": "012345",
-  "EmporiaToken": "eyJ...o8Q"
+  "EmporiaUsername": "you@email.com",
+  "EmporiaPassword": "password123"
 }
 ```
 
