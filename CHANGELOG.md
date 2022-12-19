@@ -10,15 +10,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Check the status of Emporia's API before performing command
+- Gather API tokens from AWS Cognito using Emporia credentials
 - Tests for energy conversions and usage extrapolation
 - Linting checks and automated tests added on GitHub Actions
 
 ### Changed
 
-- Config file stored in `~/.config/etime/settings.json`
-- Config file respects `$XDG_CONFIG_HOME` environment variable
+- Config stored in `~/.config/etime/settings.json`
+- Config file respects `XDG_CONFIG_HOME` environment variable
 - Repository name changed to `emporia-time`
 - Go version updated to 1.19
+
+### Removed
+
+- Tokens stored in environment variables
 
 ## [0.0.1] - 2022-11-27
 

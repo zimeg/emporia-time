@@ -4,25 +4,49 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"time"
 )
 
 type EmporiaConfig struct {
-	EmporiaDevice string
-	EmporiaToken  string
+	EmporiaDevice  string
+	EmporiaToken   string
+	EmporiaRefresh string
+	EmporiaExpires time.Time
+
+	EmporiaUsername string
+	EmporiaPassword string
 }
 
+// Init collects and sets the tokens needed when calling the Emporia API
 func (e *Emporia) Init() {
 	config := new(EmporiaConfig)
-	config.ParseConfig()
+	config.LoadConfig()
 
-	// TODO update expired EmporiaToken
+	// generate new authentication tokens or refresh expired tokens
+	if config.EmporiaToken == "" || config.EmporiaRefresh == "" {
+
+		// TODO collect these at runtime, not from config
+		if config.EmporiaUsername == "" || config.EmporiaPassword == "" {
+			log.Fatalf("Emporia username or password not set in config\n")
+		}
+
+		username := config.EmporiaUsername
+		password := config.EmporiaPassword
+
+		tokens := GenerateTokens(username, password)
+		config.SaveTokens(tokens)
+
+	} else if time.Now().After(config.EmporiaExpires) {
+		tokens := RefreshTokens(config.EmporiaRefresh)
+		config.SaveTokens(tokens)
+	}
 
 	config.SaveConfig()
 	e.config = config
 }
 
-// ParseConfig unmarshals stored config data
-func (c *EmporiaConfig) ParseConfig() {
+// LoadConfig unmarshals stored config data
+func (conf *EmporiaConfig) LoadConfig() {
 	configFilePath := findConfigFilePath()
 	data, err := os.ReadFile(configFilePath)
 	if err != nil {
@@ -30,7 +54,7 @@ func (c *EmporiaConfig) ParseConfig() {
 	}
 
 	if len(data) > 0 {
-		err := json.Unmarshal(data, &c)
+		err := json.Unmarshal(data, &conf)
 		if err != nil {
 			log.Panicf("Failed to parse config file: %s\n", err)
 		}
@@ -38,9 +62,9 @@ func (c *EmporiaConfig) ParseConfig() {
 }
 
 // SaveConfig saves config data to the config file
-func (c *EmporiaConfig) SaveConfig() {
+func (conf *EmporiaConfig) SaveConfig() {
 	configFilePath := findConfigFilePath()
-	data, err := json.MarshalIndent(c, "", "\t")
+	data, err := json.MarshalIndent(conf, "", "\t")
 	if err != nil {
 		log.Panicf("Failed to encode config data: %s\n", err)
 	}
@@ -51,7 +75,7 @@ func (c *EmporiaConfig) SaveConfig() {
 	}
 }
 
-// findConfigFilePath returns a path to stored local credentials
+// findConfigFilePath returns the path to stored local credentials
 func findConfigFilePath() string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
