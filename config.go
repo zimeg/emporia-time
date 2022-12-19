@@ -12,9 +12,6 @@ type EmporiaConfig struct {
 	EmporiaToken   string
 	EmporiaRefresh string
 	EmporiaExpires time.Time
-
-	EmporiaUsername string
-	EmporiaPassword string
 }
 
 // Init collects and sets the tokens needed when calling the Emporia API
@@ -24,15 +21,7 @@ func (e *Emporia) Init() {
 
 	// generate new authentication tokens or refresh expired tokens
 	if config.EmporiaToken == "" || config.EmporiaRefresh == "" {
-
-		// TODO collect these at runtime, not from config
-		if config.EmporiaUsername == "" || config.EmporiaPassword == "" {
-			log.Fatalf("Emporia username or password not set in config\n")
-		}
-
-		username := config.EmporiaUsername
-		password := config.EmporiaPassword
-
+		username, password := collectCredentials()
 		tokens := GenerateTokens(username, password)
 		config.SaveTokens(tokens)
 

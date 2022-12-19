@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -27,7 +29,7 @@ func GenerateTokens(username string, password string) *cognito.AuthenticationRes
 
 	user, err := client.InitiateAuth(auth)
 	if err != nil {
-		log.Fatalf("Failed to authenticate with cognito: %s\n", err)
+		log.Fatalf("Failed to authenticate with Cognito: %s\n", err)
 	}
 
 	return user.AuthenticationResult
@@ -47,7 +49,7 @@ func RefreshTokens(token string) *cognito.AuthenticationResultType {
 
 	user, err := client.InitiateAuth(auth)
 	if err != nil {
-		log.Fatalf("Failed to re-authenticate with cognito: %s\n", err)
+		log.Fatalf("Failed to re-authenticate with Cognito: %s\n", err)
 	}
 
 	return user.AuthenticationResult
@@ -77,4 +79,17 @@ func createCognitoClient() *cognito.CognitoIdentityProvider {
 
 	client := cognito.New(sess)
 	return client
+}
+
+// collectCredentials prompts for an Emporia username and password
+func collectCredentials() (string, string) {
+	var username string
+	var password string
+
+	fmt.Printf("Enter your Emporia credentials <https://web.emporiaenergy.com/>\n")
+	survey.AskOne(&survey.Input{Message: "Username"}, &username)
+	survey.AskOne(&survey.Password{Message: "Password"}, &password)
+	fmt.Printf("\n")
+
+	return username, password
 }
