@@ -10,16 +10,9 @@ The `time` command, with energy awareness.
 tab.
 
 3. Open "Inspect Element" then open the "Network" tab. Click on an `AppAPI`
-request and copy the `authToken`.
+request and locate the `deviceGid` you want to use. Save this for later.
 
-4. In your terminal, run the following commands with your own token and device:
-
-```sh
-$ export EMPORIA_TOKEN=your-authToken
-$ export EMPORIA_DEVICE=your-deviceGid
-```
-
-5. From a directory for development, download the source and compile `etime`:
+4. From a directory for development, download the source and compile `etime`:
 
 ```sh
 $ git clone https://github.com/e-zim/emporia-time.git
@@ -27,13 +20,22 @@ $ cd emporia-time
 $ make build
 ```
 
-6. Optionally, create a symbolic link to or move the compiled binary into your
+5. Optionally, create a symbolic link to or move the compiled binary into your
 `/bin` to run the command globally:
 
 ```sh
 $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
 
 $ mv etime /usr/local/bin
+```
+
+6. Update your `~/.config/etime/settings.json` file with your `deviceGid` from
+step 3:
+
+```json
+{
+  "EmporiaDevice": "012345"
+}
 ```
 
 7. Use the binary with your favorite command or script:

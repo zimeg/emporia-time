@@ -13,13 +13,8 @@ import (
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
 
 type Emporia struct {
-	device      string
-	token       string
-	resp        EmporiaUsageResp
-	chart       []float64
-	usage       float64
-	elapsedTime time.Duration
-	sureness    float64
+	resp   EmporiaUsageResp
+	config *EmporiaConfig
 }
 
 type EmporiaUsageResp struct {
@@ -28,9 +23,9 @@ type EmporiaUsageResp struct {
 	UsageList         []float64
 }
 
-// LookupEnergyUsage gathers device usage stats between the start and end times
+// LookupEnergyUsage gathers device watt usage between the start and end times
 func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
-	params := formatUsageParams(e.device, start, end)
+	params := formatUsageParams(e.config.EmporiaDevice, start, end)
 	chart, err := e.getEnergyUsage(params)
 	if err != nil {
 		return []float64{}, err
@@ -40,8 +35,23 @@ func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, 
 		chart[ii] = ScaleKWhToWs(kwh)
 	}
 
-	e.usage, e.sureness = ExtrapolateUsage(chart, e.elapsedTime.Seconds())
 	return chart, nil
+}
+
+// formatUsageParams returns URL values for the API
+func formatUsageParams(device string, start time.Time, end time.Time) url.Values {
+	params := url.Values{}
+
+	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
+	params.Set("apiMethod", "getChartUsage")
+	params.Set("deviceGid", device)
+	params.Set("channel", "1,2,3") // ?
+	params.Set("start", start.Format(time.RFC3339))
+	params.Set("end", end.Format(time.RFC3339))
+	params.Set("scale", "1S")
+	params.Set("energyUnit", "KilowattHours")
+
+	return params
 }
 
 // getEnergyUsage performs a GET request to `/AppAPI` with configured params
@@ -50,7 +60,7 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", EmporiaURL, nil)
-	req.Header.Add("authToken", e.token)
+	req.Header.Add("authToken", e.config.EmporiaToken)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -68,21 +78,6 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	}
 
 	return e.resp.UsageList, nil
-}
-
-func formatUsageParams(device string, start time.Time, end time.Time) url.Values {
-
-	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
-	params := url.Values{}
-	params.Set("apiMethod", "getChartUsage")
-	params.Set("deviceGid", device)
-	params.Set("channel", "1,2,3") // ?
-	params.Set("start", start.Format(time.RFC3339))
-	params.Set("end", end.Format(time.RFC3339))
-	params.Set("scale", "1S")
-	params.Set("energyUnit", "KilowattHours")
-
-	return params
 }
 
 // EmporiaStatus returns if the Emporia API is available
