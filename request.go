@@ -5,9 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/AlecAivazis/survey/v2"
 )
 
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
@@ -21,6 +24,17 @@ type EmporiaUsageResp struct {
 	Message           string
 	FirstUsageInstant string
 	UsageList         []float64
+}
+
+type EmporiaDeviceResp struct {
+	Devices []EmporiaDevice
+}
+
+type EmporiaDevice struct {
+	DeviceGid          int
+	LocationProperties struct {
+		DeviceName string
+	}
 }
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
@@ -94,4 +108,61 @@ func EmporiaStatus() (bool, error) {
 
 	status := resp.StatusCode == 403
 	return status, nil
+}
+
+// TODO refactor, split, remove conf
+func (conf *EmporiaConfig) selectAvailableDevices() string {
+
+	// gather device info
+	EmporiaDeviceURL := EmporiaBaseURL + "/customers/devices"
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", EmporiaDeviceURL, nil)
+	req.Header.Add("authToken", conf.EmporiaToken)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to gather device information: %s\n", err)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	var devs EmporiaDeviceResp
+	err = json.Unmarshal(body, &devs)
+	if err != nil {
+		log.Fatalf("Failed to parse device information: %s\n", err)
+	}
+
+	// select a device
+	if len(devs.Devices) == 0 {
+		log.Fatalf("No devices found")
+	}
+
+	var devices []string
+	var gids []int
+
+	for _, val := range devs.Devices {
+		devices = append(devices, val.LocationProperties.DeviceName)
+		gids = append(gids, val.DeviceGid)
+	}
+
+	var selected string
+	prompt := &survey.Select{
+		Message: "Select a device:",
+		Options: devices,
+		Description: func(value string, index int) string {
+			return fmt.Sprintf("#%d", gids[index])
+		},
+	}
+	survey.AskOne(prompt, &selected)
+	fmt.Printf("\n")
+
+	var gid int
+	for index, val := range devices {
+		if val == selected {
+			gid = gids[index]
+		}
+	}
+
+	return fmt.Sprintf("%d", gid)
 }

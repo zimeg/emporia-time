@@ -30,6 +30,11 @@ func (e *Emporia) Init() {
 		config.SaveTokens(tokens)
 	}
 
+	// select an available device
+	if config.EmporiaDevice == "" {
+		config.EmporiaDevice = config.selectAvailableDevices()
+	}
+
 	config.SaveConfig()
 	e.config = config
 }
