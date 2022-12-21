@@ -13,3 +13,4 @@ test: build
 
 clean:
 	rm -f $(BIN)
+	rm -rf ~/.config/etime

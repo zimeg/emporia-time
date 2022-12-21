@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"os"
 	"time"
@@ -44,6 +45,10 @@ func (e *Emporia) Init() {
 func (conf *EmporiaConfig) LoadConfig() {
 	configFilePath := findConfigFilePath()
 	data, err := os.ReadFile(configFilePath)
+	if errors.Is(err, os.ErrNotExist) {
+		return
+	}
+
 	if err != nil {
 		log.Panicf("Failed to read config file: %s\n", err)
 	}
