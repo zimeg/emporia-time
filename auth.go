@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"time"
 
-	"github.com/AlecAivazis/survey/v2"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -79,17 +77,4 @@ func createCognitoClient() *cognito.CognitoIdentityProvider {
 
 	client := cognito.New(sess)
 	return client
-}
-
-// collectCredentials prompts for an Emporia username and password
-func collectCredentials() (string, string) {
-	var username string
-	var password string
-
-	fmt.Printf("Enter your Emporia credentials <https://web.emporiaenergy.com/>\n")
-	survey.AskOne(&survey.Input{Message: "Username"}, &username)
-	survey.AskOne(&survey.Password{Message: "Password"}, &password)
-	fmt.Printf("\n")
-
-	return username, password
 }

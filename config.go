@@ -32,7 +32,8 @@ func (e *Emporia) Init() {
 
 	// select an available device
 	if config.EmporiaDevice == "" {
-		config.EmporiaDevice = config.selectAvailableDevices()
+		devices := config.getAvailableDevices()
+		config.EmporiaDevice = selectDevice(devices)
 	}
 
 	config.SaveConfig()

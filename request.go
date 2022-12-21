@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/AlecAivazis/survey/v2"
 )
 
 var EmporiaBaseURL = "https://api.emporiaenergy.com"
@@ -111,7 +109,7 @@ func EmporiaStatus() (bool, error) {
 }
 
 // TODO refactor, split, remove conf
-func (conf *EmporiaConfig) selectAvailableDevices() string {
+func (conf *EmporiaConfig) getAvailableDevices() []EmporiaDevice {
 
 	// gather device info
 	EmporiaDeviceURL := EmporiaBaseURL + "/customers/devices"
@@ -133,36 +131,5 @@ func (conf *EmporiaConfig) selectAvailableDevices() string {
 		log.Fatalf("Failed to parse device information: %s\n", err)
 	}
 
-	// select a device
-	if len(devs.Devices) == 0 {
-		log.Fatalf("No devices found")
-	}
-
-	var devices []string
-	var gids []int
-
-	for _, val := range devs.Devices {
-		devices = append(devices, val.LocationProperties.DeviceName)
-		gids = append(gids, val.DeviceGid)
-	}
-
-	var selected string
-	prompt := &survey.Select{
-		Message: "Select a device:",
-		Options: devices,
-		Description: func(value string, index int) string {
-			return fmt.Sprintf("#%d", gids[index])
-		},
-	}
-	survey.AskOne(prompt, &selected)
-	fmt.Printf("\n")
-
-	var gid int
-	for index, val := range devices {
-		if val == selected {
-			gid = gids[index]
-		}
-	}
-
-	return fmt.Sprintf("%d", gid)
+	return devs.Devices
 }
