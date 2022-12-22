@@ -33,7 +33,7 @@ func (e *Emporia) Init() {
 
 	// select an available device
 	if config.EmporiaDevice == "" {
-		devices := config.getAvailableDevices()
+		devices := getAvailableDevices(config.EmporiaToken)
 		config.EmporiaDevice = selectDevice(devices)
 	}
 

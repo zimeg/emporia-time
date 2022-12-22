@@ -108,15 +108,13 @@ func EmporiaStatus() (bool, error) {
 	return status, nil
 }
 
-// TODO refactor, split, remove conf
-func (conf *EmporiaConfig) getAvailableDevices() []EmporiaDevice {
-
-	// gather device info
+// getAvailableDevices returns customer devices for the Emporia account
+func getAvailableDevices(token string) []EmporiaDevice {
 	EmporiaDeviceURL := EmporiaBaseURL + "/customers/devices"
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", EmporiaDeviceURL, nil)
-	req.Header.Add("authToken", conf.EmporiaToken)
+	req.Header.Add("authToken", token)
 
 	resp, err := client.Do(req)
 	if err != nil {
