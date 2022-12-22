@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Check the status of Emporia's API before performing command
 - Gather API tokens from AWS Cognito using Emporia credentials
+- Select a device from connected Emporia devices
 - Tests for energy conversions and usage extrapolation
 - Linting checks and automated tests added on GitHub Actions
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Tokens stored in environment variables
+- Instructions for manually configuring devices
 
 ## [0.0.1] - 2022-11-27
 

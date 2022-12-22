@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -21,6 +22,17 @@ type EmporiaUsageResp struct {
 	Message           string
 	FirstUsageInstant string
 	UsageList         []float64
+}
+
+type EmporiaDeviceResp struct {
+	Devices []EmporiaDevice
+}
+
+type EmporiaDevice struct {
+	DeviceGid          int
+	LocationProperties struct {
+		DeviceName string
+	}
 }
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
@@ -94,4 +106,28 @@ func EmporiaStatus() (bool, error) {
 
 	status := resp.StatusCode == 403
 	return status, nil
+}
+
+// getAvailableDevices returns customer devices for the Emporia account
+func getAvailableDevices(token string) []EmporiaDevice {
+	EmporiaDeviceURL := EmporiaBaseURL + "/customers/devices"
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", EmporiaDeviceURL, nil)
+	req.Header.Add("authToken", token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to gather device information: %s\n", err)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+
+	var devs EmporiaDeviceResp
+	err = json.Unmarshal(body, &devs)
+	if err != nil {
+		log.Fatalf("Failed to parse device information: %s\n", err)
+	}
+
+	return devs.Devices
 }
