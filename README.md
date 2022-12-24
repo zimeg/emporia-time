@@ -54,8 +54,9 @@ A more detailed explanation can be found in [this StackOverflow answer][time].
 The amount of electricity used during the execution of the input command is
 collected from the Smart Plug and displayed in `watt`.
 
-Results from the Emporia API may not always be complete, so missing usage is
-estimated by scaling the average measured energy over the total elapsed time.
+Results from [the Emporia API][docs] may not always be complete, so missing
+usage is estimated by scaling the average measured energy over the total elapsed
+time.
 
 The ratio of observed-to-expected measurements is shown in the `sure` score.
 
@@ -63,3 +64,4 @@ The ratio of observed-to-expected measurements is shown in the `sure` score.
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [dashboard]: https://web.emporiaenergy.com/#/home
 [time]: https://stackoverflow.com/a/556411
+[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
