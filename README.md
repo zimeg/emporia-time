@@ -49,6 +49,16 @@ Meanings of these measurements are as follows:
 
 A more detailed explanation can be found in [this StackOverflow answer][time].
 
+### Energy
+
+The amount of electricity used during the execution of the input command is
+collected from the Smart Plug and displayed in watts.
+
+Results from the Emporia API may not always be complete, so missing usage is
+estimated by scaling the average measured energy over the total elapsed time.
+
+The ratio of observed-to-expected measurements is shown in the `sure` score.
+
 <!-- links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [dashboard]: https://web.emporiaenergy.com/#/home
