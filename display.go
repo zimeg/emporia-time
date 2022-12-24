@@ -6,7 +6,7 @@ import (
 )
 
 func outputUsage(watts float64, sureness float64) {
-	fmt.Printf("%12.2f watt %11.1f%% sure\n", watts, sureness*100)
+	fmt.Fprintf(os.Stderr, "%12.2f watt %11.1f%% sure\n", watts, sureness*100)
 }
 
 func outputHelp() {

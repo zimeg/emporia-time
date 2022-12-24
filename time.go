@@ -27,7 +27,7 @@ func TimeExec(args ...string) error {
 	}
 
 	fmt.Printf("%s", stdout.String())
-	fmt.Printf("%s", stderr.String())
+	fmt.Fprintf(os.Stderr, "%s", stderr.String())
 	return nil
 }
 
