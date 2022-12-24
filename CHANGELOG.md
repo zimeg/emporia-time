@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Execution info is output to stderr
 - Config stored in `~/.config/etime/settings.json`
 - Config file respects `XDG_CONFIG_HOME` environment variable
 - Repository name changed to `emporia-time`
