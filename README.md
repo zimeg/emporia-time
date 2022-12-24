@@ -35,6 +35,21 @@ The first time you run `etime`, you will be prompted to login with your
 Emporia credentials and select a device. Credentials are only used to gather
 API tokens, and tokens are stored in `~/.config/etime/settings.json`.
 
+## Measurement info
+
+### Time
+
+The duration of the input command is measured with the built-in `time` command.
+
+Meanings of these measurements are as follows:
+
+- `real`: The actual execution time from start to finish
+- `user`: CPU time spent executing user-mode code for the process
+- `sys`: CPU time spent making system calls in kernel mode
+
+A more detailed explanation can be found in [this StackOverflow answer][time].
+
 <!-- links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [dashboard]: https://web.emporiaenergy.com/#/home
+[time]: https://stackoverflow.com/a/556411
