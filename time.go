@@ -33,6 +33,14 @@ func TimeExec(args ...string) error {
 
 // main executes the command and displays energy stats
 func main() {
+
+	// share usage info on empty input
+	if len(os.Args) == 1 {
+		outputHelp()
+		os.Exit(0)
+	}
+
+	// instantiate an Emporia client
 	e := new(Emporia)
 	e.Init()
 
@@ -61,6 +69,6 @@ func main() {
 	}
 
 	// display the estimated usage stats
-	usage, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
-	fmt.Printf("%12.2f watt %11.1f%% sure\n", usage, sureness*100)
+	watts, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+	outputUsage(watts, sureness)
 }

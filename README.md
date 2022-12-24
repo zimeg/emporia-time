@@ -35,6 +35,33 @@ The first time you run `etime`, you will be prompted to login with your
 Emporia credentials and select a device. Credentials are only used to gather
 API tokens, and tokens are stored in `~/.config/etime/settings.json`.
 
+## Measurement info
+
+### Time
+
+The duration of the input command is measured with the built-in `time` command.
+
+Meanings of these measurements are as follows:
+
+- `real`: The actual execution time from start to finish
+- `user`: CPU time spent executing user-mode code for the process
+- `sys`: CPU time spent making system calls in kernel mode
+
+A more detailed explanation can be found in [this StackOverflow answer][time].
+
+### Energy
+
+The amount of electricity used during the execution of the input command is
+collected from the Smart Plug and displayed in `watt`.
+
+Results from [the Emporia API][docs] may not always be complete, so missing
+usage is estimated by scaling the average measured energy over the total elapsed
+time.
+
+The ratio of observed-to-expected measurements is shown in the `sure` score.
+
 <!-- links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [dashboard]: https://web.emporiaenergy.com/#/home
+[time]: https://stackoverflow.com/a/556411
+[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
