@@ -11,7 +11,7 @@ import (
 )
 
 // TimeExec performs the `args` command with timing, without interactivity
-func TimeExec(args ...string) error {
+func TimeExec(args ...string) (time.Time, time.Time) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
@@ -22,13 +22,16 @@ func TimeExec(args ...string) error {
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
+	startTime := time.Now().UTC()
 	if err := cmd.Run(); err != nil {
-		return err
+		log.Fatalf("Error: Failed to execute command (%v)\n", err)
 	}
+	endTime := time.Now().UTC()
 
 	fmt.Printf("%s", stdout.String())
 	fmt.Fprintf(os.Stderr, "%s", stderr.String())
-	return nil
+
+	return startTime, endTime
 }
 
 // main executes the command and displays energy stats
@@ -49,18 +52,11 @@ func main() {
 		log.Panicf("Error: Cannot measure energy during Emporia maintenance\n")
 	}
 
-	// perform and observe the command
-	startTime := time.Now().UTC()
-
+	// perform and measure the command
 	prog := os.Args[1:]
-	err := TimeExec(prog...)
-	if err != nil {
-		log.Fatalf("Error: Failed to execute command (%v)\n", err)
-	}
-
-	endTime := time.Now().UTC()
+	start, end := TimeExec(prog...)
 
 	// gather and display usage information
-	watts, sureness := e.CollectEnergyUsage(startTime, endTime)
+	watts, sureness := e.CollectEnergyUsage(start, end)
 	outputUsage(watts, sureness)
 }
