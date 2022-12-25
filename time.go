@@ -59,16 +59,8 @@ func main() {
 	}
 
 	endTime := time.Now().UTC()
-	elapsedTime := endTime.Sub(startTime)
 
-	// query emporia for usage stats
-	time.Sleep(2 * time.Second) // delay to respect latency
-	chart, err := e.LookupEnergyUsage(startTime, endTime)
-	if err != nil {
-		log.Panicf("Error: Failed to gather energy usage data (%v)\n", err)
-	}
-
-	// display the estimated usage stats
-	watts, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+	// gather and display usage information
+	watts, sureness := e.CollectEnergyUsage(startTime, endTime)
 	outputUsage(watts, sureness)
 }

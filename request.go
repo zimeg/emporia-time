@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var EmporiaBaseURL = "https://api.emporiaenergy.com"
+const EmporiaBaseURL = "https://api.emporiaenergy.com"
 
 type Emporia struct {
 	resp   EmporiaUsageResp
@@ -33,6 +33,30 @@ type EmporiaDevice struct {
 	LocationProperties struct {
 		DeviceName string
 	}
+}
+
+// CollectEnergyUsage repeatedly calls the Emporia API for usage information
+// until a certain confidence is reached
+func (e *Emporia) CollectEnergyUsage(start time.Time, end time.Time) (float64, float64) {
+	confidence := 0.80
+
+	// delay before lookup to respect latency
+	time.Sleep(200 * time.Millisecond)
+	chart, err := e.LookupEnergyUsage(start, end)
+	if err != nil {
+		log.Panicf("Error: Failed to gather energy usage data (%v)\n", err)
+	}
+
+	// calculate the estimated usage
+	elapsedTime := end.Sub(start)
+	watts, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+
+	// repeat lookup for unsure results
+	for sureness < confidence {
+		watts, sureness = e.CollectEnergyUsage(start, end)
+	}
+
+	return watts, sureness
 }
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
