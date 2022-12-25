@@ -11,7 +11,7 @@ import (
 )
 
 // TimeExec performs the `args` command with timing, without interactivity
-func TimeExec(args ...string) error {
+func TimeExec(args ...string) (time.Time, time.Time) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
@@ -22,13 +22,16 @@ func TimeExec(args ...string) error {
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
+	startTime := time.Now().UTC()
 	if err := cmd.Run(); err != nil {
-		return err
+		log.Fatalf("Error: Failed to execute command (%v)\n", err)
 	}
+	endTime := time.Now().UTC()
 
 	fmt.Printf("%s", stdout.String())
 	fmt.Fprintf(os.Stderr, "%s", stderr.String())
-	return nil
+
+	return startTime, endTime
 }
 
 // main executes the command and displays energy stats
@@ -49,26 +52,11 @@ func main() {
 		log.Panicf("Error: Cannot measure energy during Emporia maintenance\n")
 	}
 
-	// perform and observe the command
-	startTime := time.Now().UTC()
-
+	// perform and measure the command
 	prog := os.Args[1:]
-	err := TimeExec(prog...)
-	if err != nil {
-		log.Fatalf("Error: Failed to execute command (%v)\n", err)
-	}
+	start, end := TimeExec(prog...)
 
-	endTime := time.Now().UTC()
-	elapsedTime := endTime.Sub(startTime)
-
-	// query emporia for usage stats
-	time.Sleep(2 * time.Second) // delay to respect latency
-	chart, err := e.LookupEnergyUsage(startTime, endTime)
-	if err != nil {
-		log.Panicf("Error: Failed to gather energy usage data (%v)\n", err)
-	}
-
-	// display the estimated usage stats
-	watts, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+	// gather and display usage information
+	watts, sureness := e.CollectEnergyUsage(start, end)
 	outputUsage(watts, sureness)
 }
