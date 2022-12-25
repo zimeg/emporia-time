@@ -7,7 +7,7 @@ func ScaleKWhToWs(kwh float64) float64 {
 	return kwh * KiloToUnit * HourToSeconds
 }
 
-// extrapolateUsage scales the average measured energy rate over the elapsed
+// ExtrapolateUsage scales the average measured energy rate over the elapsed
 // time to account for missing measurements, returning est. watts and sureness
 func ExtrapolateUsage(measurements []float64, durr float64) (float64, float64) {
 	var sum float64 = 0
