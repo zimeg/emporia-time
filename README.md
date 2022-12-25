@@ -28,7 +28,7 @@ $ mv etime /usr/local/bin
 ```sh
 $ etime sleep 12
        12.00 real         0.00 user         0.00 sys
-        9.53 watt        61.5% sure
+        9.35 watt       100.0% sure
 ```
 
 The first time you run `etime`, you will be prompted to login with your
@@ -59,6 +59,7 @@ usage is estimated by scaling the average measured energy over the total elapsed
 time.
 
 The ratio of observed-to-expected measurements is shown in the `sure` score.
+Lookups are repeated until a sureness greater than 80.0% is achieved.
 
 <!-- links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug

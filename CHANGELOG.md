@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Repeat lookups until a sureness of at least 80.0% is reached
 - Check the status of Emporia's API before performing command
 - Gather API tokens from AWS Cognito using Emporia credentials
 - Select a device from connected Emporia devices
