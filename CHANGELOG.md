@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Check that changes are added to the changelog on pulls
 
+### Changed
+
+- Bump Go version to 1.20
+
 ## [0.0.2] - 2022-12-25
 
 ### Added
