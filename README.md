@@ -28,7 +28,7 @@ $ mv etime /usr/local/bin
 5. Use the binary with your favorite command or script:
 
 ```sh
-$ etime sleep 12
+$ ./etime sleep 12
        12.00 real         0.00 user         0.00 sys
         9.35 watt       100.0% sure
 ```
