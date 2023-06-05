@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Clarify confusing or error prone steps in the getting started process
+- Path to the repository was changed and now it matches
 
 ## [0.0.2] - 2022-12-25
 
@@ -57,6 +58,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the MIT license
 - Created a CHANGELOG
 
-[Unreleased]: https://github.com/e-zim/emporia-time/compare/v0.0.2...HEAD
-[0.0.2]: https://github.com/e-zim/emporia-time/compare/v0.0.1...v0.0.2
-[0.0.1]: https://github.com/e-zim/emporia-time/releases/tag/v0.0.1
+[Unreleased]: https://github.com/zimeg/emporia-time/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/zimeg/emporia-time/compare/v0.0.1...v0.0.2
+[0.0.1]: https://github.com/zimeg/emporia-time/releases/tag/v0.0.1

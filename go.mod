@@ -1,4 +1,4 @@
-module github.com/e-zim/emporia-etime
+module github.com/zimeg/emporia-etime
 
 go 1.20
 
