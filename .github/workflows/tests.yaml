@@ -26,6 +26,7 @@ jobs:
 
   measurement:
     name: Monitor energy usage
+    needs: checkup
     runs-on: self-hosted
     steps:
       - name: Checkout code
