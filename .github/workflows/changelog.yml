@@ -1,0 +1,16 @@
+name: Updates to the changelog
+
+on:
+  pull_request:
+
+jobs:
+  happened:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check for logged changes
+        run: git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.sha }} | grep ^CHANGELOG.md$
