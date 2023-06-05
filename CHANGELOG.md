@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Check that changes are added to the changelog on pulls
+- Perform scheduled checks for dependency updates
 
 ### Changed
 
