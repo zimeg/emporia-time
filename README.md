@@ -9,7 +9,7 @@ The `time` command, with energy awareness.
 2. From a directory for development, download the source and compile `etime`:
 
 ```sh
-$ git clone https://github.com/e-zim/emporia-time.git
+$ git clone https://github.com/zimeg/emporia-time.git
 $ cd emporia-time
 $ make build
 ```
