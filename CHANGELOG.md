@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Clarify confusing or error prone steps in the getting started process
+- Path to the repository was changed and now it matches
 
 ## [0.0.2] - 2022-12-25
 
