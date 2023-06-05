@@ -3,3 +3,4 @@ etime
 
 # development
 *.swp
+.github/runner
