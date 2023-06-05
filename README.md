@@ -5,9 +5,7 @@ The `time` command, with energy awareness.
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
-
 2. Install the latest version of [Go][golang].
-
 3. From a directory for development, download the source and compile `etime`:
 
 ```sh
