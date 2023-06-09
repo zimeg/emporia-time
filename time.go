@@ -15,7 +15,7 @@ func TimeExec(args ...string) (time.Time, time.Time) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	cmd := exec.Command("time", args...)
+	cmd := exec.Command("/usr/bin/time", args...)
 	if errors.Is(cmd.Err, exec.ErrDot) {
 		cmd.Err = nil
 	}
