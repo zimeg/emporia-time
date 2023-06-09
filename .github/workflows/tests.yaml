@@ -1,5 +1,4 @@
-name: lint-and-test
-run-name: Lint and test
+name: Makes valid measurements
 
 on:
   push:
@@ -8,13 +7,14 @@ on:
   pull_request:
 
 jobs:
-  health-check:
+  checkup:
+    name: Inspect the code health
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: '1.19.x'
+          go-version: '1.20.x'
       - name: Install dependencies
         run: go get
       - name: Build binary
@@ -23,3 +23,17 @@ jobs:
         run: test -z $(gofmt -l .)
       - name: Run tests
         run: go test
+
+  measurement:
+    name: Monitor energy usage
+    needs: checkup
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Prepare the program
+        run: make build
+      - name: Sleep for a short while
+        run: ./etime sleep 4
+      - name: Sleep for a bit longer
+        run: ./etime sleep 12
