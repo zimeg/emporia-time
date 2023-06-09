@@ -15,7 +15,10 @@ func TimeExec(args ...string) (time.Time, time.Time) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	cmd := exec.Command("/usr/bin/time", args...)
+	timeFlags := []string{"-p"}
+	timeArgs := append(timeFlags, args...)
+
+	cmd := exec.Command("/usr/bin/time", timeArgs...)
 	if errors.Is(cmd.Err, exec.ErrDot) {
 		cmd.Err = nil
 	}
