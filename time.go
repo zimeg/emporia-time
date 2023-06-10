@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// TimeMeasurement
+// TimeMeasurement holds information of a command run
 type TimeMeasurement struct {
 	Start   time.Time
 	End     time.Time
@@ -20,6 +20,7 @@ type TimeMeasurement struct {
 	Command CommandTime
 }
 
+// CommandTime contains the values from the time command
 type CommandTime struct {
 	Real string
 	User string

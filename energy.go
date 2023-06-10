@@ -3,6 +3,7 @@ package main
 const HourToSeconds float64 = 3600
 const KiloToUnit float64 = 1000
 
+// EnergyResult contains the calculated energy measurements
 type EnergyResult struct {
 	Watts    float64
 	Sureness float64
