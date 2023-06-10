@@ -32,7 +32,7 @@ func TimeExec(args ...string) TimeMeasurement {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	timeFlags := []string{"--format", "real %E\nuser %U\nsys %S"}
+	timeFlags := []string{"-p"}
 	timeArgs := append(timeFlags, args...)
 
 	cmd := exec.Command("/usr/bin/time", timeArgs...)
