@@ -27,14 +27,14 @@ type CommandTime struct {
 	Sys  string
 }
 
-// TimeExec performs the `args` command with timing, without interactivity
-func TimeExec(args ...string) TimeMeasurement {
+// TimeExec performs the command and prints outputs while measuring timing
+func TimeExec(command ...string) (TimeMeasurement, error) {
 	var times TimeMeasurement
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
 	timeFlags := []string{"-p"}
-	timeArgs := append(timeFlags, args...)
+	timeArgs := append(timeFlags, command...)
 
 	cmd := exec.Command("/usr/bin/time", timeArgs...)
 	if errors.Is(cmd.Err, exec.ErrDot) {
@@ -44,46 +44,54 @@ func TimeExec(args ...string) TimeMeasurement {
 	cmd.Stderr = &stderr
 
 	times.Start = time.Now().UTC()
-	if err := cmd.Run(); err != nil {
-		log.Fatalf("Error: Failed to execute command (%v)\n", err)
-	}
+	err := cmd.Run()
 	times.End = time.Now().UTC()
-
 	times.Elapsed = times.End.Sub(times.Start)
-	times.Command, stderr = parseTimeResults(stderr)
+
+	results, stderr, warning := parseTimeResults(stderr)
+	if warning != nil {
+		log.Printf("Warning: %s", warning)
+	}
+	times.Command = results
 
 	fmt.Printf("%s", stdout.String())
 	fmt.Fprintf(os.Stderr, "%s", stderr.String())
 
-	return times
+	return times, err
 }
 
 // parseTimeResults extracts the time information from output
-func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer) {
+func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 	times := CommandTime{}
 	lines := strings.Split(output.String(), "\n")
+
 	var cmd []string
 	for _, line := range lines {
 		fields := strings.Fields(line)
+		matched := false
+
 		if len(fields) == 2 {
 			name := fields[0]
 			value := fields[1]
-
 			switch name {
 			case "user":
 				times.User = trimTimeValue(value)
+				matched = true
 			case "sys":
 				times.Sys = trimTimeValue(value)
+				matched = true
 			case "real":
 				times.Real = trimTimeValue(value)
-			default:
-				cmd = append(cmd, line)
+				matched = true
 			}
+		}
+		if !matched {
+			cmd = append(cmd, line)
 		}
 	}
 
 	buff := bytes.NewBufferString(strings.Join(cmd, "\n"))
-	return times, *buff
+	return times, *buff, nil
 }
 
 // trimTimeValue removes most leading zeros
