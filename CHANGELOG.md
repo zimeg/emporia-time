@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump Go version to 1.20
+- Plainly use the /usr/bin/time command instead of a generic time
 
 ### Fixed
 
