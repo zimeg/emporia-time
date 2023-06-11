@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -121,7 +120,9 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 
 // trimTimeValue removes most leading zeros
 func trimTimeValue(value string) string {
-	re := regexp.MustCompile(`^0*:0?`)
-	trim := re.ReplaceAllString(value, "")
+	trim := strings.TrimLeft(value, "0:")
+	if strings.Index(trim, ".") == 0 {
+		trim = "0" + trim
+	}
 	return trim
 }

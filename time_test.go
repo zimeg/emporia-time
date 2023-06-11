@@ -123,3 +123,41 @@ func TestParseTimeResults(t *testing.T) {
 		}
 	}
 }
+
+func TestTrimTimeValue(t *testing.T) {
+	tests := []struct {
+		Title    string
+		Value    []string
+		Expected []string
+	}{
+		{
+			"retain the necessary leading zero",
+			[]string{"0.00", "0.08"},
+			[]string{"0.00", "0.08"},
+		},
+		{
+			"ignore padding on seconds as needed",
+			[]string{"2.00", "04.00", "0:06.02", "0:12.80", "0:00:06.10"},
+			[]string{"2.00", "4.00", "6.02", "12.80", "6.10"},
+		},
+		{
+			"ignore padding on minutes when possible",
+			[]string{"9:33.66", "04:21.01", "00:14:10.70"},
+			[]string{"9:33.66", "4:21.01", "14:10.70"},
+		},
+	}
+
+	for _, tt := range tests {
+		for ii, val := range tt.Value {
+			trimmed := trimTimeValue(val)
+			if trimmed != tt.Expected[ii] {
+				t.Fatalf("The formatting of time seems off for '%s'!\nTEST: '%s'\nEXPECT: %+v\nACTUAL: %+v",
+					val,
+					tt.Title,
+					tt.Expected[ii],
+					trimmed,
+				)
+			}
+		}
+	}
+}
