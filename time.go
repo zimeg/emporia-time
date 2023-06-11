@@ -66,6 +66,7 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 	lines := strings.Split(output.String(), "\n")
 
 	var cmd []string
+	userTimeFound, sysTimeFound, realTimeFound := false, false, false
 	for _, line := range lines {
 		fields := strings.Fields(line)
 		matched := false
@@ -77,12 +78,15 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 			case "user":
 				times.User = trimTimeValue(value)
 				matched = true
+				userTimeFound = true
 			case "sys":
 				times.Sys = trimTimeValue(value)
 				matched = true
+				sysTimeFound = true
 			case "real":
 				times.Real = trimTimeValue(value)
 				matched = true
+				realTimeFound = true
 			}
 		}
 		if !matched {
@@ -91,6 +95,9 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 	}
 
 	buff := bytes.NewBufferString(strings.Join(cmd, "\n"))
+	if !userTimeFound || !sysTimeFound || !realTimeFound {
+		return times, *buff, errors.New("A time value is missing in the output!")
+	}
 	return times, *buff, nil
 }
 

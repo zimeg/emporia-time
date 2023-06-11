@@ -33,6 +33,20 @@ func TestParseTimeResults(t *testing.T) {
 			},
 			nil,
 		},
+		{
+			"error and return command outputs if time value is missing",
+			[]string{
+				"something strange happened here...",
+				"sys 10:00.00",
+			},
+			CommandTime{
+				Sys: "10:00.00",
+			},
+			[]string{
+				"something strange happened here...",
+			},
+			errors.New("A time value is missing in the output!"),
+		},
 	}
 
 	for _, tt := range tests {
