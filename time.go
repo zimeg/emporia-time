@@ -66,8 +66,9 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 	lines := strings.Split(output.String(), "\n")
 
 	var cmd []string
-	userTimeFound, sysTimeFound, realTimeFound := false, false, false
-	for _, line := range lines {
+	var userTimeFound, sysTimeFound, realTimeFound bool
+	var userTimeIndex, sysTimeIndex, realTimeIndex int
+	for ii, line := range lines {
 		fields := strings.Fields(line)
 		matched := false
 
@@ -79,14 +80,17 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 				times.User = trimTimeValue(value)
 				matched = true
 				userTimeFound = true
+				userTimeIndex = ii
 			case "sys":
 				times.Sys = trimTimeValue(value)
 				matched = true
 				sysTimeFound = true
+				sysTimeIndex = ii
 			case "real":
 				times.Real = trimTimeValue(value)
 				matched = true
 				realTimeFound = true
+				realTimeIndex = ii
 			}
 		}
 		if !matched {
@@ -94,11 +98,25 @@ func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
 		}
 	}
 
-	buff := bytes.NewBufferString(strings.Join(cmd, "\n"))
-	if !userTimeFound || !sysTimeFound || !realTimeFound {
-		return times, *buff, errors.New("A time value is missing in the output!")
+	var buff bytes.Buffer
+	for ii, line := range lines {
+		switch {
+		case ii == userTimeIndex && userTimeFound:
+		case ii == sysTimeIndex && sysTimeFound:
+		case ii == realTimeIndex && realTimeFound:
+		default:
+			str := fmt.Sprintf("%s\n", line)
+			buff.WriteString(str)
+		}
 	}
-	return times, *buff, nil
+	if buff.Len() > 0 {
+		buff.Truncate(buff.Len() - 1)
+	}
+
+	if !userTimeFound || !sysTimeFound || !realTimeFound {
+		return times, buff, errors.New("A time value is missing in the output!")
+	}
+	return times, buff, nil
 }
 
 // trimTimeValue removes most leading zeros
