@@ -37,40 +37,40 @@ type EmporiaDevice struct {
 
 // CollectEnergyUsage repeatedly calls the Emporia API for usage information
 // until a certain confidence is reached
-func (e *Emporia) CollectEnergyUsage(start time.Time, end time.Time) (float64, float64) {
+func (e *Emporia) CollectEnergyUsage(times TimeMeasurement) (EnergyResult, error) {
 	confidence := 0.80
 
-	// delay before lookup to respect latency
+	// Delay before lookup to respect latency
 	time.Sleep(200 * time.Millisecond)
-	chart, err := e.LookupEnergyUsage(start, end)
+	chart, err := e.LookupEnergyUsage(times)
 	if err != nil {
-		log.Panicf("Error: Failed to gather energy usage data (%v)\n", err)
+		log.Printf("Error: Failed to gather energy usage data!\n")
+		return EnergyResult{}, err
 	}
 
-	// calculate the estimated usage
-	elapsedTime := end.Sub(start)
-	watts, sureness := ExtrapolateUsage(chart, elapsedTime.Seconds())
+	var results EnergyResult
+	results = ExtrapolateUsage(chart, times.Elapsed.Seconds())
 
-	// repeat lookup for unsure results
-	for sureness < confidence {
-		watts, sureness = e.CollectEnergyUsage(start, end)
+	// Repeat lookup for unsure results
+	for results.Sureness < confidence {
+		results, err = e.CollectEnergyUsage(times)
+		if err != nil {
+			return EnergyResult{}, err
+		}
 	}
-
-	return watts, sureness
+	return results, nil
 }
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
-func (e *Emporia) LookupEnergyUsage(start time.Time, end time.Time) ([]float64, error) {
-	params := formatUsageParams(e.config.EmporiaDevice, start, end)
+func (e *Emporia) LookupEnergyUsage(times TimeMeasurement) ([]float64, error) {
+	params := formatUsageParams(e.config.EmporiaDevice, times.Start, times.End)
 	chart, err := e.getEnergyUsage(params)
 	if err != nil {
 		return []float64{}, err
 	}
-
 	for ii, kwh := range chart {
 		chart[ii] = ScaleKWhToWs(kwh)
 	}
-
 	return chart, nil
 }
 

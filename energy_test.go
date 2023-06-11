@@ -4,138 +4,101 @@ import (
 	"testing"
 )
 
-func TestConvertKWhToWZero(t *testing.T) {
-	var kWh float64 = 0
-	var expected float64 = 0
-	actual := ScaleKWhToWs(kWh)
-	if actual != expected {
-		t.Fatalf("Incorrect conversion: %8fkWh != %8fW", kWh, expected)
+func TestScaleKWhToWs(t *testing.T) {
+	tests := []struct {
+		Title      string
+		KWh        float64
+		ExpectedWs float64
+	}{
+		{
+			"ensure the zero value is zero",
+			0,
+			0,
+		},
+		{
+			"convert a single KWh to Ws",
+			1,
+			1 * 1000 * 3600,
+		},
+		{
+			"convert 1000 KWh to Ws",
+			1000,
+			1000 * 1000 * 3600,
+		},
+	}
+
+	for _, tt := range tests {
+		actual := ScaleKWhToWs(tt.KWh)
+		if tt.ExpectedWs != actual {
+			t.Fatalf("An unexpected energy conversion was found!\nTEST: '%s'\nEXPECT: %8f\nACTUAL: %8f",
+				tt.Title,
+				tt.ExpectedWs,
+				actual,
+			)
+		}
 	}
 }
 
-func TestConvertKWhToWsUnit(t *testing.T) {
-	var kWh float64 = 1
-	var expected float64 = 1 * 1000 * 3600
-	actual := ScaleKWhToWs(kWh)
-	if actual != expected {
-		t.Fatalf("Incorrect conversion: %8fkWh == %8fW != %8fW", kWh, expected, actual)
-	}
-}
-
-func TestConvertKWhToWKilo(t *testing.T) {
-	var kWh float64 = 1000
-	var expected float64 = 1000 * 1000 * 3600
-	actual := ScaleKWhToWs(kWh)
-	if actual != expected {
-		t.Fatalf("Incorrect conversion: %8fkWh == %8fW != %8fW", kWh, expected, actual)
-	}
-}
-
-func TestExtrapolateUsageEmpty(t *testing.T) {
-	var measurements []float64 = []float64{}
-	var durr float64 = 3
-
-	// scaled measurements over the duration
-	var expected float64 = 0.0
-	var confidence float64 = 0.0
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
-	}
-
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
-	}
-}
-
-func TestExtrapolateUsageZero(t *testing.T) {
-	// occasionally all measurements return as zero, so usage cannot be predicted
-	var measurements []float64 = []float64{0, 0, 0}
-	var durr float64 = 3
-
-	// scaled measurements over the duration
-	var expected float64 = 0.0
-	var confidence float64 = 0.0
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
+func TestExtrapolateUsage(t *testing.T) {
+	tests := []struct {
+		Title          string
+		Measurements   []float64
+		Durration      float64
+		ExpectedResult EnergyResult
+	}{
+		{
+			"return unsure results if no measurements are returned",
+			[]float64{},
+			3,
+			EnergyResult{Watts: 0, Sureness: 0},
+		},
+		{
+			"return unsure results if all measurements are zero",
+			[]float64{0, 0, 0},
+			3,
+			EnergyResult{Watts: 0, Sureness: 0},
+		},
+		{
+			"confidently compute results for complete measurements",
+			[]float64{3.64, 4.2, 2}, // sum=9.84, avg=3.28
+			3,
+			EnergyResult{Watts: 9.84, Sureness: 1},
+		},
+		{
+			"extrapolate a missing second of measured results",
+			[]float64{3, 4, 6, 3}, // sum=16, avg=4
+			5,
+			EnergyResult{Watts: 20, Sureness: 0.8},
+		},
+		{
+			"extrapolate a half second of undermeasured results",
+			[]float64{3, 4, 6, 3}, // sum=16, avg=4
+			4.5,
+			EnergyResult{Watts: 18, Sureness: 4 / 4.5},
+		},
+		{
+			"extrapolate a half second of overmeasured results",
+			[]float64{3, 4, 6, 3, 4}, // sum=20, avg=4
+			4.5,
+			EnergyResult{Watts: 18, Sureness: 1},
+		},
 	}
 
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
-	}
-}
-
-func TestExtrapolateUsageComplete(t *testing.T) {
-	var measurements []float64 = []float64{3.64, 4.2, 2} // sum=9.84, avg=3.28
-	var durr float64 = 3
-
-	// scaled measurements over the duration
-	var expected float64 = 9.84
-	var confidence float64 = 1.0
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
-	}
-
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
-	}
-}
-
-func TestExtrapolateUsageUnderMeasured(t *testing.T) {
-	var measurements []float64 = []float64{3, 4, 6, 3} // sum=16, avg=4
-	var durr float64 = 5
-
-	// scaled measurements over the duration
-	var expected float64 = 20
-	var confidence float64 = 0.8
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
-	}
-
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
-	}
-}
-
-func TestExtrapolateUsageHalfSecondUnderMeasured(t *testing.T) {
-	var measurements []float64 = []float64{3, 4, 6, 3} // sum=16, avg=4
-	var durr float64 = 4.5
-
-	// scaled measurements over the duration
-	var expected float64 = 18
-	var confidence float64 = 4 / 4.5
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
-	}
-
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
-	}
-}
-
-func TestExtrapolateUsageHalfSecondOverMeasured(t *testing.T) {
-	var measurements []float64 = []float64{3, 4, 6, 3, 4} // sum=20, avg=4
-	var durr float64 = 4.5
-
-	// scaled measurements over the duration
-	var expected float64 = 18
-	var confidence float64 = 1.0
-
-	estimated, sureness := ExtrapolateUsage(measurements, durr)
-	if estimated != expected {
-		t.Fatalf("Incorrect estimation when empty: %8f != %8f", estimated, expected)
-	}
-
-	if sureness != confidence {
-		t.Fatalf("Incorrect sureness when empty: %8f != %8f", sureness, confidence)
+	for _, tt := range tests {
+		actual := ExtrapolateUsage(tt.Measurements, tt.Durration)
+		if tt.ExpectedResult.Watts != actual.Watts {
+			t.Fatalf("An unexpected energy estimation was found!\nTEST: '%s'\nEXPECT: %8f\nACTUAL: %8f",
+				tt.Title,
+				tt.ExpectedResult.Watts,
+				actual.Watts,
+			)
+		}
+		if tt.ExpectedResult.Sureness != actual.Sureness {
+			t.Fatalf("An unexpected sureness score was found!\nTEST: '%s'\nEXPECT: %8f\nACTUAL: %8f",
+				tt.Title,
+				tt.ExpectedResult.Sureness,
+				actual.Sureness,
+			)
+		}
 	}
 }

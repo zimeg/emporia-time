@@ -16,11 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump Go version to 1.20
+- Plainly use the /usr/bin/time command instead of a generic time
 
 ### Fixed
 
 - Clarify confusing or error prone steps in the getting started process
 - Path to the repository was changed and now it matches
+- Timing outputs are now consistent across operating systems
+- Errors from the provided command are properly propogated
 
 ## [0.0.2] - 2022-12-25
 

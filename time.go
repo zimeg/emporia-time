@@ -7,56 +7,122 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
-// TimeExec performs the `args` command with timing, without interactivity
-func TimeExec(args ...string) (time.Time, time.Time) {
+// TimeMeasurement holds information of a command run
+type TimeMeasurement struct {
+	Start   time.Time
+	End     time.Time
+	Elapsed time.Duration
+	Command CommandTime
+}
+
+// CommandTime contains the values from the time command
+type CommandTime struct {
+	Real string
+	User string
+	Sys  string
+}
+
+// TimeExec performs the command and prints outputs while measuring timing
+func TimeExec(command ...string) (TimeMeasurement, error) {
+	var times TimeMeasurement
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	cmd := exec.Command("time", args...)
+	timeFlags := []string{"-p"}
+	timeArgs := append(timeFlags, command...)
+
+	cmd := exec.Command("/usr/bin/time", timeArgs...)
 	if errors.Is(cmd.Err, exec.ErrDot) {
 		cmd.Err = nil
 	}
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	startTime := time.Now().UTC()
-	if err := cmd.Run(); err != nil {
-		log.Fatalf("Error: Failed to execute command (%v)\n", err)
+	times.Start = time.Now().UTC()
+	err := cmd.Run()
+	times.End = time.Now().UTC()
+	times.Elapsed = times.End.Sub(times.Start)
+
+	results, stderr, warning := parseTimeResults(stderr)
+	if warning != nil {
+		log.Printf("Warning: %s", warning)
 	}
-	endTime := time.Now().UTC()
+	times.Command = results
 
 	fmt.Printf("%s", stdout.String())
 	fmt.Fprintf(os.Stderr, "%s", stderr.String())
 
-	return startTime, endTime
+	return times, err
 }
 
-// main executes the command and displays energy stats
-func main() {
+// parseTimeResults extracts the time information from output
+func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
+	times := CommandTime{}
+	lines := strings.Split(output.String(), "\n")
 
-	// share usage info on empty input
-	if len(os.Args) == 1 {
-		outputHelp()
-		os.Exit(0)
+	var cmd []string
+	var userTimeFound, sysTimeFound, realTimeFound bool
+	var userTimeIndex, sysTimeIndex, realTimeIndex int
+	for ii, line := range lines {
+		fields := strings.Fields(line)
+		matched := false
+
+		if len(fields) == 2 {
+			name := fields[0]
+			value := fields[1]
+			switch name {
+			case "user":
+				times.User = trimTimeValue(value)
+				matched = true
+				userTimeFound = true
+				userTimeIndex = ii
+			case "sys":
+				times.Sys = trimTimeValue(value)
+				matched = true
+				sysTimeFound = true
+				sysTimeIndex = ii
+			case "real":
+				times.Real = trimTimeValue(value)
+				matched = true
+				realTimeFound = true
+				realTimeIndex = ii
+			}
+		}
+		if !matched {
+			cmd = append(cmd, line)
+		}
 	}
 
-	// instantiate an Emporia client
-	e := new(Emporia)
-	e.Init()
-
-	available, _ := EmporiaStatus()
-	if !available {
-		log.Panicf("Error: Cannot measure energy during Emporia maintenance\n")
+	var buff bytes.Buffer
+	for ii, line := range lines {
+		switch {
+		case ii == userTimeIndex && userTimeFound:
+		case ii == sysTimeIndex && sysTimeFound:
+		case ii == realTimeIndex && realTimeFound:
+		default:
+			str := fmt.Sprintf("%s\n", line)
+			buff.WriteString(str)
+		}
+	}
+	if buff.Len() > 0 {
+		buff.Truncate(buff.Len() - 1)
 	}
 
-	// perform and measure the command
-	prog := os.Args[1:]
-	start, end := TimeExec(prog...)
+	if !userTimeFound || !sysTimeFound || !realTimeFound {
+		return times, buff, errors.New("A time value is missing in the output!")
+	}
+	return times, buff, nil
+}
 
-	// gather and display usage information
-	watts, sureness := e.CollectEnergyUsage(start, end)
-	outputUsage(watts, sureness)
+// trimTimeValue removes most leading zeros
+func trimTimeValue(value string) string {
+	trim := strings.TrimLeft(value, "0:")
+	if strings.Index(trim, ".") == 0 {
+		trim = "0" + trim
+	}
+	return trim
 }
