@@ -88,7 +88,7 @@ Configurations to this program can be made using `flags` before the `command`:
 #### Command
 
 The provided command can be either a program or a path to an executable.
-Pretty much anything that runs when invoked from the command line.
+Pretty much anything that can be invoked from the command line.
 
 #### Args
 
