@@ -66,7 +66,7 @@ Lookups are repeated until a sureness greater than 80.0% is achieved.
 ### Usage guide
 
 This program can be configured using positional flags and arguments to produce
-certain behaviors. Example usage follows:
+certain behaviors:
 
 ```sh
 $ ./etime [flags] <command> [args]
@@ -93,7 +93,7 @@ Pretty much anything that runs when invoked from the command line.
 #### Args
 
 Any additional arguments for the `command` should follow the `command`. These
-might include subcommands, positional values, and other flags.
+might include subcommands, positional values, or other flags.
 
 ### Program environment variables
 
