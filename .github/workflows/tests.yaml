@@ -37,5 +37,11 @@ jobs:
         run: make build
       - name: Sleep for a short while
         run: ./etime sleep 4
+        env:
+          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
+          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
       - name: Sleep for a bit longer
         run: ./etime sleep 12
+        env:
+          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
+          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
