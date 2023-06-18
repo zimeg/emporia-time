@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// Flags holds etime specific command line flags
+// Flags holds command line flags specific to etime
 type Flags struct {
 	Device   string
 	Username string

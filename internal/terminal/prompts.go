@@ -50,7 +50,7 @@ func CollectInput(prompt *Prompt) (string, error) {
 	return value, nil
 }
 
-// CollectInput gathers a value for the prompt from flag, environment, or select
+// CollectSelect gathers the index of the selected value for a prompt
 func CollectSelect(prompt Prompt) (int, error) {
 	switch {
 	case len(prompt.Options) == 0:

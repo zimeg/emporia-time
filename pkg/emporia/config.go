@@ -10,6 +10,7 @@ import (
 	"github.com/zimeg/emporia-time/internal/terminal"
 )
 
+// EmporiaConfig contains device configurations and user authentications
 type EmporiaConfig struct {
 	Device string
 	Tokens EmporiaTokenSet

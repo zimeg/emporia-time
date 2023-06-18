@@ -16,21 +16,25 @@ import (
 
 const EmporiaBaseURL = "https://api.emporiaenergy.com"
 
+// Emporia holds information for and from the Emporia API
 type Emporia struct {
 	Resp   EmporiaUsageResp
 	Config EmporiaConfig
 }
 
+// EmporiaUsageResp holds usage information from the response
 type EmporiaUsageResp struct {
 	Message           string
 	FirstUsageInstant string
 	UsageList         []float64
 }
 
+// EmporiaDeviceResp contains a slice of available devices
 type EmporiaDeviceResp struct {
 	Devices []EmporiaDevice
 }
 
+// EmporiaDevice represents a device that can be measured
 type EmporiaDevice struct {
 	DeviceGid          int
 	LocationProperties struct {
