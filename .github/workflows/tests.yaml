@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Clean the environment
+        run: make clean
       - name: Prepare the program
         run: make build
       - name: Sleep for a short while
