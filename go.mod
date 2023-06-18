@@ -3,7 +3,7 @@ module github.com/zimeg/emporia-time
 go 1.20
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.6
+	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go v1.44.284
 )
 
