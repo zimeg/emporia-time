@@ -20,9 +20,9 @@ jobs:
       - name: Build binary
         run: go build
       - name: Check formatting
-        run: test -z $(gofmt -l .)
+        run: test -z $(gofmt -l $(find . -name '*.go'))
       - name: Run tests
-        run: go test
+        run: go test ./...
 
   measurement:
     name: Monitor energy usage

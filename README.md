@@ -35,7 +35,7 @@ The first time you run `etime`, you will be prompted to login with your
 Emporia credentials and select a device. Credentials are only used to gather
 API tokens, and tokens are stored in `~/.config/etime/settings.json`.
 
-## Measurement info
+## Measurement information
 
 ### Time
 
@@ -60,6 +60,49 @@ time.
 
 The ratio of observed-to-expected measurements is shown in the `sure` score.
 Lookups are repeated until a sureness greater than 80.0% is achieved.
+
+## Command information 
+
+### Usage guide
+
+This program can be configured using positional flags and arguments to produce
+certain behaviors:
+
+```sh
+$ ./etime [flags] <command> [args]
+```
+
+- `flags`: optional flags to provide this program
+- `command`: the program to execute and measure
+- `args`: optional arguments for the command
+
+#### Flags
+
+Configurations to this program can be made using `flags` before the `command`:
+
+- `-h`, `--help`: output a hopefully helpful message
+- `--device <string>`: name or ID of the smart plug to measure
+- `--username <string>`: account username for Emporia
+- `--password <string>`: account password for Emporia
+
+#### Command
+
+The provided command can be either a program or a path to an executable.
+Pretty much anything that can be invoked from the command line.
+
+#### Args
+
+Any additional arguments for the `command` should follow the `command`. These
+might include subcommands, positional values, or other flags.
+
+### Program environment variables
+
+Environment variables can be used as another way to configure the program:
+
+- `EMPORIA_DEVICE`: name or ID of the smart plug to measure
+- `EMPORIA_USERNAME`: account username for Emporia
+- `EMPORIA_PASSWORD`: account password for Emporia
+- `XDG_CONFIG_HOME`: the directory to store configurations
 
 <!-- links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug

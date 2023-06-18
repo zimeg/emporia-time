@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Check that changes are added to the changelog on pulls
-- Perform scheduled checks for dependency updates
-- Measure energy usage as an integration test on the remote
+- A helpful message is shown when the `--help` flags are used
+- Login credentials can be provided with the `--username` and `--password` flags
+- Environment variables `EMPORIA_USERNAME` and `EMPORIA_PASSWORD` will login too
+- Specify a device to measure with flag `--device` or variable `EMPORIA_DEVICE`
+- Detailed information about this program is included in the README
 
 ### Changed
 
@@ -24,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path to the repository was changed and now it matches
 - Timing outputs are now consistent across operating systems
 - Errors from the provided command are properly propogated
+
+### Maintenance
+
+- Check that changes are added to the changelog on pulls
+- Perform scheduled checks for dependency updates
+- Measure energy usage as an integration test on the remote
+- Restructure the repo to use multiple packages
 
 ## [0.0.2] - 2022-12-25
 

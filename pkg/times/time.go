@@ -1,4 +1,4 @@
-package main
+package times
 
 import (
 	"bytes"
@@ -9,6 +9,8 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/zimeg/emporia-time/internal/terminal"
 )
 
 // TimeMeasurement holds information of a command run
@@ -27,13 +29,13 @@ type CommandTime struct {
 }
 
 // TimeExec performs the command and prints outputs while measuring timing
-func TimeExec(command ...string) (TimeMeasurement, error) {
+func TimeExec(command terminal.Command) (TimeMeasurement, error) {
 	var times TimeMeasurement
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
 	timeFlags := []string{"-p"}
-	timeArgs := append(timeFlags, command...)
+	timeArgs := append(timeFlags, command.Args...)
 
 	cmd := exec.Command("/usr/bin/time", timeArgs...)
 	if errors.Is(cmd.Err, exec.ErrDot) {

@@ -1,4 +1,4 @@
-package main
+package emporia
 
 import (
 	"encoding/json"
@@ -9,25 +9,32 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/zimeg/emporia-time/pkg/energy"
+	"github.com/zimeg/emporia-time/pkg/times"
 )
 
 const EmporiaBaseURL = "https://api.emporiaenergy.com"
 
+// Emporia holds information for and from the Emporia API
 type Emporia struct {
-	resp   EmporiaUsageResp
-	config *EmporiaConfig
+	Resp   EmporiaUsageResp
+	Config EmporiaConfig
 }
 
+// EmporiaUsageResp holds usage information from the response
 type EmporiaUsageResp struct {
 	Message           string
 	FirstUsageInstant string
 	UsageList         []float64
 }
 
+// EmporiaDeviceResp contains a slice of available devices
 type EmporiaDeviceResp struct {
 	Devices []EmporiaDevice
 }
 
+// EmporiaDevice represents a device that can be measured
 type EmporiaDevice struct {
 	DeviceGid          int
 	LocationProperties struct {
@@ -37,53 +44,53 @@ type EmporiaDevice struct {
 
 // CollectEnergyUsage repeatedly calls the Emporia API for usage information
 // until a certain confidence is reached
-func (e *Emporia) CollectEnergyUsage(times TimeMeasurement) (EnergyResult, error) {
+func (emp *Emporia) CollectEnergyUsage(times times.TimeMeasurement) (energy.EnergyResult, error) {
 	confidence := 0.80
 
 	// Delay before lookup to respect latency
 	time.Sleep(200 * time.Millisecond)
-	chart, err := e.LookupEnergyUsage(times)
+	chart, err := emp.LookupEnergyUsage(times)
 	if err != nil {
 		log.Printf("Error: Failed to gather energy usage data!\n")
-		return EnergyResult{}, err
+		return energy.EnergyResult{}, err
 	}
 
-	var results EnergyResult
-	results = ExtrapolateUsage(chart, times.Elapsed.Seconds())
+	var results energy.EnergyResult
+	results = energy.ExtrapolateUsage(chart, times.Elapsed.Seconds())
 
 	// Repeat lookup for unsure results
 	for results.Sureness < confidence {
-		results, err = e.CollectEnergyUsage(times)
+		results, err = emp.CollectEnergyUsage(times)
 		if err != nil {
-			return EnergyResult{}, err
+			return energy.EnergyResult{}, err
 		}
 	}
 	return results, nil
 }
 
 // LookupEnergyUsage gathers device watt usage between the start and end times
-func (e *Emporia) LookupEnergyUsage(times TimeMeasurement) ([]float64, error) {
-	params := formatUsageParams(e.config.EmporiaDevice, times.Start, times.End)
-	chart, err := e.getEnergyUsage(params)
+func (emp *Emporia) LookupEnergyUsage(times times.TimeMeasurement) ([]float64, error) {
+	params := emp.formatUsageParams(times)
+	chart, err := emp.getEnergyUsage(params)
 	if err != nil {
 		return []float64{}, err
 	}
 	for ii, kwh := range chart {
-		chart[ii] = ScaleKWhToWs(kwh)
+		chart[ii] = energy.ScaleKWhToWs(kwh)
 	}
 	return chart, nil
 }
 
 // formatUsageParams returns URL values for the API
-func formatUsageParams(device string, start time.Time, end time.Time) url.Values {
+func (emp *Emporia) formatUsageParams(times times.TimeMeasurement) url.Values {
 	params := url.Values{}
 
 	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
 	params.Set("apiMethod", "getChartUsage")
-	params.Set("deviceGid", device)
+	params.Set("deviceGid", emp.Config.Device)
 	params.Set("channel", "1,2,3") // ?
-	params.Set("start", start.Format(time.RFC3339))
-	params.Set("end", end.Format(time.RFC3339))
+	params.Set("start", times.Start.Format(time.RFC3339))
+	params.Set("end", times.End.Format(time.RFC3339))
 	params.Set("scale", "1S")
 	params.Set("energyUnit", "KilowattHours")
 
@@ -91,12 +98,12 @@ func formatUsageParams(device string, start time.Time, end time.Time) url.Values
 }
 
 // getEnergyUsage performs a GET request to `/AppAPI` with configured params
-func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
+func (emp *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	EmporiaURL := fmt.Sprintf("%s/AppAPI?%s", EmporiaBaseURL, params.Encode())
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", EmporiaURL, nil)
-	req.Header.Add("authToken", e.config.EmporiaToken)
+	req.Header.Add("authToken", emp.Config.Tokens.IdToken)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -105,31 +112,12 @@ func (e *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 
-	err = json.Unmarshal(body, &e.resp)
-	if err != nil {
+	if err := json.Unmarshal(body, &emp.Resp); err != nil {
 		return []float64{}, err
+	} else if emp.Resp.Message != "" {
+		return []float64{}, errors.New(emp.Resp.Message)
 	}
-	if e.resp.Message != "" {
-		return []float64{}, errors.New(e.resp.Message)
-	}
-
-	return e.resp.UsageList, nil
-}
-
-// EmporiaStatus returns if the Emporia API is available
-func EmporiaStatus() (bool, error) {
-
-	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
-	EmporiaStatusURL := "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/maintenance/maintenance.json"
-
-	resp, err := http.Get(EmporiaStatusURL)
-	if err != nil {
-		return false, err
-	}
-	defer resp.Body.Close()
-
-	status := resp.StatusCode == 403
-	return status, nil
+	return emp.Resp.UsageList, nil
 }
 
 // getAvailableDevices returns customer devices for the Emporia account
@@ -154,4 +142,20 @@ func getAvailableDevices(token string) []EmporiaDevice {
 	}
 
 	return devs.Devices
+}
+
+// EmporiaStatus returns if the Emporia API is available
+func EmporiaStatus() (bool, error) {
+
+	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
+	EmporiaStatusURL := "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/maintenance/maintenance.json"
+
+	resp, err := http.Get(EmporiaStatusURL)
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	status := resp.StatusCode == 403
+	return status, nil
 }

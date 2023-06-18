@@ -9,7 +9,7 @@ run: build
 	./$(BIN) sleep 4
 
 test: build
-	go test
+	go test ./...
 
 clean:
 	rm -f $(BIN)
