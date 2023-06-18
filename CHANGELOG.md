@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- A helpful message is shown when the help flags are used
+- A helpful message is shown when the `--help` flags are used
 - Login credentials can be provided with the `--username` and `--password` flags
 - Environment variables `EMPORIA_USERNAME` and `EMPORIA_PASSWORD` will login too
 - Specify a device to measure with flag `--device` or variable `EMPORIA_DEVICE`
+- Detailed information about this program is included in the README
 
 ### Changed
 

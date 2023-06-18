@@ -49,7 +49,7 @@ Measure the time and energy used while executing a command
   {{ CommandName }} [flags] <command> [args]
 
 {{ Bold "DESCRIPTION" }}
-  flags    optional flags to provide etime
+  flags    optional flags to provide this program
   command  the program to execute and measure
   args     optional arguments for the command
 
