@@ -31,9 +31,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Clean the environment
+        run: make clean
       - name: Prepare the program
         run: make build
       - name: Sleep for a short while
         run: ./etime sleep 4
+        env:
+          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
+          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
+          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
       - name: Sleep for a bit longer
         run: ./etime sleep 12
+        env:
+          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
+          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
+          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}

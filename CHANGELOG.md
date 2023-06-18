@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Check that changes are added to the changelog on pulls
 - Perform scheduled checks for dependency updates
 - Measure energy usage as an integration test on the remote
+- Perform the full authentication handshake on remote tests
 - Restructure the repo to use multiple packages
 
 ## [0.0.2] - 2022-12-25
