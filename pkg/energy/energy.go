@@ -1,4 +1,4 @@
-package main
+package energy
 
 const HourToSeconds float64 = 3600
 const KiloToUnit float64 = 1000
