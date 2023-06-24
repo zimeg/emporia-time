@@ -16,24 +16,26 @@ func ScaleKWhToWs(kwh float64) float64 {
 
 // ExtrapolateUsage scales the average measured energy rate over the elapsed
 // time to account for missing measurements, returning est. watts and sureness
-func ExtrapolateUsage(measurements []float64, durr float64) EnergyResult {
-	var sum float64 = 0
+func ExtrapolateUsage(measurements []float64, duration float64) EnergyResult {
+	count := float64(len(measurements))
+	sum := 0.0
 	for _, mm := range measurements {
 		sum += mm
 	}
 
-	// cannot estimate an empty measurement
-	measured := float64(len(measurements))
-	if measured == 0 || sum == 0 {
+	if duration == 0 {
+		return EnergyResult{Watts: 0, Sureness: 1}
+	}
+	if count == 0 || sum == 0 {
 		return EnergyResult{Watts: 0, Sureness: 0}
 	}
 
 	// scale the summation across the entire duration
-	estimated := sum * (durr / measured)
+	estimated := sum * (duration / count)
 
 	// calculate the observed-to-expected measurement ratio
-	sureness := measured / durr
-	if measured > durr {
+	sureness := count / duration
+	if count > duration {
 		sureness = 1.0
 	}
 

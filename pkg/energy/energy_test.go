@@ -43,9 +43,15 @@ func TestExtrapolateUsage(t *testing.T) {
 	tests := []struct {
 		Title          string
 		Measurements   []float64
-		Durration      float64
+		Duration       float64
 		ExpectedResult EnergyResult
 	}{
+		{
+			"handle the measurements of instant commands",
+			[]float64{0},
+			0,
+			EnergyResult{Watts: 0, Sureness: 1},
+		},
 		{
 			"return unsure results if no measurements are returned",
 			[]float64{},
