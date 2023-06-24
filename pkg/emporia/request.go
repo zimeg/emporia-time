@@ -56,7 +56,7 @@ func (emp *Emporia) CollectEnergyUsage(times times.TimeMeasurement) (energy.Ener
 	}
 
 	var results energy.EnergyResult
-	results = energy.ExtrapolateUsage(chart, times.Elapsed.Seconds())
+	results = energy.ExtrapolateUsage(chart, times.Elapsed)
 
 	// Repeat lookup for unsure results
 	for results.Sureness < confidence {

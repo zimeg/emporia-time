@@ -1,5 +1,9 @@
 package energy
 
+import (
+	"time"
+)
+
 const HourToSeconds float64 = 3600
 const KiloToUnit float64 = 1000
 
@@ -16,7 +20,8 @@ func ScaleKWhToWs(kwh float64) float64 {
 
 // ExtrapolateUsage scales the average measured energy rate over the elapsed
 // time to account for missing measurements, returning est. watts and sureness
-func ExtrapolateUsage(measurements []float64, duration float64) EnergyResult {
+func ExtrapolateUsage(measurements []float64, duration time.Duration) EnergyResult {
+	seconds := time.Duration.Seconds(duration)
 	count := float64(len(measurements))
 	sum := 0.0
 	for _, mm := range measurements {
@@ -31,11 +36,11 @@ func ExtrapolateUsage(measurements []float64, duration float64) EnergyResult {
 	}
 
 	// scale the summation across the entire duration
-	estimated := sum * (duration / count)
+	estimated := sum * (seconds / count)
 
 	// calculate the observed-to-expected measurement ratio
-	sureness := count / duration
-	if count > duration {
+	sureness := count / seconds
+	if count > seconds {
 		sureness = 1.0
 	}
 
