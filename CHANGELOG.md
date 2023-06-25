@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Environment variables `EMPORIA_USERNAME` and `EMPORIA_PASSWORD` will login too
 - Specify a device to measure with flag `--device` or variable `EMPORIA_DEVICE`
 - Detailed information about this program is included in the README
+- Include the average power used over a command executation in watts
 
 ### Changed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path to the repository was changed and now it matches
 - Timing outputs are now consistent across operating systems
 - Errors from the provided command are properly propogated
+- Correctly dislpay energy as joules and power as watts
 
 ### Maintenance
 
