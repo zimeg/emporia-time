@@ -94,14 +94,14 @@ func TestExtrapolateUsage(t *testing.T) {
 	for _, tt := range tests {
 		actual := ExtrapolateUsage(tt.Measurements, tt.Duration)
 		if tt.ExpectedResult.Watts != actual.Watts {
-			t.Fatalf("An unexpected energy estimation was found!\nTEST: '%s'\nEXPECT: %8f\nACTUAL: %8f",
+			t.Fatalf("An unexpected watt estimation was found!\nFAILED: '%s'\nEXPECT: %8f\nACTUAL: %8f",
 				tt.Title,
 				tt.ExpectedResult.Watts,
 				actual.Watts,
 			)
 		}
 		if tt.ExpectedResult.Sureness != actual.Sureness {
-			t.Fatalf("An unexpected sureness score was found!\nTEST: '%s'\nEXPECT: %8f\nACTUAL: %8f",
+			t.Fatalf("An unexpected sureness score was found!\nFAILED: '%s'\nEXPECT: %8f\nACTUAL: %8f",
 				tt.Title,
 				tt.ExpectedResult.Sureness,
 				actual.Sureness,
