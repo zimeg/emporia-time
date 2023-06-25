@@ -28,7 +28,7 @@ $ mv etime /usr/local/bin
 ```sh
 $ ./etime sleep 12
        12.00 real         0.00 user         0.00 sys
-        9.35 watt       100.0% sure
+      922.63 joules      76.87 watts      100.0% sure
 ```
 
 The first time you run `etime`, you will be prompted to login with your

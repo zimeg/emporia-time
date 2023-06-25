@@ -70,7 +70,7 @@ Measure the time and energy used while executing a command
 {{ Bold "EXAMPLE" }}
   $ {{ CommandName }} sleep 12
          12.00 real         0.00 user         0.00 sys
-          9.53 watt        61.5%% sure
+        922.63 joules      76.87 watts      100.0%% sure
 
 `
 	if body, err := TemplateBuilder(helpTemplate, nil); err != nil {
