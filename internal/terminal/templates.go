@@ -74,8 +74,10 @@ Measure the time and energy used while executing a command
 
 `
 	if body, err := TemplateBuilder(helpTemplate, nil); err != nil {
-		re := regexp.MustCompile(`{{ Bold "([^"]+)" }}`)
-		body = re.ReplaceAllString(helpTemplate, "$1")
+		boldRegex := regexp.MustCompile(`{{ Bold "([^"]+)" }}`)
+		body = boldRegex.ReplaceAllString(helpTemplate, "$1")
+		commandNameRegex := regexp.MustCompile(`{{ CommandName }}`)
+		body = commandNameRegex.ReplaceAllString(body, "etime")
 		fmt.Fprintf(os.Stderr, strings.TrimLeft(body, "\n"))
 	} else {
 		fmt.Fprintf(os.Stderr, strings.TrimLeft(body, "\n"))
