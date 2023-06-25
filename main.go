@@ -69,7 +69,7 @@ func main() {
 func formatUsage(results CommandResult) (string, error) {
 	energyTemplate := strings.TrimSpace(`
 {{12 | Time .TimeMeasurement.Command.Real}} real {{12 | Time .TimeMeasurement.Command.User}} user {{12 | Time .TimeMeasurement.Command.Sys}} sys
-{{12 | Value .EnergyResult.Watts}} watt {{11 | Percent .EnergyResult.Sureness}}% sure`)
+{{12 | Value .EnergyResult.Joules}} joules {{10 | Value .EnergyResult.Watts}} watts {{10 | Percent .EnergyResult.Sureness}}% sure`)
 
 	body, err := terminal.TemplateBuilder(energyTemplate, results)
 	if err != nil {

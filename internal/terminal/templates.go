@@ -60,17 +60,17 @@ Measure the time and energy used while executing a command
   --password <string>  account password for Emporia
 
 {{ Bold "OUTPUT" }}
-  Command output is printed as specified by the program
+  Command output is printed as specified by the command
   Time and energy usage information is output to stderr
 
-  Time is measured in seconds as defined by the time command
-  Energy is measured in watts and collected from Emporia
-  Sureness is the ratio of recieved-to-expected measurements
+  Time is counted with seconds and measured by the time command
+  Usage is measured by the device and shown in joules and watts
+  Sure is the ratio of recieved-to-expected measurements
 
 {{ Bold "EXAMPLE" }}
   $ {{ CommandName }} sleep 12
          12.00 real         0.00 user         0.00 sys
-          9.53 watt        61.5%% sure
+        922.63 joules      76.87 watts      100.0%% sure
 
 `
 	if body, err := TemplateBuilder(helpTemplate, nil); err != nil {
