@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Timing outputs are now consistent across operating systems
 - Errors from the provided command are properly propogated
 - Correctly dislpay energy as joules and power as watts
+- Replace the command name in help templates on build errors
 
 ### Maintenance
 
