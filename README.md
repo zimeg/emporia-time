@@ -43,7 +43,7 @@ The duration of the input command is measured with the built-in `time` command.
 
 Meanings of these measurements are as follows:
 
-- `real`: The actual execution time from start to finish
+- `real`: the actual execution time from start to finish
 - `user`: CPU time spent executing user-mode code for the process
 - `sys`: CPU time spent making system calls in kernel mode
 
@@ -51,8 +51,14 @@ A more detailed explanation can be found in [this StackOverflow answer][time].
 
 ### Energy
 
-The amount of electricity used during the execution of the input command is
-collected from the Smart Plug and displayed in `watt`.
+Measurments of electricity used while executing the input command are collected
+from the Smart Plug.
+
+This usage is shown in the following units:
+
+- `joules`: the total [energy][energy] used during the command duration
+- `watts`: the average [power][power] output over the command duration
+- `sure`: a confidence score for the above values
 
 Results from [the Emporia API][docs] may not always be complete, so missing
 usage is estimated by scaling the average measured energy over the total elapsed
@@ -109,4 +115,6 @@ Environment variables can be used as another way to configure the program:
 [golang]: https://go.dev/dl
 [dashboard]: https://web.emporiaenergy.com/#/home
 [time]: https://stackoverflow.com/a/556411
+[energy]: https://en.wikipedia.org/wiki/Energy
+[power]: https://en.wikipedia.org/wiki/Power_(physics)
 [docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
