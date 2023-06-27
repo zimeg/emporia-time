@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Specify a device to measure with flag `--device` or variable `EMPORIA_DEVICE`
 - Detailed information about this program is included in the README
 - Include the average power used over a command executation in watts
+- Display measurements on separate lines with the `--portable` or `-p` flags
 
 ### Changed
 
