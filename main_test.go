@@ -125,33 +125,33 @@ func TestFormatUsage_Portable(t *testing.T) {
 		}
 
 		var (
-			realTimeFound int
-			userTimeFound int
-			sysTimeFound  int
-			joulesFound   int
-			wattsFound    int
-			surenessFound int
+			realTimeCount int
+			userTimeCount int
+			sysTimeCount  int
+			joulesCount   int
+			wattsCount    int
+			surenessCount int
 		)
 		for _, line := range strings.Split(output, "\n") {
 			switch line {
 			case fmt.Sprintf("%s real", tt.Result.TimeMeasurement.Command.Real):
-				realTimeFound += 1
+				realTimeCount += 1
 			case fmt.Sprintf("%s user", tt.Result.TimeMeasurement.Command.User):
-				userTimeFound += 1
+				userTimeCount += 1
 			case fmt.Sprintf("%s sys", tt.Result.TimeMeasurement.Command.Sys):
-				sysTimeFound += 1
+				sysTimeCount += 1
 			case fmt.Sprintf("%.2f joules", tt.Result.EnergyResult.Joules):
-				joulesFound += 1
+				joulesCount += 1
 			case fmt.Sprintf("%.2f watts", tt.Result.EnergyResult.Watts):
-				wattsFound += 1
+				wattsCount += 1
 			case fmt.Sprintf("%.1f%% sure", tt.Result.EnergyResult.Sureness*100):
-				surenessFound += 1
+				surenessCount += 1
 			default:
 				t.Error("An unexpected value appeared in the ouput:", line)
 			}
 		}
-		if realTimeFound != 1 || userTimeFound != 1 || sysTimeFound != 1 ||
-			joulesFound != 1 || wattsFound != 1 || surenessFound != 1 {
+		if realTimeCount != 1 || userTimeCount != 1 || sysTimeCount != 1 ||
+			joulesCount != 1 || wattsCount != 1 || surenessCount != 1 {
 			t.Error("A measurement appeared an unexpected amount of times!")
 		}
 	}
