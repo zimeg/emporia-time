@@ -55,6 +55,7 @@ Measure the time and energy used while executing a command
 
 {{ Bold "FLAGS" }}
   -h, --help           this very informative message
+  -p, --portable       display measurements on separate lines
   --device <string>    name or ID of the smart plug to measure
   --username <string>  account username for Emporia
   --password <string>  account password for Emporia

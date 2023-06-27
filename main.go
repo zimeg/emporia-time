@@ -57,7 +57,7 @@ func main() {
 	}
 
 	// Output the resulting measurements
-	if stats, err := formatUsage(results); err != nil {
+	if stats, err := formatUsage(results, command.Flags.Portable); err != nil {
 		log.Fatalf("Error: %s", err)
 	} else {
 		fmt.Fprintf(os.Stderr, "%s\n", stats)
@@ -66,10 +66,22 @@ func main() {
 }
 
 // formatUsage arranges information about resource usage of a command
-func formatUsage(results CommandResult) (string, error) {
-	energyTemplate := strings.TrimSpace(`
+func formatUsage(results CommandResult, isPortableFormat bool) (string, error) {
+	var energyTemplate string
+	switch isPortableFormat {
+	case false:
+		energyTemplate = strings.TrimSpace(`
 {{12 | Time .TimeMeasurement.Command.Real}} real {{12 | Time .TimeMeasurement.Command.User}} user {{12 | Time .TimeMeasurement.Command.Sys}} sys
 {{12 | Value .EnergyResult.Joules}} joules {{10 | Value .EnergyResult.Watts}} watts {{10 | Percent .EnergyResult.Sureness}}% sure`)
+	case true:
+		energyTemplate = strings.TrimSpace(`
+{{0 | Time .TimeMeasurement.Command.Real}} real
+{{0 | Time .TimeMeasurement.Command.User}} user
+{{0 | Time .TimeMeasurement.Command.Sys}} sys
+{{0 | Value .EnergyResult.Joules}} joules
+{{0 | Value .EnergyResult.Watts}} watts
+{{0 | Percent .EnergyResult.Sureness}}% sure`)
+	}
 
 	body, err := terminal.TemplateBuilder(energyTemplate, results)
 	if err != nil {

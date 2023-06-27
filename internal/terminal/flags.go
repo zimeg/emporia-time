@@ -10,6 +10,7 @@ type Flags struct {
 	Device   string
 	Username string
 	Password string
+	Portable bool
 }
 
 // Command contains the command line configurations
@@ -26,6 +27,10 @@ func ParseFlags(arguments []string) Command {
 	}
 
 	var flags Flags
+
+	flag.BoolVar(&flags.Portable, "p", false, "display measurements on separate lines")
+	flag.BoolVar(&flags.Portable, "portable", false, "display measurements on separate lines")
+
 	flag.StringVar(&flags.Device, "device", "", "device to measure usage for")
 	flag.StringVar(&flags.Username, "username", "", "account username for Emporia")
 	flag.StringVar(&flags.Password, "password", "", "account password for Emporia")
