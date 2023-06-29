@@ -57,7 +57,9 @@ func TimeExec(command terminal.Command) (TimeMeasurement, error) {
 	times.Command = results
 
 	fmt.Printf("%s", stdout.String())
-	fmt.Fprintf(os.Stderr, "%s", stderr.String())
+	if stderr.Len() > 0 {
+		fmt.Fprintf(os.Stderr, "%s\n", stderr.String())
+	}
 
 	return times, err
 }
