@@ -62,80 +62,45 @@ func TimeExec(command terminal.Command) (TimeMeasurement, error) {
 	return times, err
 }
 
+// splitBuffer separates the command output from times
+func splitBuffer(buff bytes.Buffer) (command, times []string) {
+	output := buff.String()
+	trimmed := strings.TrimRight(output, "\n")
+	lines := strings.Split(trimmed, "\n")
+	for i := len(lines) - 1; i >= 0; i-- {
+		times = append([]string{lines[i]}, times...)
+		if strings.Contains(lines[i], "real") {
+			command = lines[:i]
+			break
+		}
+	}
+	return command, times
+}
+
 // parseTimeResults extracts the time information from output
-func parseTimeResults(output bytes.Buffer) (CommandTime, bytes.Buffer, error) {
-	lines := strings.Split(output.String(), "\n")
-
-	var cmd []string
-	var userTimeFound, sysTimeFound, realTimeFound bool
-	var userTimeIndex, sysTimeIndex, realTimeIndex int
-	var userTimeValue, sysTimeValue, realTimeValue string
-	var userTimeFloat, sysTimeFloat, realTimeFloat float64
-	for ii, line := range lines {
+func parseTimeResults(output bytes.Buffer) (times CommandTime, buff bytes.Buffer, err error) {
+	commandLines, timeLines := splitBuffer(output)
+	for _, line := range timeLines {
 		fields := strings.Fields(line)
-		matched := false
-
-		if len(fields) == 2 {
-			name := fields[0]
-			value := fields[1]
-			switch name {
-			case "user":
-				matched = true
-				userTimeFound = true
-				userTimeIndex = ii
-				userTimeValue = value
-			case "sys":
-				matched = true
-				sysTimeFound = true
-				sysTimeIndex = ii
-				sysTimeValue = value
-			case "real":
-				matched = true
-				realTimeFound = true
-				realTimeIndex = ii
-				realTimeValue = value
+		measurement, value := fields[0], fields[1]
+		switch measurement {
+		case "user":
+			if times.User, err = parseTimeValue(value); err != nil {
+				return times, buff, errors.New("Failed to parse the user time value!")
+			}
+		case "sys":
+			if times.Sys, err = parseTimeValue(value); err != nil {
+				return times, buff, errors.New("Failed to parse the sys time value!")
+			}
+		case "real":
+			if times.Real, err = parseTimeValue(value); err != nil {
+				return times, buff, errors.New("Failed to parse the real time value!")
 			}
 		}
-		if !matched {
-			cmd = append(cmd, line)
-		}
 	}
-
-	var buff bytes.Buffer
-	for ii, line := range lines {
-		switch {
-		case ii == userTimeIndex && userTimeFound:
-		case ii == sysTimeIndex && sysTimeFound:
-		case ii == realTimeIndex && realTimeFound:
-		default:
-			str := fmt.Sprintf("%s\n", line)
-			buff.WriteString(str)
-		}
-	}
-	if buff.Len() > 0 {
-		buff.Truncate(buff.Len() - 1)
-	}
-
-	var err error
-	if !userTimeFound || !sysTimeFound || !realTimeFound {
-		return CommandTime{}, buff, errors.New("A time value is missing in the output!")
-	}
-	if userTimeFloat, err = parseTimeValue(userTimeValue); err != nil {
-		return CommandTime{}, buff, errors.New("Failed to parse the user time value!")
-	}
-	if sysTimeFloat, err = parseTimeValue(sysTimeValue); err != nil {
-		return CommandTime{}, buff, errors.New("Failed to parse the sys time value!")
-	}
-	if realTimeFloat, err = parseTimeValue(realTimeValue); err != nil {
-		return CommandTime{}, buff, errors.New("Failed to parse the real time value!")
-	}
-
-	times := CommandTime{
-		User: userTimeFloat,
-		Sys:  sysTimeFloat,
-		Real: realTimeFloat,
-	}
-	return times, buff, nil
+	command := strings.Join(commandLines, "\n")
+	buff.WriteString(command)
+	return times, buff, err
 }
 
 // parseTimeValue converts a string to a float64

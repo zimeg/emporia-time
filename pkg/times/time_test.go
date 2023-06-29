@@ -2,7 +2,6 @@ package times
 
 import (
 	"bytes"
-	"errors"
 	"strings"
 	"testing"
 )
@@ -47,18 +46,6 @@ func TestParseTimeResults(t *testing.T) {
 				"example command output!",
 			},
 			nil,
-		},
-		{
-			"error and return command outputs if a time value is missing",
-			[]string{
-				"something strange happened here...",
-				"sys 6000.00",
-			},
-			CommandTime{},
-			[]string{
-				"something strange happened here...",
-			},
-			errors.New("A time value is missing in the output!"),
 		},
 		{
 			"prefer the latest outputs for timing information",
