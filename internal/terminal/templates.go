@@ -20,8 +20,8 @@ func TemplateBuilder(templateStr string, body interface{}) (string, error) {
 		"Percent": func(f float64, spacing int) string {
 			return fmt.Sprintf("%*.1f", spacing, f*100)
 		},
-		"Time": func(f string, spacing int) string {
-			return fmt.Sprintf("%*s", spacing, f)
+		"Time": func(f float64, spacing int) string {
+			return fmt.Sprintf("%*.2f", spacing, f)
 		},
 		"Value": func(f float64, spacing int) string {
 			return fmt.Sprintf("%*.2f", spacing, f)
