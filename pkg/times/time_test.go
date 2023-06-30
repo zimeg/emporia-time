@@ -149,7 +149,7 @@ func TestParseTimeValue(t *testing.T) {
 			[]float64{2.0, 4.0, 6.02, 12.8, 6.1},
 		},
 		{
-			"parse times greater than seconds",
+			"parse times greater than sixty seconds",
 			[]string{"573.66", "261.01", "850.70", "86405.12"},
 			[]float64{573.66, 261.01, 850.7, 86405.12},
 		},
