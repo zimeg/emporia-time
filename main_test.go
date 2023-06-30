@@ -9,7 +9,7 @@ import (
 	"github.com/zimeg/emporia-time/pkg/times"
 )
 
-func TestFormatUsage_Regular(t *testing.T) {
+func TestFormatUsage_Formatted(t *testing.T) {
 	tests := []struct {
 		Title  string
 		Result CommandResult
@@ -19,9 +19,9 @@ func TestFormatUsage_Regular(t *testing.T) {
 			CommandResult{
 				TimeMeasurement: times.TimeMeasurement{
 					Command: times.CommandTime{
-						Real: "0.00",
-						User: "0.00",
-						Sys:  "0.00",
+						Real: 0.0,
+						User: 0.0,
+						Sys:  0.0,
 					},
 				},
 				EnergyResult: energy.EnergyResult{
@@ -36,15 +36,15 @@ func TestFormatUsage_Regular(t *testing.T) {
 			CommandResult{
 				TimeMeasurement: times.TimeMeasurement{
 					Command: times.CommandTime{
-						Real: "4.00",
-						User: "2.10",
-						Sys:  "1.40",
+						Real: 4.0,
+						User: 2.1,
+						Sys:  1.4,
 					},
 				},
 				EnergyResult: energy.EnergyResult{
 					Joules:   12.00,
 					Watts:    3.00,
-					Sureness: .9620,
+					Sureness: 0.9620,
 				},
 			},
 		},
@@ -56,13 +56,13 @@ func TestFormatUsage_Regular(t *testing.T) {
 			t.Error("An unexpected error was encountered while formatting!")
 		}
 
-		if !strings.Contains(output, fmt.Sprintf(" %s real", tt.Result.TimeMeasurement.Command.Real)) {
+		if !strings.Contains(output, fmt.Sprintf(" %.2f real", tt.Result.TimeMeasurement.Command.Real)) {
 			t.Error("The `real` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %s user", tt.Result.TimeMeasurement.Command.User)) {
+		if !strings.Contains(output, fmt.Sprintf(" %.2f user", tt.Result.TimeMeasurement.Command.User)) {
 			t.Error("The `user` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %s sys", tt.Result.TimeMeasurement.Command.Sys)) {
+		if !strings.Contains(output, fmt.Sprintf(" %.2f sys", tt.Result.TimeMeasurement.Command.Sys)) {
 			t.Error("The `sys` measurement is missing in the output!")
 		}
 		if !strings.Contains(output, fmt.Sprintf(" %.2f joules", tt.Result.EnergyResult.Joules)) {
@@ -87,9 +87,9 @@ func TestFormatUsage_Portable(t *testing.T) {
 			CommandResult{
 				TimeMeasurement: times.TimeMeasurement{
 					Command: times.CommandTime{
-						Real: "0.00",
-						User: "0.00",
-						Sys:  "0.00",
+						Real: 0.0,
+						User: 0.0,
+						Sys:  0.0,
 					},
 				},
 				EnergyResult: energy.EnergyResult{
@@ -104,15 +104,15 @@ func TestFormatUsage_Portable(t *testing.T) {
 			CommandResult{
 				TimeMeasurement: times.TimeMeasurement{
 					Command: times.CommandTime{
-						Real: "4.00",
-						User: "2.10",
-						Sys:  "1.40",
+						Real: 4.0,
+						User: 2.1,
+						Sys:  1.4,
 					},
 				},
 				EnergyResult: energy.EnergyResult{
 					Joules:   12.00,
 					Watts:    3.00,
-					Sureness: .9620,
+					Sureness: 0.9620,
 				},
 			},
 		},
@@ -134,11 +134,11 @@ func TestFormatUsage_Portable(t *testing.T) {
 		)
 		for _, line := range strings.Split(output, "\n") {
 			switch line {
-			case fmt.Sprintf("%s real", tt.Result.TimeMeasurement.Command.Real):
+			case fmt.Sprintf("%.2f real", tt.Result.TimeMeasurement.Command.Real):
 				realTimeCount += 1
-			case fmt.Sprintf("%s user", tt.Result.TimeMeasurement.Command.User):
+			case fmt.Sprintf("%.2f user", tt.Result.TimeMeasurement.Command.User):
 				userTimeCount += 1
-			case fmt.Sprintf("%s sys", tt.Result.TimeMeasurement.Command.Sys):
+			case fmt.Sprintf("%.2f sys", tt.Result.TimeMeasurement.Command.Sys):
 				sysTimeCount += 1
 			case fmt.Sprintf("%.2f joules", tt.Result.EnergyResult.Joules):
 				joulesCount += 1
