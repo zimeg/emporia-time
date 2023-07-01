@@ -71,7 +71,7 @@ func formatUsage(results CommandResult, isPortableFormat bool) (string, error) {
 	switch isPortableFormat {
 	case false:
 		energyTemplate = strings.TrimSpace(`
-{{12 | Time .TimeMeasurement.Command.Real}} real {{12 | Time .TimeMeasurement.Command.User}} user {{12 | Time .TimeMeasurement.Command.Sys}} sys
+{{12 | TimeF .TimeMeasurement.Command.Real}} real {{12 | TimeF .TimeMeasurement.Command.User}} user {{12 | TimeF .TimeMeasurement.Command.Sys}} sys
 {{12 | Value .EnergyResult.Joules}} joules {{10 | Value .EnergyResult.Watts}} watts {{10 | Percent .EnergyResult.Sureness}}% sure`)
 	case true:
 		energyTemplate = strings.TrimSpace(`

@@ -2,6 +2,7 @@ package terminal
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strings"
@@ -23,6 +24,9 @@ func TemplateBuilder(templateStr string, body interface{}) (string, error) {
 		"Time": func(f float64, spacing int) string {
 			return fmt.Sprintf("%*.2f", spacing, f)
 		},
+		"TimeF": func(f float64, spacing int) string {
+			return fmt.Sprintf("%*s", spacing, FormatSeconds(f))
+		},
 		"Value": func(f float64, spacing int) string {
 			return fmt.Sprintf("%*.2f", spacing, f)
 		},
@@ -38,6 +42,22 @@ func TemplateBuilder(templateStr string, body interface{}) (string, error) {
 	}
 	formattedString := result.String()
 	return formattedString, nil
+}
+
+// FormatSeconds converts seconds into the hh:mm:ss.ss without leading zeros
+func FormatSeconds(seconds float64) string {
+	h := math.Floor(seconds / 3600)
+	m := math.Floor((seconds - (h * 3600)) / 60)
+	s := seconds - (h * 3600) - (m * 60)
+
+	switch {
+	case h > 0:
+		return fmt.Sprintf("%d:%02d:%05.2f", int(h), int(m), s)
+	case m > 0:
+		return fmt.Sprintf("%d:%05.2f", int(m), s)
+	default:
+		return fmt.Sprintf("%.2f", s)
+	}
 }
 
 // printHelpMessage outputs an informative message for this program
