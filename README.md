@@ -2,6 +2,13 @@
 
 The `time` command, with energy awareness.
 
+**Outline**:
+
+- [Getting started](#getting-started)
+- [Measurement information](#measurement-information)
+- [Program information](#program-information)
+- [Repository information](#repository-information)
+
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
@@ -67,7 +74,7 @@ time.
 The ratio of observed-to-expected measurements is shown in the `sure` score.
 Lookups are repeated until a sureness greater than 80.0% is achieved.
 
-## Command information 
+## Program information
 
 ### Usage guide
 
@@ -94,7 +101,7 @@ Configurations to this program can be made using `flags` before the `command`:
 
 #### Command
 
-The provided command can be either a program or a path to an executable.
+The provided `command` can be either a program or a path to an executable.
 Pretty much anything that can be invoked from the command line.
 
 #### Args
@@ -111,7 +118,18 @@ Environment variables can be used as another way to configure the program:
 - `EMPORIA_PASSWORD`: account password for Emporia
 - `XDG_CONFIG_HOME`: the directory to store configurations
 
-<!-- links -->
+## Repository information
+
+This project is licensed under the MIT license and is not affiliated with
+or endorsed by Emporia Energy.
+
+Notes on submitting any type of contribution, either in issues or pull requests,
+are taken in [`.github/CONTRIBUTING.md`][contributing].
+
+Details on the processes around code for this repository are shared in the
+[`.github/MAINTAINERS_GUIDE.md`][maintainers].
+
+<!-- a collection of links -->
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [golang]: https://go.dev/dl
 [dashboard]: https://web.emporiaenergy.com/#/home
@@ -119,3 +137,5 @@ Environment variables can be used as another way to configure the program:
 [energy]: https://en.wikipedia.org/wiki/Energy
 [power]: https://en.wikipedia.org/wiki/Power_(physics)
 [docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
+[contributing]: ./.github/CONTRIBUTING.md
+[maintainers]: ./.github/MAINTAINERS_GUIDE.md
