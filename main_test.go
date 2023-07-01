@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/zimeg/emporia-time/internal/terminal"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -48,6 +49,23 @@ func TestFormatUsage_Formatted(t *testing.T) {
 				},
 			},
 		},
+		{
+			"extended time values are shown as hh:mm:ss.ss",
+			CommandResult{
+				TimeMeasurement: times.TimeMeasurement{
+					Command: times.CommandTime{
+						Real: 75284924792499.01,
+						User: 43200.56,
+						Sys:  14400.12,
+					},
+				},
+				EnergyResult: energy.EnergyResult{
+					Joules:   18821231198124.75,
+					Watts:    4.00,
+					Sureness: 0.9620,
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -56,16 +74,16 @@ func TestFormatUsage_Formatted(t *testing.T) {
 			t.Error("An unexpected error was encountered while formatting!")
 		}
 
-		if !strings.Contains(output, fmt.Sprintf(" %.2f real", tt.Result.TimeMeasurement.Command.Real)) {
+		if !strings.Contains(output, fmt.Sprintf("%s real", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.Real))) {
 			t.Error("The `real` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %.2f user", tt.Result.TimeMeasurement.Command.User)) {
+		if !strings.Contains(output, fmt.Sprintf(" %s user", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.User))) {
 			t.Error("The `user` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %.2f sys", tt.Result.TimeMeasurement.Command.Sys)) {
+		if !strings.Contains(output, fmt.Sprintf(" %s sys", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.Sys))) {
 			t.Error("The `sys` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %.2f joules", tt.Result.EnergyResult.Joules)) {
+		if !strings.Contains(output, fmt.Sprintf("%.2f joules", tt.Result.EnergyResult.Joules)) {
 			t.Error("The `joules` measurement is missing in the output!")
 		}
 		if !strings.Contains(output, fmt.Sprintf(" %.2f watts", tt.Result.EnergyResult.Watts)) {
