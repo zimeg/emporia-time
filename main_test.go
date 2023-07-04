@@ -152,17 +152,17 @@ func TestFormatUsage_Portable(t *testing.T) {
 		)
 		for _, line := range strings.Split(output, "\n") {
 			switch line {
-			case fmt.Sprintf("%.2f real", tt.Result.TimeMeasurement.Command.Real):
+			case fmt.Sprintf("real %.2f", tt.Result.TimeMeasurement.Command.Real):
 				realTimeCount += 1
-			case fmt.Sprintf("%.2f user", tt.Result.TimeMeasurement.Command.User):
+			case fmt.Sprintf("user %.2f", tt.Result.TimeMeasurement.Command.User):
 				userTimeCount += 1
-			case fmt.Sprintf("%.2f sys", tt.Result.TimeMeasurement.Command.Sys):
+			case fmt.Sprintf("sys %.2f", tt.Result.TimeMeasurement.Command.Sys):
 				sysTimeCount += 1
-			case fmt.Sprintf("%.2f joules", tt.Result.EnergyResult.Joules):
+			case fmt.Sprintf("joules %.2f", tt.Result.EnergyResult.Joules):
 				joulesCount += 1
-			case fmt.Sprintf("%.2f watts", tt.Result.EnergyResult.Watts):
+			case fmt.Sprintf("watts %.2f", tt.Result.EnergyResult.Watts):
 				wattsCount += 1
-			case fmt.Sprintf("%.1f%% sure", tt.Result.EnergyResult.Sureness*100):
+			case fmt.Sprintf("sure %.1f%%", tt.Result.EnergyResult.Sureness*100):
 				surenessCount += 1
 			default:
 				t.Error("An unexpected value appeared in the ouput:", line)
