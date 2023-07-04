@@ -75,12 +75,12 @@ func formatUsage(results CommandResult, isPortableFormat bool) (string, error) {
 {{12 | Value .EnergyResult.Joules}} joules {{10 | Value .EnergyResult.Watts}} watts {{10 | Percent .EnergyResult.Sureness}}% sure`)
 	case true:
 		energyTemplate = strings.TrimSpace(`
-{{0 | Time .TimeMeasurement.Command.Real}} real
-{{0 | Time .TimeMeasurement.Command.User}} user
-{{0 | Time .TimeMeasurement.Command.Sys}} sys
-{{0 | Value .EnergyResult.Joules}} joules
-{{0 | Value .EnergyResult.Watts}} watts
-{{0 | Percent .EnergyResult.Sureness}}% sure`)
+real {{0 | Time .TimeMeasurement.Command.Real}}
+user {{0 | Time .TimeMeasurement.Command.User}}
+sys {{0 | Time .TimeMeasurement.Command.Sys}}
+joules {{0 | Value .EnergyResult.Joules}}
+watts {{0 | Value .EnergyResult.Watts}}
+sure {{0 | Percent .EnergyResult.Sureness}}%`)
 	}
 
 	body, err := terminal.TemplateBuilder(energyTemplate, results)
