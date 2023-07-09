@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
-- Add notes on the steps for cutting a release
+- Add instructions for cutting and versioning a release
 
 ## [0.1.0] - 2023-07-08
 
