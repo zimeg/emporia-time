@@ -21,7 +21,7 @@ and can be an enjoyable language to learn!
 This project hopes to use different directories to separate various concerns,
 currently using the following structure: 
 
-- `/` – primary project files and repository metadata
+- `/` – primary project files and metadata for the repository
 - `.github/` – information for collaboration and continuous integrations
 - `internal/` – helpful utilities needed to create the program
 - `pkg/` – various concerns that are pieced together to form the program
