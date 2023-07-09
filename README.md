@@ -123,8 +123,8 @@ Environment variables can be used as another way to configure the program:
 This project is licensed under the MIT license and is not affiliated with
 or endorsed by Emporia Energy.
 
-Notes on submitting any type of contribution, either in issues or pull requests,
-are taken in [`.github/CONTRIBUTING.md`][contributing].
+Notes on submitting contributions of any type are taken in
+[`.github/CONTRIBUTING.md`][contributing].
 
 Details on the processes around code for this repository are shared in the
 [`.github/MAINTAINERS_GUIDE.md`][maintainers].

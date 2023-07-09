@@ -52,7 +52,7 @@ After you have [created a fork][fork] and made your changes, there are a few
 additional checks before opening a pull request:
 
 - Add an entry to the `CHANGELOG.md` – something brief but descriptive
-- Write tests for common cases of any modifications to the code
+- Write tests that cover common cases for any changes to the code
 - Ensure all documentation is updated – both `godoc` and the outward kinds
 
 Once this looks good to you, [create a pull request][fork_pr] with the following

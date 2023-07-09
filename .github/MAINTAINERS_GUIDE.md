@@ -21,7 +21,7 @@ and can be an enjoyable language to learn!
 This project hopes to use different directories to separate various concerns,
 currently using the following structure: 
 
-- `/` – project files
+- `/` – primary project files and repository metadata
 - `.github/` – information for collaboration and continuous integrations
 - `internal/` – helpful utilities needed to create the program
 - `pkg/` – various concerns that are pieced together to form the program
@@ -55,7 +55,7 @@ check edge cases. There's some balance.
 ### Integration tests
 
 Assurance that the program works as expected with the Emporia API can be gained
-by running the program with a command:
+by running the program with any command:
 
 ```sh
 make build
@@ -89,7 +89,7 @@ If that all looks good and the change is solid, the **Squash and merge** awaits.
 A self-hosted runner is used to verify valid measurements are made when
 monitoring energy usage during the remote integration tests.
 
-To bring runner online, [add a **New self-hosted runner**][runner] using a
+To bring the runner online, [add a **New self-hosted runner**][runner] using a
 device connected to a smart plug.
 
 Then set values for `EMPORIA_DEVICE`, `EMPORIA_USERNAME`, and `EMPORIA_PASSWORD`
