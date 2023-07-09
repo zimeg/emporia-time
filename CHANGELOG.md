@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plainly use the /usr/bin/time command instead of a generic time
 - Parse the `time` output for measurements represented as float64 seconds
 - Display times with hours and minutes in the formatted output
+- Match common output orderings with `-p` for portable parsing
 
 ### Fixed
 
