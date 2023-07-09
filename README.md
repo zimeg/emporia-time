@@ -123,8 +123,8 @@ Environment variables can be used as another way to configure the program:
 This project is licensed under the MIT license and is not affiliated with
 or endorsed by Emporia Energy.
 
-Documentation for the Emporia API was graciously gathered from
-[the `magico13/PyEmVue` project][docs].
+Documentation for the Emporia API was graciously gathered from the
+[`magico13/PyEmVue`][docs] project.
 
 Notes on submitting contributions of any type are taken in
 [`.github/CONTRIBUTING.md`][contributing].
