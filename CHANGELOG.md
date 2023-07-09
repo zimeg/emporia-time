@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2023-07-08
+
 ### Added
 
 - A helpful message is shown when the `--help` flags are used
@@ -80,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the MIT license
 - Created a CHANGELOG
 
-[Unreleased]: https://github.com/zimeg/emporia-time/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/zimeg/emporia-time/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/zimeg/emporia-time/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/zimeg/emporia-time/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/zimeg/emporia-time/releases/tag/v0.0.1
