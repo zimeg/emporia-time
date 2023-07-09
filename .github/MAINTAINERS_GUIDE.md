@@ -7,6 +7,7 @@ Hey there! It's about time... Watt have you been jouling!?
 - [Project setup](#project-setup)
 - [Testing](#testing)
 - [Merging pull requests](#merging-pull-requests)
+- [Cutting a release](#cutting-a-release)
 - [Runner setup](#runner-setup)
 
 ## Project setup
@@ -84,6 +85,22 @@ On any change, the following should be verified before merging:
 
 If that all looks good and the change is solid, the **Squash and merge** awaits.
 
+## Cutting a release
+
+When the time is right to bump versions, either for new features or bug fixes,
+the following steps can be taken:
+
+1. Add the new version header to the `CHANGELOG.md` to mark the release
+2. Preemptively update the version links at the end of the `CHANGELOG.md`
+3. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
+4. Open then merge a pull request with these changes
+5. Draft a [new release][releases] using the version name and entries from the
+`CHANGELOG.md`
+6. Publish this as the latest release!
+
+In deciding a version number, best judgement should be used to follow
+[semantic versioning][semver].
+
 ## Runner setup
 
 A self-hosted runner is used to verify valid measurements are made when
@@ -98,4 +115,6 @@ for Dependabot to configure this workflow.
 
 <!-- a collection of links -->
 [learn_go]: https://go.dev/learn/
+[releases]: https://github.com/zimeg/emporia-time/releases
+[semver]: https://semver.org/spec/v2.0.0.html
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
