@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detailed information about this program is included in the README
 - Include the average power used over a command executation in watts
 - Display measurements on separate lines with the `--portable` or `-p` flags
-- Documentation for collaboration and contribution processes
+- Documentation created for collaboration and contribution processes
 
 ### Changed
 
