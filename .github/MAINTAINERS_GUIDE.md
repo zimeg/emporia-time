@@ -116,4 +116,5 @@ for Dependabot to configure this workflow.
 <!-- a collection of links -->
 [learn_go]: https://go.dev/learn/
 [releases]: https://github.com/zimeg/emporia-time/releases
+[semver]: https://semver.org/spec/v2.0.0.html
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
