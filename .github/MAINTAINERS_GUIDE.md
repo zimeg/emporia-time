@@ -31,7 +31,7 @@ currently using the following structure:
 For ease of development, some commands are added in a `Makefile`:
 
 - `make build` – build the program binary
-- `make test` – perform the written code tests
+- `make test` – perform the written code tests
 - `make clean` – remove all program artifacts
 
 The name of the binary can be changed with `make build BIN=timer`.

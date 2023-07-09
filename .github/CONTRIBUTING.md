@@ -64,7 +64,7 @@ information:
 And with that, you can open the pull request and wait for a review! Woo! Go you!
 
 For more information on the code processes for this project, check out the
-[`MAINTAINERS_GUIDE.md`](maintainers].
+[`MAINTAINERS_GUIDE.md`][maintainers].
 
 <!-- a collection of links -->
 [conduct]: ./CODE_OF_CONDUCT.md
