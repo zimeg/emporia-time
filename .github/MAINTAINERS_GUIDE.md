@@ -58,8 +58,8 @@ Assurance that the program works as expected with the Emporia API can be gained
 by running the program with any command:
 
 ```sh
-make build
-./etime sleep 4
+$ make build
+$ ./etime sleep 4
 ```
 
 A smart plug and Emporia credentials are needed for this to be successful.
