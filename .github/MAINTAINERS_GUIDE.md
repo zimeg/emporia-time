@@ -98,8 +98,8 @@ the following steps can be taken:
 `CHANGELOG.md`
 6. Publish this as the latest release!
 
-In deciding the version name, best judgement should be used to follow
-[semantic versioning][semver]. Feature additions usually justify a minor bump.
+In deciding a version number, best judgement should be used to follow
+[semantic versioning][semver].
 
 ## Runner setup
 
