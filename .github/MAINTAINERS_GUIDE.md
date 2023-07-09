@@ -7,6 +7,7 @@ Hey there! It's about time... Watt have you been jouling!?
 - [Project setup](#project-setup)
 - [Testing](#testing)
 - [Merging pull requests](#merging-pull-requests)
+- [Cutting a release](#cutting-a-release)
 - [Runner setup](#runner-setup)
 
 ## Project setup
@@ -83,6 +84,22 @@ On any change, the following should be verified before merging:
 - Code changes move the project in a positive direction
 
 If that all looks good and the change is solid, the **Squash and merge** awaits.
+
+## Cutting a release
+
+When the time is right to bump versions, either for new features or bug fixes,
+the following steps can be taken:
+
+1. Add the new version header to the `CHANGELOG.md` to mark the release
+2. Preemptively update the version links at the end of the `CHANGELOG.md`
+3. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
+4. Open then merge a pull request with these changes
+5. Draft a [new release][releases] using the version name and entries from the
+`CHANGELOG.md`
+6. Publish this as the latest release!
+
+In deciding the version name, best judgement should be used to follow
+[semantic versioning][semver]. Feature additions usually justify a minor bump.
 
 ## Runner setup
 
