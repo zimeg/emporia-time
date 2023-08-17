@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/aws/aws-sdk-go v1.44.309
+	github.com/aws/aws-sdk-go v1.44.325
 )
 
 require (
