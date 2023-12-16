@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Include instructions for cutting and versioning a release
 - Reduce frequency of dependabot updates to once a month
+- Include dependency checks for actions in GitHub Actions
 
 ## [0.1.0] - 2023-07-08
 
