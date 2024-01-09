@@ -93,8 +93,8 @@ $ ./etime [flags] <command> [args]
 
 Configurations to this program can be made using `flags` before the `command`:
 
-- `-h`, `--help`: output a hopefully helpful message
-- `-p`, `--portable`: display measurements on separate lines
+- `-h`, `--help`: display a hopefully helpful message
+- `-p`, `--portable`: output measurements on separate lines
 - `--device <string>`: name or ID of the smart plug to measure
 - `--username <string>`: account username for Emporia
 - `--password <string>`: account password for Emporia

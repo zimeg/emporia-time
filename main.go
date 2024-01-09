@@ -23,8 +23,12 @@ type CommandResult struct {
 // main executes the command and displays energy stats
 func main() {
 	command := terminal.ParseFlags(os.Args)
-	client := new(emporia.Emporia)
+	if len(command.Args) <= 0 || command.Flags.Help {
+		terminal.PrintHelpMessage()
+		os.Exit(0)
+	}
 
+	client := new(emporia.Emporia)
 	if config, err := emporia.SetupConfig(command.Flags); err != nil {
 		log.Fatalf("Error: %s", err)
 	} else {
