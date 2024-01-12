@@ -60,8 +60,8 @@ func FormatSeconds(seconds float64) string {
 	}
 }
 
-// PrintHelpMessage outputs an informative message for this program
-func PrintHelpMessage() {
+// printHelpMessage outputs an informative message for this program
+func printHelpMessage() {
 	helpTemplate := `
 Measure the time and energy used while executing a command
 
