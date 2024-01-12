@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go v1.49.13
+	github.com/stretchr/testify v1.8.4
 )
 
 require (
@@ -15,8 +16,6 @@ require (
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
-	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/term v0.1.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
