@@ -31,7 +31,7 @@ func Setup() (command program.Command, client emporia.Emporia, err error) {
 	return command, client, err
 }
 
-// Run executes the command and displays energy stats
+// Run executes the command and returns the usage statistics
 func Run(command program.Command, client emporia.Emporia) (results CommandResult, err error) {
 	if measurements, err := times.TimeExec(command); err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
