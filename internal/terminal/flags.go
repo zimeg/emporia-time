@@ -33,7 +33,7 @@ func ParseFlags(arguments []string) Command {
 	flagset.StringVar(&flags.Password, "password", "", "account password for Emporia")
 	flagset.StringVar(&flags.Username, "username", "", "account username for Emporia")
 
-	flagset.Usage = PrintHelpMessage
+	flagset.Usage = printHelpMessage
 	flagset.Parse(arguments[1:])
 	if len(arguments) <= 1 || flags.Help {
 		printHelpMessage()
