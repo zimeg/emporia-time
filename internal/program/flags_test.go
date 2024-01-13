@@ -57,6 +57,13 @@ func TestParseFlags(t *testing.T) {
 				Flags: Flags{Help: true},
 			},
 		},
+		"help is noticed when no arguments are provided": {
+			arguments: []string{"etime"},
+			command: Command{
+				Args:  []string{},
+				Flags: Flags{Help: true},
+			},
+		},
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
