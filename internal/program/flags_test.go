@@ -10,7 +10,6 @@ func TestParseFlags(t *testing.T) {
 	tests := map[string]struct {
 		arguments []string
 		command   Command
-		makesExit bool
 	}{
 		"plain arguments are treated as a command": {
 			arguments: []string{"etime", "sleep", "12"},
