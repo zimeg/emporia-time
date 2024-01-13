@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zimeg/emporia-time/internal/terminal"
+	"github.com/zimeg/emporia-time/internal/display"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -74,13 +74,13 @@ func TestFormatUsage_Formatted(t *testing.T) {
 			t.Error("An unexpected error was encountered while formatting!")
 		}
 
-		if !strings.Contains(output, fmt.Sprintf("%s real", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.Real))) {
+		if !strings.Contains(output, fmt.Sprintf("%s real", display.FormatSeconds(tt.Result.TimeMeasurement.Command.Real))) {
 			t.Error("The `real` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %s user", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.User))) {
+		if !strings.Contains(output, fmt.Sprintf(" %s user", display.FormatSeconds(tt.Result.TimeMeasurement.Command.User))) {
 			t.Error("The `user` measurement is missing in the output!")
 		}
-		if !strings.Contains(output, fmt.Sprintf(" %s sys", terminal.FormatSeconds(tt.Result.TimeMeasurement.Command.Sys))) {
+		if !strings.Contains(output, fmt.Sprintf(" %s sys", display.FormatSeconds(tt.Result.TimeMeasurement.Command.Sys))) {
 			t.Error("The `sys` measurement is missing in the output!")
 		}
 		if !strings.Contains(output, fmt.Sprintf("%.2f joules", tt.Result.EnergyResult.Joules)) {

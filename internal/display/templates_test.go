@@ -1,4 +1,4 @@
-package terminal
+package display
 
 import (
 	"testing"
@@ -61,7 +61,6 @@ func TestFormatSeconds(t *testing.T) {
 			Expected: "87:15:59.27",
 		},
 	}
-
 	for _, tt := range tests {
 		actual := FormatSeconds(tt.Seconds)
 		if actual != tt.Expected {

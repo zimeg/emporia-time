@@ -1,4 +1,4 @@
-package terminal
+package display
 
 import (
 	"fmt"
@@ -60,8 +60,8 @@ func FormatSeconds(seconds float64) string {
 	}
 }
 
-// printHelpMessage outputs an informative message for this program
-func printHelpMessage() {
+// PrintHelpMessage outputs an informative message for this program
+func PrintHelpMessage() {
 	helpTemplate := `
 Measure the time and energy used while executing a command
 

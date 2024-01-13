@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/zimeg/emporia-time/internal/terminal"
+	"github.com/zimeg/emporia-time/internal/program"
 )
 
 // EmporiaConfig contains device configurations and user authentications
@@ -24,7 +24,7 @@ type EmporiaTokenSet struct {
 }
 
 // SetupConfig prepares the local configurations for a command
-func SetupConfig(flags terminal.Flags) (EmporiaConfig, error) {
+func SetupConfig(flags program.Flags) (EmporiaConfig, error) {
 	if config, err := LoadConfigFile(); err != nil {
 		return EmporiaConfig{}, err
 	} else if err := config.gatherTokens(flags); err != nil {
