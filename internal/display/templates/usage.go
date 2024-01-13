@@ -6,12 +6,12 @@ import (
 
 // UsageStatistics contains methods to retreive information of command results
 type UsageStatistics interface {
-	GetJoules() float64   // GetJoules returns the joules in a result
-	GetWatts() float64    // GetWatts returns the watts in a result
-	GetSureness() float64 // GetSureness returns the sureness of a result
 	GetReal() float64     // GetReal returns the real time of a command
 	GetUser() float64     // GetUser returns the user time of a command
 	GetSys() float64      // GetSys returns the sys time of a command
+	GetJoules() float64   // GetJoules returns the joules in a result
+	GetWatts() float64    // GetWatts returns the watts in a result
+	GetSureness() float64 // GetSureness returns the sureness of a result
 }
 
 // FormatUsage arranges information about resource usage of a command
