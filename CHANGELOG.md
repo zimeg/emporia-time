@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Maintenance
 
+- Perform asserts on uniquely named tests across packages
 - Refactor command usage templating into a templates package
 - Separate concerns of a single internal package into many
 - Increment the end license year to include this new year
