@@ -24,6 +24,21 @@ type EnergyResult struct {
 	Duration time.Duration // Duration is the amount of time used running a command
 }
 
+// GetJoules returns the joules in a result
+func (result EnergyResult) GetJoules() float64 {
+	return result.Joules
+}
+
+// GetWatts returns the watts in a result
+func (result EnergyResult) GetWatts() float64 {
+	return result.Watts
+}
+
+// GetSureness returns the sureness of a result
+func (result EnergyResult) GetSureness() float64 {
+	return result.Sureness
+}
+
 // ScaleKWhToWs converts kilowatt-hours to watt-seconds
 func ScaleKWhToWs(kwh float64) float64 {
 	return kwh * KiloToUnit * HourToSeconds
