@@ -4,91 +4,33 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
-	"strings"
 
-	"github.com/zimeg/emporia-time/internal/display"
-	"github.com/zimeg/emporia-time/internal/program"
+	etime "github.com/zimeg/emporia-time/cmd"
+	"github.com/zimeg/emporia-time/internal/display/templates"
 	"github.com/zimeg/emporia-time/pkg/emporia"
-	"github.com/zimeg/emporia-time/pkg/energy"
-	"github.com/zimeg/emporia-time/pkg/times"
 )
 
-// CommandResult holds information from the run command
-type CommandResult struct {
-	EnergyResult    energy.EnergyResult
-	ExitCode        int
-	TimeMeasurement times.TimeMeasurement
-}
-
-// main executes the command and displays energy stats
+// main manages the lifecycle of this program
 func main() {
-	command := program.ParseFlags(os.Args)
-	if command.Flags.Help {
+	command, client, err := etime.Setup()
+	if err != nil {
+		log.Fatalf("Error: %s", err)
+	} else if command.Flags.Help {
 		os.Exit(0)
 	}
-	client := new(emporia.Emporia)
-	if config, err := emporia.SetupConfig(command.Flags); err != nil {
-		log.Fatalf("Error: %s", err)
-	} else {
-		client.Config = config
-	}
-
 	if available, err := emporia.EmporiaStatus(); err != nil {
 		log.Fatalf("Error: %s", err)
 	} else if !available {
 		log.Fatalf("Error: Cannot measure energy during Emporia maintenance\n")
 	}
-
-	// Perform and measure the command
-	results := CommandResult{}
-	if measurements, err := times.TimeExec(command); err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
-			results.ExitCode = exitError.ExitCode()
-		} else {
-			log.Printf("Error: %s", err)
-		}
-		results.TimeMeasurement = measurements
-	} else {
-		results.TimeMeasurement = measurements
-	}
-
-	if usage, err := client.CollectEnergyUsage(results.TimeMeasurement); err != nil {
+	results, err := etime.Run(command, client)
+	if err != nil {
 		log.Fatalf("Error: %s", err)
-	} else {
-		results.EnergyResult = usage
 	}
-
-	// Output the resulting measurements
-	if stats, err := formatUsage(results, command.Flags.Portable); err != nil {
+	if stats, err := templates.FormatUsage(results, command.Flags.Portable); err != nil {
 		log.Fatalf("Error: %s", err)
 	} else {
 		fmt.Fprintf(os.Stderr, "%s\n", stats)
 	}
 	os.Exit(results.ExitCode)
-}
-
-// formatUsage arranges information about resource usage of a command
-func formatUsage(results CommandResult, isPortableFormat bool) (string, error) {
-	var energyTemplate string
-	switch isPortableFormat {
-	case false:
-		energyTemplate = strings.TrimSpace(`
-{{12 | TimeF .TimeMeasurement.Command.Real}} real {{12 | TimeF .TimeMeasurement.Command.User}} user {{12 | TimeF .TimeMeasurement.Command.Sys}} sys
-{{12 | Value .EnergyResult.Joules}} joules {{10 | Value .EnergyResult.Watts}} watts {{10 | Percent .EnergyResult.Sureness}}% sure`)
-	case true:
-		energyTemplate = strings.TrimSpace(`
-real {{0 | Time .TimeMeasurement.Command.Real}}
-user {{0 | Time .TimeMeasurement.Command.User}}
-sys {{0 | Time .TimeMeasurement.Command.Sys}}
-joules {{0 | Value .EnergyResult.Joules}}
-watts {{0 | Value .EnergyResult.Watts}}
-sure {{0 | Percent .EnergyResult.Sureness}}%`)
-	}
-
-	body, err := display.TemplateBuilder(energyTemplate, results)
-	if err != nil {
-		return "", err
-	}
-	return body, nil
 }

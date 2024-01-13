@@ -1,64 +1,11 @@
-package display
+package templates
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"regexp"
 	"strings"
-	"text/template"
 )
-
-// TemplateBuilder creates a string using a template and variables
-func TemplateBuilder(templateStr string, body interface{}) (string, error) {
-	funcs := template.FuncMap{
-		"Bold": func(f string) string {
-			return fmt.Sprintf("\x1b[1m%s\x1b[0m", f)
-		},
-		"CommandName": func() string {
-			return os.Args[0]
-		},
-		"Percent": func(f float64, spacing int) string {
-			return fmt.Sprintf("%*.1f", spacing, f*100)
-		},
-		"Time": func(f float64, spacing int) string {
-			return fmt.Sprintf("%*.2f", spacing, f)
-		},
-		"TimeF": func(f float64, spacing int) string {
-			return fmt.Sprintf("%*s", spacing, FormatSeconds(f))
-		},
-		"Value": func(f float64, spacing int) string {
-			return fmt.Sprintf("%*.2f", spacing, f)
-		},
-	}
-
-	tmpl, err := template.New("outputs").Funcs(funcs).Parse(templateStr)
-	if err != nil {
-		return "", err
-	}
-	var result strings.Builder
-	if tmpl.Execute(&result, body) != nil {
-		return "", err
-	}
-	formattedString := result.String()
-	return formattedString, nil
-}
-
-// FormatSeconds converts seconds into the hh:mm:ss.ss without leading zeros
-func FormatSeconds(seconds float64) string {
-	h := math.Floor(seconds / 3600)
-	m := math.Floor((seconds - (h * 3600)) / 60)
-	s := seconds - (h * 3600) - (m * 60)
-
-	switch {
-	case h > 0:
-		return fmt.Sprintf("%d:%02d:%05.2f", int(h), int(m), s)
-	case m > 0:
-		return fmt.Sprintf("%d:%05.2f", int(m), s)
-	default:
-		return fmt.Sprintf("%.2f", s)
-	}
-}
 
 // PrintHelpMessage outputs an informative message for this program
 func PrintHelpMessage() {
@@ -94,7 +41,7 @@ Measure the time and energy used while executing a command
         922.63 joules      76.87 watts      100.0%% sure
 
 `
-	if body, err := TemplateBuilder(helpTemplate, nil); err != nil {
+	if body, err := templateBuilder(helpTemplate, nil); err != nil {
 		boldRegex := regexp.MustCompile(`{{ Bold "([^"]+)" }}`)
 		body = boldRegex.ReplaceAllString(helpTemplate, "$1")
 		commandNameRegex := regexp.MustCompile(`{{ CommandName }}`)

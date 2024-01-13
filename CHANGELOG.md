@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Parse the provided help flag to display a helpful message
+- Return the actual error that happens when building templates
 
 ### Maintenance
 
+- Refactor command usage templating into a templates package
 - Separate concerns of a single internal package into many
 - Increment the end license year to include this new year
 - Bump the Golang version to the most recent version of 1.21

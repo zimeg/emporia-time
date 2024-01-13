@@ -29,6 +29,21 @@ type CommandTime struct {
 	Sys  float64
 }
 
+// GetReal returns the real time of a command
+func (times TimeMeasurement) GetReal() float64 {
+	return times.Command.Real
+}
+
+// GetUser returns the user time of a command
+func (times TimeMeasurement) GetUser() float64 {
+	return times.Command.User
+}
+
+// GetSys returns the sys time of a command
+func (times TimeMeasurement) GetSys() float64 {
+	return times.Command.Sys
+}
+
 // TimeExec performs the command and prints outputs while measuring timing
 func TimeExec(command program.Command) (TimeMeasurement, error) {
 	var times TimeMeasurement
@@ -86,6 +101,10 @@ func parseTimeResults(output bytes.Buffer) (times CommandTime, buff bytes.Buffer
 		fields := strings.Fields(line)
 		measurement, value := fields[0], fields[1]
 		switch measurement {
+		case "real":
+			if times.Real, err = parseTimeValue(value); err != nil {
+				return times, buff, errors.New("Failed to parse the real time value!")
+			}
 		case "user":
 			if times.User, err = parseTimeValue(value); err != nil {
 				return times, buff, errors.New("Failed to parse the user time value!")
@@ -93,10 +112,6 @@ func parseTimeResults(output bytes.Buffer) (times CommandTime, buff bytes.Buffer
 		case "sys":
 			if times.Sys, err = parseTimeValue(value); err != nil {
 				return times, buff, errors.New("Failed to parse the sys time value!")
-			}
-		case "real":
-			if times.Real, err = parseTimeValue(value); err != nil {
-				return times, buff, errors.New("Failed to parse the real time value!")
 			}
 		}
 	}
