@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/zimeg/emporia-time/internal/program"
 	"github.com/zimeg/emporia-time/internal/terminal"
 )
 
@@ -18,20 +19,20 @@ type EmporiaCredentials struct {
 }
 
 // headlessLogin returns if all credentials are provided by flag or environment
-func (config *EmporiaConfig) headlessLogin(flags terminal.Flags) bool {
+func (config *EmporiaConfig) headlessLogin(flags program.Flags) bool {
 	return (flags.Username != "" || os.Getenv("EMPORIA_USERNAME") != "") &&
 		(flags.Password != "" || os.Getenv("EMPORIA_PASSWORD") != "")
 }
 
 // useCredentials returns if new login credentials should be used
-func (config *EmporiaConfig) useCredentials(flags terminal.Flags) bool {
+func (config *EmporiaConfig) useCredentials(flags program.Flags) bool {
 	return (config.Tokens.IdToken == "" || config.Tokens.RefreshToken == "") ||
 		(flags.Username != "" || os.Getenv("EMPORIA_USERNAME") != "") ||
 		(flags.Password != "" || os.Getenv("EMPORIA_PASSWORD") != "")
 }
 
 // gatherTokens collects and sets the tokens needed for calling the Emporia API
-func (config *EmporiaConfig) gatherTokens(flags terminal.Flags) error {
+func (config *EmporiaConfig) gatherTokens(flags program.Flags) error {
 	if config.useCredentials(flags) {
 		if credentials, err := config.gatherCredentials(flags); err != nil {
 			return err
@@ -51,7 +52,7 @@ func (config *EmporiaConfig) gatherTokens(flags terminal.Flags) error {
 }
 
 // gatherCredentials prompts for an Emporia username and password
-func (config *EmporiaConfig) gatherCredentials(flags terminal.Flags) (EmporiaCredentials, error) {
+func (config *EmporiaConfig) gatherCredentials(flags program.Flags) (EmporiaCredentials, error) {
 	credentials := EmporiaCredentials{}
 	if !config.headlessLogin(flags) {
 		fmt.Printf("Enter your Emporia credentials <https://web.emporiaenergy.com/>\n")
@@ -79,7 +80,7 @@ func (config *EmporiaConfig) gatherCredentials(flags terminal.Flags) (EmporiaCre
 }
 
 // gatherDevice prompts and stores the choice of an Emporia device
-func (config *EmporiaConfig) gatherDevice(flags terminal.Flags) error {
+func (config *EmporiaConfig) gatherDevice(flags program.Flags) error {
 	var names, gids, gidLabels = []string{}, []string{}, []string{}
 	var device string
 

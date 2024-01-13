@@ -1,7 +1,9 @@
-package terminal
+package program
 
 import (
 	"flag"
+
+	"github.com/zimeg/emporia-time/internal/display"
 )
 
 // Flags holds command line flags specific to etime
@@ -33,10 +35,10 @@ func ParseFlags(arguments []string) Command {
 	flagset.StringVar(&flags.Password, "password", "", "account password for Emporia")
 	flagset.StringVar(&flags.Username, "username", "", "account username for Emporia")
 
-	flagset.Usage = printHelpMessage
+	flagset.Usage = display.PrintHelpMessage
 	flagset.Parse(arguments[1:])
 	if len(arguments) <= 1 || flags.Help {
-		printHelpMessage()
+		display.PrintHelpMessage()
 	}
 	return Command{Args: flagset.Args(), Flags: flags}
 }

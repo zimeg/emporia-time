@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zimeg/emporia-time/internal/terminal"
+	"github.com/zimeg/emporia-time/internal/program"
 )
 
 // TimeMeasurement holds information of a command run
@@ -30,7 +30,7 @@ type CommandTime struct {
 }
 
 // TimeExec performs the command and prints outputs while measuring timing
-func TimeExec(command terminal.Command) (TimeMeasurement, error) {
+func TimeExec(command program.Command) (TimeMeasurement, error) {
 	var times TimeMeasurement
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer

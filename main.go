@@ -7,7 +7,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/zimeg/emporia-time/internal/terminal"
+	"github.com/zimeg/emporia-time/internal/display"
+	"github.com/zimeg/emporia-time/internal/program"
 	"github.com/zimeg/emporia-time/pkg/emporia"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
@@ -22,7 +23,7 @@ type CommandResult struct {
 
 // main executes the command and displays energy stats
 func main() {
-	command := terminal.ParseFlags(os.Args)
+	command := program.ParseFlags(os.Args)
 	if command.Flags.Help {
 		os.Exit(0)
 	}
@@ -85,7 +86,7 @@ watts {{0 | Value .EnergyResult.Watts}}
 sure {{0 | Percent .EnergyResult.Sureness}}%`)
 	}
 
-	body, err := terminal.TemplateBuilder(energyTemplate, results)
+	body, err := display.TemplateBuilder(energyTemplate, results)
 	if err != nil {
 		return "", err
 	}
