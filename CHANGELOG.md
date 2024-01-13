@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Parse the provided help flag to display a helpful message
+
 ### Maintenance
 
 - Include instructions for cutting and versioning a release
