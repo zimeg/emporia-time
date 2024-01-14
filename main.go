@@ -12,7 +12,7 @@ import (
 
 // main manages the lifecycle of this program
 func main() {
-	command, client, err := etime.Setup()
+	command, client, err := etime.Setup(os.Args)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	} else if command.Flags.Help {

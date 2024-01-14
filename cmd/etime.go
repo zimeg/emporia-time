@@ -1,7 +1,6 @@
 package etime
 
 import (
-	"os"
 	"os/exec"
 
 	"github.com/zimeg/emporia-time/internal/program"
@@ -18,8 +17,8 @@ type CommandResult struct {
 }
 
 // Setup prepares the command and client with provided inputs
-func Setup() (command program.Command, client emporia.Emporia, err error) {
-	command = program.ParseFlags(os.Args)
+func Setup(arguments []string) (command program.Command, client emporia.Emporia, err error) {
+	command = program.ParseFlags(arguments)
 	if command.Flags.Help {
 		return command, client, err
 	}
