@@ -37,8 +37,8 @@ func ParseFlags(arguments []string) Command {
 
 	flagset.Usage = templates.PrintHelpMessage
 	flagset.Parse(arguments[1:])
-	if len(arguments) <= 1 || flags.Help {
-		templates.PrintHelpMessage()
+	if len(arguments) <= 1 {
+		flags.Help = true
 	}
 	return Command{Args: flagset.Args(), Flags: flags}
 }
