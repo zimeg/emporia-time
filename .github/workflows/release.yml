@@ -26,6 +26,13 @@ jobs:
       - uses: goreleaser/goreleaser-action@v5
         with:
           args: release --clean --snapshot --skip=publish
+      - name: Collect the version
+        run: echo "VERSION=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
+      - name: Upload the checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.VERSION }}_checksums.txt
+          path: ./dist/etime_${{ env.VERSION }}_checksums.txt
       - uses: actions/cache/save@v3
         if: always()
         with:
@@ -49,21 +56,14 @@ jobs:
           - windows_x86_64.zip
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - run: echo "VERSION=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
       - uses: actions/cache/restore@v3
         with:
           path: ./dist
           key: snapshots
       - uses: actions/upload-artifact@v4
         with:
-          name: etime_$VERSION_checksums.txt
-          path: ./dist/etime_$VERSION_checksums.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: etime_$VERSION_${{ matrix.target }}
-          path: ./dist/etime_$VERSION_${{ matrix.target }}
+          name: etime_${{ env.VERSION }}_${{ matrix.target }}
+          path: ./dist/etime_${{ env.VERSION }}_${{ matrix.target }}
 
   release:
     name: Distribute a release
