@@ -73,13 +73,14 @@ jobs:
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
 
   notify:
-    name: Latest notification
+    name: Post a notification
     needs: artifacts
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
-      - name:
+      - name: Leave a comment
         run: |
           PR_COMMENT="Latest builds: https://github.com/$GH_REPO/actions/runs/$GH_RUN_ID"
           PR_REF="${{ github.ref_name }}"
