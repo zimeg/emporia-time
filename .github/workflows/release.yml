@@ -1,0 +1,123 @@
+name: Package this version
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    name: Save a snapshot
+    if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21.x'
+      - name: Create snapshots
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          args: release --clean --snapshot --skip=publish
+      - name: Collect the current version
+        id: tag
+        run: |
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_OUTPUT"
+      - name: Upload the checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_checksums.txt
+          path: ./dist/etime_${{ env.version }}_checksums.txt
+      - name: Cache the moments
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ./dist
+          key: snapshots-${{ github.sha }}
+
+  artifacts:
+    name: Share the artifacts
+    needs: snapshot
+    runs-on: ubuntu-latest
+    env:
+      version: ${{ needs.snapshot.outputs.version }}
+    strategy:
+      matrix:
+        target:
+          - darwin_arm64.tar.gz
+          - darwin_x86_64.tar.gz
+          - linux_arm64.tar.gz
+          - linux_i386.tar.gz
+          - linux_x86_64.tar.gz
+          - windows_arm64.zip
+          - windows_i386.zip
+          - windows_x86_64.zip
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore cached snapshots
+        uses: actions/cache/restore@v3
+        with:
+          path: ./dist
+          key: snapshots-${{ github.sha }}
+      - name: Upload a snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_${{ matrix.target }}
+          path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
+
+  notify:
+    name: Post a notification
+    needs: artifacts
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Leave a comment
+        run: |
+          PR_COMMENT="Latest builds: https://github.com/$GH_REPO/actions/runs/$GH_RUN_ID"
+          PR_REF="${{ github.ref_name }}"
+          if [[ $PR_REF == *"/merge" ]]; then
+            PR_REF="${PR_REF%%/merge}"
+          fi
+          if ! gh pr comment "$PR_REF" --repo "$GH_REPO" --edit-last --body "$PR_COMMENT"; then
+            gh pr comment "$PR_REF" --repo "$GH_REPO" --body "$PR_COMMENT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+
+  release:
+    name: Distribute a release
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21.x'
+      - name: Create releases
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

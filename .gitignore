@@ -1,6 +1,7 @@
-# binary
+# Built binaries
 etime
+dist/*
 
-# development
+# Development leftovers
 *.swp
 .github/runner
