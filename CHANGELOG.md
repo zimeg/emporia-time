@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parse the provided help flag to display a helpful message
 - Return the actual error that happens when building templates
 - Avoid a panic when no command arguments are provided
+- Output errors from parsing flags in a more clear manner
 
 ### Maintenance
 
