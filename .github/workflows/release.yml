@@ -48,6 +48,8 @@ jobs:
     name: Share the artifacts
     needs: snapshot
     runs-on: ubuntu-latest
+    env:
+      version: ${{ needs.snapshot.outputs.version }}
     strategy:
       matrix:
         target:
@@ -69,8 +71,6 @@ jobs:
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
-          env:
-            version: ${{needs.snapshot.outputs.version}}
 
   release:
     name: Distribute a release
