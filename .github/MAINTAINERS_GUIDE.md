@@ -97,6 +97,7 @@ the following steps can be taken:
 5. Draft a [new release][releases] using the version name and entries from the
 `CHANGELOG.md`
 6. Publish this as the latest release!
+7. Close the current milestone for the latest release then create a new one
 
 In deciding a version number, best judgement should be used to follow
 [semantic versioning][semver].
