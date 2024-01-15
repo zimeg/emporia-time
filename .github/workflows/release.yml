@@ -19,13 +19,16 @@ jobs:
     outputs:
       version: ${{ steps.tag.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout the repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
         with:
           go-version: '1.21.x'
-      - uses: goreleaser/goreleaser-action@v5
+      - name: Create snapshots
+        uses: goreleaser/goreleaser-action@v5
         with:
           args: release --clean --snapshot --skip=publish
       - name: Collect the current version
@@ -38,7 +41,8 @@ jobs:
         with:
           name: etime_${{ env.version }}_checksums.txt
           path: ./dist/etime_${{ env.version }}_checksums.txt
-      - uses: actions/cache/save@v3
+      - name: Cache the moments
+        uses: actions/cache/save@v3
         if: always()
         with:
           path: ./dist
@@ -62,12 +66,15 @@ jobs:
           - windows_i386.zip
           - windows_x86_64.zip
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v3
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore cached snapshots
+        uses: actions/cache/restore@v3
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
-      - uses: actions/upload-artifact@v4
+      - name: Upload a snapshot
+        uses: actions/upload-artifact@v4
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
@@ -100,13 +107,16 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout the repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
         with:
           go-version: '1.21.x'
-      - uses: goreleaser/goreleaser-action@v5
+      - name: Create releases
+        uses: goreleaser/goreleaser-action@v5
         with:
           args: release --clean
         env:
