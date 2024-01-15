@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: snapshot-release
-          path: ./dist
+          path: ./dist/etime_*
       - name: Distribute a release
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: goreleaser/goreleaser-action@v5
