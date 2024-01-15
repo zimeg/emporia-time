@@ -72,6 +72,28 @@ jobs:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
 
+  notify:
+    name: Latest notification
+    needs: artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name:
+        run: |
+          PR_COMMENT="Latest builds: https://github.com/$GH_REPO/actions/runs/$GH_RUN_ID"
+          PR_REF="${{ github.ref_name }}"
+          if [[ $PR_REF == *"/merge" ]]; then
+            PR_REF="${PR_REF%%/merge}"
+          fi
+          if ! gh pr comment "$PR_REF" --repo "$GH_REPO" --edit-last --body "$PR_COMMENT"; then
+            gh pr comment "$PR_REF" --repo "$GH_REPO" --body "$PR_COMMENT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+
   release:
     name: Distribute a release
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
