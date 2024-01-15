@@ -16,6 +16,8 @@ jobs:
     name: Save a snapshot
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,12 +29,15 @@ jobs:
         with:
           args: release --clean --snapshot --skip=publish
       - name: Collect the current version
-        run: echo "VERSION=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
+        id: tag
+        run: |
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_OUTPUT"
       - name: Upload the checksums
         uses: actions/upload-artifact@v4
         with:
-          name: etime_${{ env.VERSION }}_checksums.txt
-          path: ./dist/etime_${{ env.VERSION }}_checksums.txt
+          name: etime_${{ env.version }}_checksums.txt
+          path: ./dist/etime_${{ env.version }}_checksums.txt
       - uses: actions/cache/save@v3
         if: always()
         with:
@@ -62,8 +67,10 @@ jobs:
           key: snapshots-${{ github.sha }}
       - uses: actions/upload-artifact@v4
         with:
-          name: etime_${{ env.VERSION }}_${{ matrix.target }}
-          path: ./dist/etime_${{ env.VERSION }}_${{ matrix.target }}
+          name: etime_${{ env.version }}_${{ matrix.target }}
+          path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
+          env:
+            version: ${{ needs.snapshot.outputs.version }}
 
   release:
     name: Distribute a release
