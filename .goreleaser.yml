@@ -30,4 +30,4 @@ archives:
         format: zip
 
 changelog:
-  disable: true
+  skip: true
