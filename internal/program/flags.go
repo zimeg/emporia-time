@@ -1,9 +1,8 @@
 package program
 
 import (
+	"bytes"
 	"flag"
-
-	"github.com/zimeg/emporia-time/internal/display/templates"
 )
 
 // Flags holds command line flags specific to etime
@@ -22,8 +21,8 @@ type Command struct {
 }
 
 // ParseFlags prepares the command using provided arguments
-func ParseFlags(arguments []string) Command {
-	var flagset flag.FlagSet
+func ParseFlags(arguments []string) (Command, error) {
+	var flagset = flag.NewFlagSet("etime", flag.ContinueOnError)
 	var flags Flags
 
 	flagset.BoolVar(&flags.Help, "h", false, "display this very informative message")
@@ -35,11 +34,14 @@ func ParseFlags(arguments []string) Command {
 	flagset.StringVar(&flags.Password, "password", "", "account password for Emporia")
 	flagset.StringVar(&flags.Username, "username", "", "account username for Emporia")
 
-	flagset.Usage = templates.PrintHelpMessage
-	flagset.Parse(arguments[1:])
+	flagset.SetOutput(&bytes.Buffer{})
+	err := flagset.Parse(arguments[1:])
+	if err != nil {
+		return Command{}, err
+	}
 	commandArgs := flagset.Args()
 	if len(commandArgs) <= 0 {
 		flags.Help = true
 	}
-	return Command{Args: commandArgs, Flags: flags}
+	return Command{Args: commandArgs, Flags: flags}, nil
 }

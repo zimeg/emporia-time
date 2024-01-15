@@ -18,8 +18,8 @@ type CommandResult struct {
 
 // Setup prepares the command and client with provided inputs
 func Setup(arguments []string) (command program.Command, client emporia.Emporia, err error) {
-	command = program.ParseFlags(arguments)
-	if command.Flags.Help {
+	command, err = program.ParseFlags(arguments)
+	if err != nil || command.Flags.Help {
 		return command, client, err
 	}
 	if config, err := emporia.SetupConfig(command.Flags); err != nil {

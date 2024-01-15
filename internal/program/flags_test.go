@@ -1,6 +1,7 @@
 package program
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -8,74 +9,88 @@ import (
 
 func TestParseFlags(t *testing.T) {
 	tests := map[string]struct {
-		arguments []string
-		command   Command
+		Arguments []string
+		Command   Command
+		Error     error
 	}{
 		"plain arguments are treated as a command": {
-			arguments: []string{"etime", "sleep", "12"},
-			command: Command{
+			Arguments: []string{"etime", "sleep", "12"},
+			Command: Command{
 				Args: []string{"sleep", "12"},
 			},
 		},
 		"flags before the command are parsed as flags": {
-			arguments: []string{"etime", "-p", "make", "build"},
-			command: Command{
+			Arguments: []string{"etime", "-p", "make", "build"},
+			Command: Command{
 				Args:  []string{"make", "build"},
 				Flags: Flags{Portable: true},
 			},
 		},
 		"flags after the command are parsed as command": {
-			arguments: []string{"etime", "zip", "code.zip", "-r", "."},
-			command: Command{
+			Arguments: []string{"etime", "zip", "code.zip", "-r", "."},
+			Command: Command{
 				Args: []string{"zip", "code.zip", "-r", "."},
 			},
 		},
 		"overlapping command flags are for the command": {
-			arguments: []string{"etime", "unzip", "-p", "code.zip"},
-			command: Command{
+			Arguments: []string{"etime", "unzip", "-p", "code.zip"},
+			Command: Command{
 				Args: []string{"unzip", "-p", "code.zip"},
 			},
 		},
 		"duplicated flags that matched are set separate": {
-			arguments: []string{"etime", "-p", "mkdir", "-p", "/tmp/words"},
-			command: Command{
+			Arguments: []string{"etime", "-p", "mkdir", "-p", "/tmp/words"},
+			Command: Command{
 				Args:  []string{"mkdir", "-p", "/tmp/words"},
 				Flags: Flags{Portable: true},
 			},
 		},
 		"multiple energy flags are accepted at a time": {
-			arguments: []string{"etime", "--username", "example", "--password", "123", "ls"},
-			command: Command{
+			Arguments: []string{"etime", "--username", "example", "--password", "123", "ls"},
+			Command: Command{
 				Args:  []string{"ls"},
 				Flags: Flags{Username: "example", Password: "123"},
 			},
 		},
 		"help is noticed when help flags are provided": {
-			arguments: []string{"etime", "-h"},
-			command: Command{
+			Arguments: []string{"etime", "-h"},
+			Command: Command{
 				Args:  []string{},
 				Flags: Flags{Help: true},
 			},
 		},
 		"help is noticed when no arguments are provided": {
-			arguments: []string{"etime"},
-			command: Command{
+			Arguments: []string{"etime"},
+			Command: Command{
 				Args:  []string{},
 				Flags: Flags{Help: true},
 			},
 		},
 		"help is noticed when no commands are provided": {
-			arguments: []string{"etime", "-p"},
-			command: Command{
+			Arguments: []string{"etime", "-p"},
+			Command: Command{
 				Args:  []string{},
 				Flags: Flags{Help: true, Portable: true},
 			},
 		},
+		"parsing errors are returned before the command": {
+			Arguments: []string{"etime", "--help=2"},
+			Command: Command{
+				Args:  []string{},
+				Flags: Flags{},
+			},
+			Error: fmt.Errorf("invalid boolean value"),
+		},
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			command := ParseFlags(tt.arguments)
-			assert.Equal(t, tt.command, command)
+			command, err := ParseFlags(tt.Arguments)
+			if tt.Error != nil {
+				assert.ErrorContains(t, err, tt.Error.Error())
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.Command, command)
+			}
 		})
 	}
 }
