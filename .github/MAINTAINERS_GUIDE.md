@@ -25,7 +25,8 @@ A prepared development environment can be guaranteed from the `flake.nix`:
 $ nix develop
 ```
 
-Using Nix is completely optional but somewhat recommended for consistency.
+Using [Nix][nix] is completely optional but somewhat recommended for
+consistency.
 
 ### Project structure
 
@@ -127,6 +128,7 @@ for Dependabot to configure this workflow.
 
 <!-- a collection of links -->
 [learn_go]: https://go.dev/learn/
+[nix]: https://zero-to-nix.com
 [releases]: https://github.com/zimeg/emporia-time/releases
-[semver]: https://semver.org/spec/v2.0.0.html
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
+[semver]: https://semver.org/spec/v2.0.0.html
