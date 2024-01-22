@@ -17,6 +17,16 @@ After setting up the project for normal usage, you're ready for development!
 An [understanding of Go][learn_go] is a likely prerequisite for any programming
 and can be an enjoyable language to learn!
 
+### Nix configuration
+
+A prepared development environment can be guaranteed from the `flake.nix`:
+
+```sh
+$ nix develop
+```
+
+Using Nix is completely optional but somewhat recommended for consistency.
+
 ### Project structure
 
 This project hopes to use different directories to separate various concerns,
@@ -24,6 +34,7 @@ currently using the following structure:
 
 - `/` – primary project files and metadata for the repository
 - `.github/` – information for collaboration and continuous integrations
+- `cmd/` - controllers for the different stages of the command
 - `internal/` – helpful utilities needed to create the program
 - `pkg/` – various concerns that are pieced together to form the program
 

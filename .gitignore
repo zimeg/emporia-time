@@ -5,3 +5,6 @@ dist/*
 # Development leftovers
 *.swp
 .github/runner
+
+# Environment settings
+.direnv
