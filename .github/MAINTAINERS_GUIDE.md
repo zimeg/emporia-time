@@ -17,6 +17,17 @@ After setting up the project for normal usage, you're ready for development!
 An [understanding of Go][learn_go] is a likely prerequisite for any programming
 and can be an enjoyable language to learn!
 
+### Nix configuration
+
+A prepared development environment can be guaranteed from the `flake.nix`:
+
+```sh
+$ nix develop
+```
+
+Using [Nix][nix] is completely optional but somewhat recommended for
+consistency.
+
 ### Project structure
 
 This project hopes to use different directories to separate various concerns,
@@ -24,6 +35,7 @@ currently using the following structure:
 
 - `/` – primary project files and metadata for the repository
 - `.github/` – information for collaboration and continuous integrations
+- `cmd/` - controllers for the different stages of the command
 - `internal/` – helpful utilities needed to create the program
 - `pkg/` – various concerns that are pieced together to form the program
 
@@ -116,6 +128,7 @@ for Dependabot to configure this workflow.
 
 <!-- a collection of links -->
 [learn_go]: https://go.dev/learn/
+[nix]: https://zero-to-nix.com
 [releases]: https://github.com/zimeg/emporia-time/releases
-[semver]: https://semver.org/spec/v2.0.0.html
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
+[semver]: https://semver.org/spec/v2.0.0.html
