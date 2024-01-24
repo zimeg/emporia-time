@@ -26,6 +26,7 @@ Measure the time and energy used while executing a command
   --device <string>    name or ID of the smart plug to measure
   --username <string>  account username for Emporia
   --password <string>  account password for Emporia
+  --version            print the current version of this build
 
 {{ Bold "OUTPUT" }}
   Command output is printed as specified by the command

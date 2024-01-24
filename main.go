@@ -10,11 +10,17 @@ import (
 	"github.com/zimeg/emporia-time/pkg/emporia"
 )
 
+// version is the title of this current build
+var version = "development"
+
 // main manages the lifecycle of this program
 func main() {
 	command, client, err := etime.Setup(os.Args)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
+	} else if command.Flags.Version {
+		fmt.Printf("%s\n", version)
+		os.Exit(0)
 	} else if command.Flags.Help {
 		templates.PrintHelpMessage()
 		os.Exit(0)
