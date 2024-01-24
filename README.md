@@ -98,6 +98,7 @@ Configurations to this program can be made using `flags` before the `command`:
 - `--device <string>`: name or ID of the smart plug to measure
 - `--username <string>`: account username for Emporia
 - `--password <string>`: account password for Emporia
+- `--version`: print the current version of the build
 
 #### Command
 

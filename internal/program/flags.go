@@ -12,6 +12,7 @@ type Flags struct {
 	Password string
 	Portable bool
 	Username string
+	Version  bool
 }
 
 // Command contains the command line configurations
@@ -29,6 +30,7 @@ func ParseFlags(arguments []string) (Command, error) {
 	flagset.BoolVar(&flags.Help, "help", false, "display this very informative message")
 	flagset.BoolVar(&flags.Portable, "p", false, "output measurements on separate lines")
 	flagset.BoolVar(&flags.Portable, "portable", false, "output measurements on separate lines")
+	flagset.BoolVar(&flags.Version, "version", false, "print the current version of this build")
 
 	flagset.StringVar(&flags.Device, "device", "", "device to measure usage for")
 	flagset.StringVar(&flags.Password, "password", "", "account password for Emporia")
