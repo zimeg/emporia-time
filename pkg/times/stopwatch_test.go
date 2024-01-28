@@ -50,3 +50,19 @@ func TestBufferWriter(t *testing.T) {
 		})
 	}
 }
+
+func TestMakeBounds(t *testing.T) {
+	t.Run("bounds are different between runs", func(t *testing.T) {
+		bounds1 := makeBounds()
+		bounds2 := makeBounds()
+		assert.NotEqual(t, bounds1, bounds2)
+	})
+	t.Run("bounds are somewhat long", func(t *testing.T) {
+		bounds := makeBounds()
+		assert.Greater(t, len(bounds), 40)
+	})
+	t.Run("bounds ends in a newline", func(t *testing.T) {
+		bounds := makeBounds()
+		assert.Equal(t, len(bounds)-1, len(strings.TrimRight(bounds, "\n")))
+	})
+}
