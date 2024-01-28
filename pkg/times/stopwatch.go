@@ -3,6 +3,7 @@ package times
 import (
 	"bytes"
 	"errors"
+	"io"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -14,7 +15,7 @@ import (
 type bufferWriter struct {
 	bounds string
 	buff   *bytes.Buffer
-	std    *os.File
+	std    io.Writer
 	stored bool
 }
 
