@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print the current build version with a `--verison` flag
 
+### Fixed
+
+- Output outputs in an unbuffered manner as output happens
+
 ### Maintenance
 
 - Setup a Nix flake for more consistent developments

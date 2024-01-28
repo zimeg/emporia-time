@@ -3,10 +3,8 @@ package times
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -46,78 +44,50 @@ func (times TimeMeasurement) GetSys() float64 {
 
 // TimeExec performs the command and prints outputs while measuring timing
 func TimeExec(command program.Command) (TimeMeasurement, error) {
-	var times TimeMeasurement
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-
-	timeFlags := []string{"-p"}
-	timeArgs := append(timeFlags, command.Args...)
-
-	cmd := exec.Command("/usr/bin/time", timeArgs...)
-	if errors.Is(cmd.Err, exec.ErrDot) {
-		cmd.Err = nil
+	times := TimeMeasurement{}
+	stderr := bufferWriter{
+		buff:   &bytes.Buffer{},
+		std:    os.Stderr,
+		bounds: makeBounds(),
 	}
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
 
+	cmd := timerCommand(command.Args, stderr)
 	times.Start = time.Now().UTC()
 	err := cmd.Run()
 	times.End = time.Now().UTC()
-	times.Elapsed = times.End.Sub(times.Start)
 
-	results, stderr, warning := parseTimeResults(stderr)
+	results, warning := parseTimeResults(stderr.buff.String())
 	if warning != nil {
 		log.Printf("Warning: %s", warning)
 	}
+	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
-
-	fmt.Printf("%s", stdout.String())
-	if stderr.Len() > 0 {
-		fmt.Fprintf(os.Stderr, "%s\n", stderr.String())
-	}
 
 	return times, err
 }
 
-// splitBuffer separates the command output from times
-func splitBuffer(buff bytes.Buffer) (command, times []string) {
-	output := buff.String()
-	trimmed := strings.TrimRight(output, "\n")
-	lines := strings.Split(trimmed, "\n")
-	for i := len(lines) - 1; i >= 0; i-- {
-		times = append([]string{lines[i]}, times...)
-		if strings.Contains(lines[i], "real") {
-			command = lines[:i]
-			break
-		}
-	}
-	return command, times
-}
-
 // parseTimeResults extracts the time information from output
-func parseTimeResults(output bytes.Buffer) (times CommandTime, buff bytes.Buffer, err error) {
-	commandLines, timeLines := splitBuffer(output)
-	for _, line := range timeLines {
+func parseTimeResults(output string) (times CommandTime, err error) {
+	lines := strings.TrimSpace(output)
+	for _, line := range strings.Split(lines, "\n") {
 		fields := strings.Fields(line)
 		measurement, value := fields[0], fields[1]
 		switch measurement {
 		case "real":
 			if times.Real, err = parseTimeValue(value); err != nil {
-				return times, buff, errors.New("Failed to parse the real time value!")
+				return times, errors.New("Failed to parse the real time value!")
 			}
 		case "user":
 			if times.User, err = parseTimeValue(value); err != nil {
-				return times, buff, errors.New("Failed to parse the user time value!")
+				return times, errors.New("Failed to parse the user time value!")
 			}
 		case "sys":
 			if times.Sys, err = parseTimeValue(value); err != nil {
-				return times, buff, errors.New("Failed to parse the sys time value!")
+				return times, errors.New("Failed to parse the sys time value!")
 			}
 		}
 	}
-	command := strings.Join(commandLines, "\n")
-	buff.WriteString(command)
-	return times, buff, err
+	return times, err
 }
 
 // parseTimeValue converts a string to a float64
