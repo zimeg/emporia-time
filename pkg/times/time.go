@@ -47,7 +47,6 @@ func (times TimeMeasurement) GetSys() float64 {
 // TimeExec performs the command and prints outputs while measuring timing
 func TimeExec(command program.Command) (TimeMeasurement, error) {
 	var times TimeMeasurement
-	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
 	timeFlags := []string{"-p"}
@@ -57,7 +56,7 @@ func TimeExec(command program.Command) (TimeMeasurement, error) {
 	if errors.Is(cmd.Err, exec.ErrDot) {
 		cmd.Err = nil
 	}
-	cmd.Stdout = &stdout
+	cmd.Stdout = os.Stdout
 	cmd.Stderr = &stderr
 
 	times.Start = time.Now().UTC()
@@ -71,7 +70,6 @@ func TimeExec(command program.Command) (TimeMeasurement, error) {
 	}
 	times.Command = results
 
-	fmt.Printf("%s", stdout.String())
 	if stderr.Len() > 0 {
 		fmt.Fprintf(os.Stderr, "%s\n", stderr.String())
 	}
