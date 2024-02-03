@@ -36,7 +36,7 @@ func (bw *bufferWriter) Write(p []byte) (int, error) {
 func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 	timeShell := []string{
 		strings.Join(command, " "),
-		"&&",
+		";",
 		"1>&2",
 		"echo",
 		stderr.bounds,
