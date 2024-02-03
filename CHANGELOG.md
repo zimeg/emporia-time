@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Output outputs in an unbuffered manner as output happens
+- Capture timing information for erroneous commands
 
 ### Maintenance
 
