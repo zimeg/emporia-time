@@ -9,3 +9,4 @@ dist/*
 
 # Environment settings
 .direnv
+.env
