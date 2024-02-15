@@ -15,4 +15,5 @@ release: clean
 clean:
 	rm -f $(BIN)
 	rm -rf ~/.config/etime
+	rm -f .gon.hcl
 	rm -rf dist
