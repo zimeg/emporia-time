@@ -11,18 +11,20 @@ jobs:
     name: Inspect the code health
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          go-version: '1.21.x'
+          fetch-depth: 0
+      - name: Install a flaked Nix
+        uses: DeterminateSystems/nix-installer-action@v9
       - name: Install dependencies
-        run: go get
+        run: nix develop -c go get
       - name: Build binary
-        run: make build
+        run: nix develop -c make build
       - name: Check formatting
-        run: test -z $(gofmt -l $(find . -name '*.go'))
+        run: nix develop -c test -z $(gofmt -l $(find . -name '*.go'))
       - name: Run tests
-        run: go test -v ./...
+        run: nix develop -c go test -v ./...
 
   measurement:
     name: Monitor energy usage
@@ -31,10 +33,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install a flaked Nix
+        uses: DeterminateSystems/nix-installer-action@v9
       - name: Clean the environment
-        run: make clean
+        run: nix develop -c make clean
       - name: Prepare the program
-        run: make build
+        run: nix develop -c make build
       - name: Sleep for a short while
         run: ./etime sleep 4
         env:
