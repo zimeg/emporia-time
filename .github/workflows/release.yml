@@ -30,7 +30,9 @@ jobs:
       - name: Develop with a Nix shell
         run: nix develop
       - name: Inspect Go environment # TODO: remove after testing
-        run: which go
+        run: |
+          which go
+          nix develop --command which go
       - name: Create snapshots
         uses: goreleaser/goreleaser-action@v5
         with:
