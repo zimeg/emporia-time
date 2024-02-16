@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include a note to update milestones after a release
 - Automatically extend the license at the start of a year
 - Use the development Nix flake in continuous integration
+- Checkout the entire Git history for automated testing
 
 ## [0.1.1] - 2024-01-15
 
