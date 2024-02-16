@@ -40,15 +40,8 @@ jobs:
           echo "$PATH" # TODO: remove after testing
           which go
           nix develop --command which go
-      - name: Inspect Go environment with Nix shell  # TODO: remove after testing
-        run: |
-          which go
-          nix develop --command which go
-        shell: nix develop --command {0}
       - name: Create snapshots
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          args: release --clean --snapshot --skip=publish
+        run: nix develop -c goreleaser release --clean --snapshot --skip=publish
       - name: Collect the current version
         id: tag
         run: |
