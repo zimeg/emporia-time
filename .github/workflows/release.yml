@@ -109,8 +109,6 @@ jobs:
           fetch-depth: 0
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@v9
-      - name: Develop with a Nix shell
-        run: nix develop
       - name: Create releases
         run: nix develop -c goreleaser release --clean
         env:
