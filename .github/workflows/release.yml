@@ -33,10 +33,16 @@ jobs:
         run: |
           which go
           nix develop --command which go
+      - name: Inspect Go environment with Nix shell  # TODO: remove after testing
+        run: |
+          which go
+          nix develop --command which go
+        shell: nix develop
       - name: Create snapshots
         uses: goreleaser/goreleaser-action@v5
         with:
           args: release --clean --snapshot --skip=publish
+        shell: nix develop
       - name: Collect the current version
         id: tag
         run: |
