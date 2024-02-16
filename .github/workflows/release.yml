@@ -42,7 +42,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           args: release --clean --snapshot --skip=publish
-        shell: nix develop
       - name: Collect the current version
         id: tag
         run: |
