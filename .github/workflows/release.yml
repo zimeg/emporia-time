@@ -28,9 +28,12 @@ jobs:
       - name: Cache Nix builds
         uses: DeterminateSystems/magic-nix-cache-action@v3
       - name: Develop with a Nix shell
-        run: nix develop .
+        run: |
+          echo "$PATH" # TODO: remove after testing
+          echo "PATH=$(nix develop --command echo $PATH)" >> $GITHUB_ENV
       - name: Inspect Go environment # TODO: remove after testing
         run: |
+          echo "$PATH" # TODO: remove after testing
           which go
           nix develop --command which go
       - name: Inspect Go environment with Nix shell  # TODO: remove after testing
