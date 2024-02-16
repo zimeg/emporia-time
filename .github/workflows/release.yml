@@ -112,8 +112,6 @@ jobs:
       - name: Develop with a Nix shell
         run: nix develop
       - name: Create releases
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          args: release --clean
+        run: nix develop -c goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
