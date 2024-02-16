@@ -28,7 +28,7 @@ jobs:
       - name: Cache Nix builds
         uses: DeterminateSystems/magic-nix-cache-action@v3
       - name: Develop with a Nix shell
-        run: nix develop
+        run: nix develop .
       - name: Inspect Go environment # TODO: remove after testing
         run: |
           which go
