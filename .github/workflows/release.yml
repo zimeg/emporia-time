@@ -37,7 +37,7 @@ jobs:
         run: |
           which go
           nix develop --command which go
-        shell: nix develop
+        shell: nix develop --command {0}
       - name: Create snapshots
         uses: goreleaser/goreleaser-action@v5
         with:
