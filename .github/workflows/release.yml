@@ -27,19 +27,6 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v9
       - name: Cache Nix builds
         uses: DeterminateSystems/magic-nix-cache-action@v3
-      - name: Develop with a Nix shell
-        run: |
-          echo "$PATH" # TODO: remove after testing
-          which go # TODO: remove after testing
-          echo "PATH=$(nix develop --command echo $PATH)" >> $GITHUB_ENV
-          which go # TODO: remove after testing
-          nix develop # TODO: remove after testing
-          which go # TODO: remove after testing
-      - name: Inspect Go environment # TODO: remove after testing
-        run: |
-          echo "$PATH" # TODO: remove after testing
-          which go
-          nix develop --command which go
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish
       - name: Collect the current version
