@@ -23,17 +23,19 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          packages = [
-            pkgs.gnumake
-            pkgs.go
-            pkgs.goreleaser
+          packages = with pkgs; [
+            gnumake
+            go
+            goreleaser
           ];
           shellHook = "go mod tidy";
         };
         devShells.gon = if system == "x86_64-darwin" || system == "aarch64-darwin" then
           pkgs.mkShell {
             buildInputs = with pkgs; [
+              go
               gon
+              goreleaser
             ];
             shellHook = ''
               export PATH=/usr/bin:$PATH:${gon}/bin
