@@ -26,8 +26,7 @@ jobs:
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@v9
       - name: Create snapshots
-        run: nix develop .#gon -c \
-          goreleaser release --clean --snapshot --skip=publish
+        run: nix develop .#gon -c goreleaser release --clean --snapshot --skip=publish
       - name: Collect the current version
         id: tag
         run: |
