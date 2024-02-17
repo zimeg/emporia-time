@@ -110,6 +110,6 @@ jobs:
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@v9
       - name: Create releases
-        run: nix develop -c goreleaser release --clean
+        run: nix develop .#gon -c goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
