@@ -31,6 +31,8 @@ jobs:
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security import certificate.cer -k build.keychain
           security set-key-partition-list -S apple-tool:,apple: -s -k $KEYCHAIN_PASSWORD build.keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@v9
       - name: Create snapshots # TODO temp with signing
