@@ -1,5 +1,4 @@
 # Built binaries
-.gon.hcl
 etime
 dist/*
 
@@ -10,3 +9,7 @@ dist/*
 # Environment settings
 .direnv
 .env
+
+# Release artifacts
+.gon.hcl
+certificate.p12

@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Fixed
+
+- Ignore temporary certificates for clean release signing
+
 ## [1.0.0] - 2024-02-18
 
 ### Added
