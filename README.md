@@ -12,17 +12,10 @@ The `time` command, with energy awareness.
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
-2. Install the latest version of [Go][golang].
-3. From a directory for development, download the source and compile `etime`:
-
-```sh
-$ git clone https://github.com/zimeg/emporia-time.git
-$ cd emporia-time
-$ make build
-```
-
-4. Optionally, create a symbolic link to or move the compiled binary into your
-`/bin` to run the command globally:
+2. Install the [latest released version][releases] or
+  [build from source][source].
+3. Optionally, create a symbolic link to or move the compiled binary into your
+  `/bin` to run the command globally:
 
 ```sh
 $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
@@ -30,7 +23,7 @@ $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
 $ mv etime /usr/local/bin
 ```
 
-5. Use the binary with your favorite command or script:
+4. Use the binary with your favorite command or script:
 
 ```sh
 $ ./etime sleep 12
@@ -142,4 +135,6 @@ Details on the processes around code for this repository are shared in the
 [maintainers]: ./.github/MAINTAINERS_GUIDE.md
 [plug]: https://www.emporiaenergy.com/emporia-smart-plug
 [power]: https://en.wikipedia.org/wiki/Power_(physics)
+[releases]: https://github.com/zimeg/emporia-time/releases
+[source]: ./.github/MAINTAINERS_GUIDE.md#project-setup
 [time]: https://stackoverflow.com/a/556411

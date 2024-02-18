@@ -12,7 +12,16 @@ Hey there! It's about time... Watt have you been jouling!?
 
 ## Project setup
 
-After setting up the project for normal usage, you're ready for development!
+Building from source to reflect any code changes only takes a few fast steps.
+
+1. Install the latest version of [Go][golang].
+2. From a directory for development, download the source and compile `etime`:
+
+```sh
+$ git clone https://github.com/zimeg/emporia-time.git
+$ cd emporia-time
+$ make build
+```
 
 An [understanding of Go][learn_go] is a likely prerequisite for any programming
 and can be an enjoyable language to learn!
