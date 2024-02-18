@@ -53,7 +53,8 @@ currently using the following structure:
 For ease of development, some commands are added in a `Makefile`:
 
 - `make build` – build the program binary
-- `make release` – package a distribution
+- `make staging` – package a distribution
+- `make release` – sign and notarize packages
 - `make test` – perform the written code tests
 - `make clean` – remove all program artifacts
 

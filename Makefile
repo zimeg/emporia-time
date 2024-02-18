@@ -1,4 +1,4 @@
-.PHONY: build test release clean
+.PHONY: build test staging release clean
 
 BIN=etime
 VERSION="$(shell git describe --dirty --tags --always)"
@@ -9,8 +9,11 @@ build:
 test: build
 	go test ./...
 
-release: clean
+staging: clean
 	goreleaser build --snapshot --config .goreleaser.staging.yml
+
+release: clean
+	goreleaser build --snapshot --config .goreleaser.release.yml
 
 clean:
 	rm -f $(BIN)
