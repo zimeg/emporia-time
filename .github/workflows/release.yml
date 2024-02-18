@@ -33,8 +33,12 @@ jobs:
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           # security import authority.cer -k build.keychain
           security import certificate.cer -k build.keychain # -A -t cert
+          security list-keychains
+          security list-keychains -d user -s build.keychain
+          security list-keychains -d system -s build.keychain
+          security list-keychains -d common -s build.keychain
           # security import developer.cer -k build.keychain
-          # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Install a flaked Nix
