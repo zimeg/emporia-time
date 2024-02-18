@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 1
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: etime
+    binary: etime_{{.Summary}}
+    ldflags:
+      - -s -w -X main.version={{.Summary}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+  - id: etime_macos
+    binary: etime_{{.Summary}}
+    goos:
+      - darwin
+    hooks:
+      post: |-
+        sh -c '
+        cat > .gon.hcl << EOF
+        source = ["./dist/etime_macos_{{.Target}}/etime_{{.Summary}}"]
+        bundle_id = "net.o526.etime"
+        sign {
+          application_identity = "Developer ID Application: Ethan Garrett Zimbelman (SA8WRA75UN)"
+        }
+        dmg {
+          output_path = "./dist/etime_{{.Target}}_{{.Summary}}.dmg"
+          volume_name = "etime_{{.Target}}"
+        }
+        EOF
+        gon .gon.hcl
+        '
+archives:
+  - format: tar.gz
+    name_template: >-
+      etime_
+      {{- .Summary }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+changelog:
+  skip: true
+checksum:
+  name_template: "etime_{{ .Summary }}_checksums.txt"

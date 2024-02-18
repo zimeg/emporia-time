@@ -12,17 +12,10 @@ The `time` command, with energy awareness.
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
-2. Install the latest version of [Go][golang].
-3. From a directory for development, download the source and compile `etime`:
-
-```sh
-$ git clone https://github.com/zimeg/emporia-time.git
-$ cd emporia-time
-$ make build
-```
-
-4. Optionally, create a symbolic link to or move the compiled binary into your
-`/bin` to run the command globally:
+2. Install the [latest released version][releases] or
+  [build from source][source].
+3. Optionally, create a symbolic link to or move the compiled binary into your
+  `/bin` to run the command globally:
 
 ```sh
 $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
@@ -30,7 +23,7 @@ $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
 $ mv etime /usr/local/bin
 ```
 
-5. Use the binary with your favorite command or script:
+4. Use the binary with your favorite command or script:
 
 ```sh
 $ ./etime sleep 12
@@ -134,12 +127,14 @@ Details on the processes around code for this repository are shared in the
 [`.github/MAINTAINERS_GUIDE.md`][maintainers].
 
 <!-- a collection of links -->
-[plug]: https://www.emporiaenergy.com/emporia-smart-plug
-[golang]: https://go.dev/dl
-[dashboard]: https://web.emporiaenergy.com/#/home
-[time]: https://stackoverflow.com/a/556411
-[energy]: https://en.wikipedia.org/wiki/Energy
-[power]: https://en.wikipedia.org/wiki/Power_(physics)
-[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
 [contributing]: ./.github/CONTRIBUTING.md
+[dashboard]: https://web.emporiaenergy.com/#/home
+[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
+[energy]: https://en.wikipedia.org/wiki/Energy
+[golang]: https://go.dev/dl
 [maintainers]: ./.github/MAINTAINERS_GUIDE.md
+[plug]: https://www.emporiaenergy.com/emporia-smart-plug
+[power]: https://en.wikipedia.org/wiki/Power_(physics)
+[releases]: https://github.com/zimeg/emporia-time/releases
+[source]: ./.github/MAINTAINERS_GUIDE.md#project-setup
+[time]: https://stackoverflow.com/a/556411

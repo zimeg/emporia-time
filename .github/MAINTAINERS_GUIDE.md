@@ -12,7 +12,16 @@ Hey there! It's about time... Watt have you been jouling!?
 
 ## Project setup
 
-After setting up the project for normal usage, you're ready for development!
+Building from source to reflect any code changes only takes a few fast steps.
+
+1. Install the latest version of [Go][golang].
+2. From a directory for development, download the source and compile `etime`:
+
+```sh
+$ git clone https://github.com/zimeg/emporia-time.git
+$ cd emporia-time
+$ make build
+```
 
 An [understanding of Go][learn_go] is a likely prerequisite for any programming
 and can be an enjoyable language to learn!
@@ -35,7 +44,7 @@ currently using the following structure:
 
 - `/` – primary project files and metadata for the repository
 - `.github/` – information for collaboration and continuous integrations
-- `cmd/` - controllers for the different stages of the command
+- `cmd/` – controllers for the different stages of the command
 - `internal/` – helpful utilities needed to create the program
 - `pkg/` – various concerns that are pieced together to form the program
 
@@ -44,6 +53,8 @@ currently using the following structure:
 For ease of development, some commands are added in a `Makefile`:
 
 - `make build` – build the program binary
+- `make staging` – package a distribution
+- `make release` – sign and notarize packages
 - `make test` – perform the written code tests
 - `make clean` – remove all program artifacts
 
@@ -107,12 +118,59 @@ the following steps can be taken:
 3. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
 4. Open then merge a pull request with these changes
 5. Draft a [new release][releases] using the version name and entries from the
-`CHANGELOG.md`
+  `CHANGELOG.md`
 6. Publish this as the latest release!
 7. Close the current milestone for the latest release then create a new one
 
 In deciding a version number, best judgement should be used to follow
 [semantic versioning][semver].
+
+### Signing notarizations
+
+Packaging for the release process begins after a new version tag is created.
+
+Builds for various targets are made with [goreleaser][goreleaser] then signed by
+[gon][gon] and uploaded to the action artifacts.
+
+Only compilations for macOS are signed at this time. Verifying binaries made for
+other operating systems is left as an exercise for the developer.
+
+#### Keychaining certificates
+
+Certain credentials and certificates are requested for the signing processes.
+
+Apple holds the keys for [developer credentials][credentials] and
+[system certificates][certificates]. A "Developer ID Application" is needed on
+the system keychain and any missing but matching certificates too.
+
+Account information is also needed as environment variables in the `.env` file.
+
+#### Processing packages
+
+Signing and notarizing binaries is an automatic process that happens after
+making a release build.
+
+Special tooling and a macOS system is required for this process. Tooling can be
+setup with a packaging flake:
+
+```sh
+$ flake develop .#gon
+```
+
+With the above ready the following commands will hopefully officiate things:
+
+```sh
+$ make release  # Build and notarize a release
+$ gon .gon.hcl  # Troubleshoot specific errors
+```
+
+#### Verifying a signature
+
+Unpackage the output disk image to make sure everything was successful with:
+
+```sh
+$ spctl -a -vvv -t install ./etime
+```
 
 ## Runner setup
 
@@ -127,6 +185,10 @@ in your action repository secrets using your Emporia information. Also add these
 for Dependabot to configure this workflow.
 
 <!-- a collection of links -->
+[certificates]: https://www.apple.com/certificateauthority/
+[credentials]: https://developer.apple.com/account/resources/certificates/list
+[gon]: https://github.com/Bearer/gon
+[goreleaser]: https://github.com/goreleaser/goreleaser
 [learn_go]: https://go.dev/learn/
 [nix]: https://zero-to-nix.com
 [releases]: https://github.com/zimeg/emporia-time/releases
