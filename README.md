@@ -134,12 +134,12 @@ Details on the processes around code for this repository are shared in the
 [`.github/MAINTAINERS_GUIDE.md`][maintainers].
 
 <!-- a collection of links -->
-[plug]: https://www.emporiaenergy.com/emporia-smart-plug
-[golang]: https://go.dev/dl
-[dashboard]: https://web.emporiaenergy.com/#/home
-[time]: https://stackoverflow.com/a/556411
-[energy]: https://en.wikipedia.org/wiki/Energy
-[power]: https://en.wikipedia.org/wiki/Power_(physics)
-[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
 [contributing]: ./.github/CONTRIBUTING.md
+[dashboard]: https://web.emporiaenergy.com/#/home
+[docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md
+[energy]: https://en.wikipedia.org/wiki/Energy
+[golang]: https://go.dev/dl
 [maintainers]: ./.github/MAINTAINERS_GUIDE.md
+[plug]: https://www.emporiaenergy.com/emporia-smart-plug
+[power]: https://en.wikipedia.org/wiki/Power_(physics)
+[time]: https://stackoverflow.com/a/556411
