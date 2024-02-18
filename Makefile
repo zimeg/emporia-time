@@ -10,7 +10,7 @@ test: build
 	go test ./...
 
 release: clean
-	goreleaser build --snapshot
+	goreleaser build --snapshot --config .goreleaser.staging.yml
 
 clean:
 	rm -f $(BIN)
