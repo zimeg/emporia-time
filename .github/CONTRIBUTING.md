@@ -58,7 +58,8 @@ additional checks before opening a pull request:
 Once this looks good to you, [create a pull request][fork_pr] with the following
 information:
 
-- A title that summarizes the goal of the changes
+- A title that summarizes the goal of the changes, formatted as a
+  [conventional commit][commit]
 - A summary of the changes and any notes, as needed
 
 And with that, you can open the pull request and wait for a review! Woo! Go you!
@@ -67,9 +68,10 @@ For more information on the code processes for this project, check out the
 [`MAINTAINERS_GUIDE.md`][maintainers].
 
 <!-- a collection of links -->
+[commit]: https://www.conventionalcommits.org/en/v1.0.0/
 [conduct]: ./CODE_OF_CONDUCT.md
-[issues]: https://github.com/zimeg/emporia-time/issues
-[security]: https://github.com/zimeg/emporia-time/security
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository
 [fork_pr]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork
+[issues]: https://github.com/zimeg/emporia-time/issues
 [maintainers]: ./MAINTAINERS_GUIDE.md
+[security]: https://github.com/zimeg/emporia-time/security
