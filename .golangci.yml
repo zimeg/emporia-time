@@ -1,0 +1,6 @@
+linters:
+  enable:
+    - gocyclo
+    - gofumpt
+    - goimports
+    - misspell

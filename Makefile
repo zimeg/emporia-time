@@ -1,9 +1,12 @@
-.PHONY: build test staging release clean
+.PHONY: check build test staging release clean
 
 BIN=etime
 VERSION="$(shell git describe --dirty --tags --always)"
 
-build:
+check:
+	golangci-lint run ./...
+
+build: check
 	go build -o $(BIN) -ldflags "-X main.version=${VERSION}"
 
 test: build
