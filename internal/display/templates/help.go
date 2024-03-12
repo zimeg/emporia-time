@@ -34,7 +34,7 @@ Measure the time and energy used while executing a command
 
   Time is counted with seconds and measured by the time command
   Usage is measured by the device and shown in joules and watts
-  Sure is the ratio of recieved-to-expected measurements
+  Sure is the ratio of received-to-expected measurements
 
 {{ Bold "EXAMPLE" }}
   $ {{ CommandName }} sleep 12
@@ -47,8 +47,8 @@ Measure the time and energy used while executing a command
 		body = boldRegex.ReplaceAllString(helpTemplate, "$1")
 		commandNameRegex := regexp.MustCompile(`{{ CommandName }}`)
 		body = commandNameRegex.ReplaceAllString(body, "etime")
-		fmt.Fprintf(os.Stderr, strings.TrimLeft(body, "\n"))
+		fmt.Fprint(os.Stderr, strings.TrimLeft(body, "\n"))
 	} else {
-		fmt.Fprintf(os.Stderr, strings.TrimLeft(body, "\n"))
+		fmt.Fprint(os.Stderr, strings.TrimLeft(body, "\n"))
 	}
 }

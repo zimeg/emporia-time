@@ -96,7 +96,7 @@ func TestFormatUsage_Portable(t *testing.T) {
 				case fmt.Sprintf("sure %.1f%%", mockResults.Sureness*100):
 					surenessCount += 1
 				default:
-					t.Error("An unexpected value appeared in the ouput:", line)
+					t.Error("An unexpected value appeared in the output:", line)
 				}
 			}
 			assert.Equal(t, 1, realTimeCount)

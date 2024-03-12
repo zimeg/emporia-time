@@ -26,6 +26,10 @@
           packages = with pkgs; [
             gnumake
             go
+            gocyclo
+            gofumpt
+            golangci-lint
+            gopls
             goreleaser
           ];
           shellHook = "go mod tidy";

@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Maintenance
+
+- Enforce common linter checks before building the binary
+
 ## [1.0.1] - 2024-02-18
 
 ### Fixed
