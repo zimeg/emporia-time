@@ -19,10 +19,10 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v9
       - name: Install dependencies
         run: nix develop -c go get
+      - name: Check formatting
+        run: nix develop -c make check
       - name: Build binary
         run: nix develop -c make build
-      - name: Check formatting
-        run: nix develop -c test -z $(gofmt -l $(find . -name '*.go'))
       - name: Run tests
         run: nix develop -c go test -v ./...
 
