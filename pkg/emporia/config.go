@@ -75,7 +75,7 @@ func (config *EmporiaConfig) SaveConfig() {
 	configFilePath := findConfigFilePath()
 	if data, err := json.MarshalIndent(config, "", "\t"); err != nil {
 		log.Panicf("Failed to encode config data: %s\n", err)
-	} else if err := os.WriteFile(configFilePath, data, 0660); err != nil {
+	} else if err := os.WriteFile(configFilePath, data, 0o660); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -91,12 +91,12 @@ func findConfigFilePath() string {
 	if val, ok := os.LookupEnv("XDG_CONFIG_HOME"); ok {
 		configDir = val + "/etime"
 	}
-	if err := os.MkdirAll(configDir, 0755); err != nil {
+	if err := os.MkdirAll(configDir, 0o755); err != nil {
 		log.Panicf("Failed to create config directory: %s\n", err)
 	}
 
 	configFile := configDir + "/settings.json"
-	if file, err := os.OpenFile(configFile, os.O_CREATE, 0600); err != nil {
+	if file, err := os.OpenFile(configFile, os.O_CREATE, 0o600); err != nil {
 		log.Panicf("Failed to open file: %s\n", err)
 	} else {
 		defer file.Close()

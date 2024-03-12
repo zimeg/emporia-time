@@ -60,8 +60,8 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 func makeBounds() string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	const size = 64
-	var random = rand.New(rand.NewSource(time.Now().UnixNano()))
 	var bounds strings.Builder
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < size; i++ {
 		bounds.WriteByte(charset[random.Intn(len(charset))])
 	}

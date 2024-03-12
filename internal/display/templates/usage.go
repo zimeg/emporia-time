@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-// UsageStatistics contains methods to retreive information of command results
+// UsageStatistics contains methods to retrieve information of command results
 type UsageStatistics interface {
 	GetReal() float64     // GetReal returns the real time of a command
 	GetUser() float64     // GetUser returns the user time of a command

@@ -81,10 +81,13 @@ func (config *EmporiaConfig) gatherCredentials(flags program.Flags) (EmporiaCred
 
 // gatherDevice prompts and stores the choice of an Emporia device
 func (config *EmporiaConfig) gatherDevice(flags program.Flags) error {
-	var names, gids, gidLabels = []string{}, []string{}, []string{}
-	var device string
+	names, gids, gidLabels := []string{}, []string{}, []string{}
+	device := ""
 
-	devices := getAvailableDevices(config.Tokens.IdToken)
+	devices, err := getAvailableDevices(config.Tokens.IdToken)
+	if err != nil {
+		return err
+	}
 	if len(devices) == 0 {
 		return errors.New("No available devices found!")
 	}

@@ -14,7 +14,10 @@ import (
 	"github.com/zimeg/emporia-time/pkg/times"
 )
 
-const EmporiaBaseURL = "https://api.emporiaenergy.com"
+const (
+	EmporiaAPIRequestURL = "https://api.emporiaenergy.com"
+	EmporiaAPIStatusURL  = "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/maintenance/maintenance.json"
+)
 
 // Emporia holds information for and from the Emporia API
 type Emporia struct {
@@ -84,10 +87,10 @@ func (emp *Emporia) LookupEnergyUsage(times times.TimeMeasurement) ([]float64, e
 }
 
 // formatUsageParams returns URL values for the API
+//
+// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
 func (emp *Emporia) formatUsageParams(times times.TimeMeasurement) url.Values {
 	params := url.Values{}
-
-	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#getchartusage---usage-over-a-range-of-time
 	params.Set("apiMethod", "getChartUsage")
 	params.Set("deviceGid", emp.Config.Device)
 	params.Set("channel", "1,2,3") // ?
@@ -95,16 +98,18 @@ func (emp *Emporia) formatUsageParams(times times.TimeMeasurement) url.Values {
 	params.Set("end", times.End.Format(time.RFC3339))
 	params.Set("scale", "1S")
 	params.Set("energyUnit", "KilowattHours")
-
 	return params
 }
 
 // getEnergyUsage performs a GET request to `/AppAPI` with configured params
 func (emp *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
-	EmporiaURL := fmt.Sprintf("%s/AppAPI?%s", EmporiaBaseURL, params.Encode())
+	usageURL := fmt.Sprintf("%s/AppAPI?%s", EmporiaAPIRequestURL, params.Encode())
 
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", EmporiaURL, nil)
+	req, err := http.NewRequest("GET", usageURL, nil)
+	if err != nil {
+		return []float64{}, err
+	}
 	req.Header.Add("authToken", emp.Config.Tokens.IdToken)
 
 	resp, err := client.Do(req)
@@ -113,6 +118,9 @@ func (emp *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []float64{}, err
+	}
 
 	if err := json.Unmarshal(body, &emp.Resp); err != nil {
 		return []float64{}, err
@@ -123,41 +131,44 @@ func (emp *Emporia) getEnergyUsage(params url.Values) ([]float64, error) {
 }
 
 // getAvailableDevices returns customer devices for the Emporia account
-func getAvailableDevices(token string) []EmporiaDevice {
-	EmporiaDeviceURL := EmporiaBaseURL + "/customers/devices"
+func getAvailableDevices(token string) ([]EmporiaDevice, error) {
+	deviceURL := fmt.Sprintf("%s/customers/devices", EmporiaAPIRequestURL)
 
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", EmporiaDeviceURL, nil)
+	req, err := http.NewRequest("GET", deviceURL, nil)
+	if err != nil {
+		return []EmporiaDevice{}, err
+	}
 	req.Header.Add("authToken", token)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Failed to gather device information: %s\n", err)
+		return []EmporiaDevice{}, err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return []EmporiaDevice{}, err
+	}
 
 	var devs EmporiaDeviceResp
 	err = json.Unmarshal(body, &devs)
 	if err != nil {
-		log.Fatalf("Failed to parse device information: %s\n", err)
+		return []EmporiaDevice{}, err
 	}
 
-	return devs.Devices
+	return devs.Devices, nil
 }
 
 // EmporiaStatus returns if the Emporia API is available
+//
+// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
 func EmporiaStatus() (bool, error) {
-
-	// https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
-	EmporiaStatusURL := "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/maintenance/maintenance.json"
-
-	resp, err := http.Get(EmporiaStatusURL)
+	resp, err := http.Get(EmporiaAPIStatusURL)
 	if err != nil {
 		return false, err
 	}
 	defer resp.Body.Close()
-
 	status := resp.StatusCode == 403
 	return status, nil
 }

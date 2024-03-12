@@ -23,7 +23,7 @@ type Command struct {
 
 // ParseFlags prepares the command using provided arguments
 func ParseFlags(arguments []string) (Command, error) {
-	var flagset = flag.NewFlagSet("etime", flag.ContinueOnError)
+	flagset := flag.NewFlagSet("etime", flag.ContinueOnError)
 	var flags Flags
 
 	flagset.BoolVar(&flags.Help, "h", false, "display this very informative message")
