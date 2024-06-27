@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-version: 1
+version: 2
 before:
   hooks:
     - go mod tidy
@@ -47,6 +47,6 @@ archives:
       - goos: windows
         format: zip
 changelog:
-  skip: true
+  disable: true
 checksum:
   name_template: "etime_{{ .Summary }}_checksums.txt"

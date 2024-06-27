@@ -1,8 +1,7 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Updates to the changelog
-
 on:
   pull_request:
-
 jobs:
   happened:
     if: github.actor != 'dependabot[bot]'
@@ -12,6 +11,5 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Check for logged changes
         run: git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.sha }} | grep ^CHANGELOG.md$
