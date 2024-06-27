@@ -11,6 +11,7 @@ to [Semantic Versioning][semver].
 
 - Enforce common linter checks before building the binary
 - Format markdown files according to rules of the marksman
+- Update go versions to 1.22 with other build dependencies
 
 ## [1.0.1] - 2024-02-18
 

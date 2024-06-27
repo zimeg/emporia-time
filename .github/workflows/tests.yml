@@ -1,11 +1,10 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Makes valid measurements
-
 on:
   push:
     branches:
       - main
   pull_request:
-
 jobs:
   checkup:
     name: Inspect the code health
@@ -25,7 +24,6 @@ jobs:
         run: nix develop -c make build
       - name: Run tests
         run: nix develop -c go test -v ./...
-
   measurement:
     name: Monitor energy usage
     needs: checkup

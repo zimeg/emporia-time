@@ -1,16 +1,14 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Package this version
-
 on:
   push:
     branches:
       - main
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
-
 permissions:
   contents: write
-
 jobs:
   snapshot:
     name: Save a snapshot
@@ -43,7 +41,6 @@ jobs:
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
-
   artifacts:
     name: Share the artifacts
     needs: snapshot
@@ -74,7 +71,6 @@ jobs:
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
-
   notify:
     name: Post a notification
     needs: artifacts
@@ -97,7 +93,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
-
   release:
     name: Distribute a release
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
