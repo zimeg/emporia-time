@@ -13,9 +13,9 @@ The `time` command, with energy awareness.
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
 2. Install the [latest released version][releases] or
-  [build from source][source].
+   [build from source][source].
 3. Optionally, create a symbolic link to or move the compiled binary into your
-  `/bin` to run the command globally:
+   `/bin` to run the command globally:
 
 ```sh
 $ ln -s ~/path/to/emporia-time/etime /usr/local/bin
@@ -126,7 +126,6 @@ Notes on submitting contributions of any type are taken in
 Details on the processes around code for this repository are shared in the
 [`.github/MAINTAINERS_GUIDE.md`][maintainers].
 
-<!-- a collection of links -->
 [contributing]: ./.github/CONTRIBUTING.md
 [dashboard]: https://web.emporiaenergy.com/#/home
 [docs]: https://github.com/magico13/PyEmVue/blob/master/api_docs.md

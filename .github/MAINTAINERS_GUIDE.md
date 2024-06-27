@@ -40,7 +40,7 @@ consistency.
 ### Project structure
 
 This project hopes to use different directories to separate various concerns,
-currently using the following structure: 
+currently using the following structure:
 
 - `/` – primary project files and metadata for the repository
 - `.github/` – information for collaboration and continuous integrations
@@ -118,7 +118,7 @@ the following steps can be taken:
 3. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
 4. Open then merge a pull request with these changes
 5. Draft a [new release][releases] using the version name and entries from the
-  `CHANGELOG.md`
+   `CHANGELOG.md`
 6. Publish this as the latest release!
 7. Close the current milestone for the latest release then create a new one
 
@@ -184,9 +184,9 @@ Then set values for `EMPORIA_DEVICE`, `EMPORIA_USERNAME`, and `EMPORIA_PASSWORD`
 in your action repository secrets using your Emporia information. Also add these
 for Dependabot to configure this workflow.
 
-<!-- a collection of links -->
 [certificates]: https://www.apple.com/certificateauthority/
 [credentials]: https://developer.apple.com/account/resources/certificates/list
+[golang]: https://go.dev/dl/
 [gon]: https://github.com/Bearer/gon
 [goreleaser]: https://github.com/goreleaser/goreleaser
 [learn_go]: https://go.dev/learn/
