@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v11
+        uses: DeterminateSystems/nix-installer-action@v12
       - name: Install dependencies
         run: nix develop -c go get
       - name: Check formatting
@@ -34,7 +34,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v11
+        uses: DeterminateSystems/nix-installer-action@v12
       - name: Clean the environment
         run: nix develop -c make clean
       - name: Prepare the program
