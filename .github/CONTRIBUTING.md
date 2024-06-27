@@ -67,7 +67,6 @@ And with that, you can open the pull request and wait for a review! Woo! Go you!
 For more information on the code processes for this project, check out the
 [`MAINTAINERS_GUIDE.md`][maintainers].
 
-<!-- a collection of links -->
 [commit]: https://www.conventionalcommits.org/en/v1.0.0/
 [conduct]: ./CODE_OF_CONDUCT.md
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository

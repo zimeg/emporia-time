@@ -10,6 +10,7 @@ to [Semantic Versioning][semver].
 ### Maintenance
 
 - Enforce common linter checks before building the binary
+- Format markdown files according to rules of the marksman
 
 ## [1.0.1] - 2024-02-18
 
@@ -139,10 +140,12 @@ to [Semantic Versioning][semver].
 - Created a CHANGELOG
 
 <!-- a collection of links -->
+
 [changelog]: https://keepachangelog.com/en/1.1.0/
 [semver]: https://semver.org/spec/v2.0.0.html
 
 <!-- a collection of releases -->
+
 [Unreleased]: https://github.com/zimeg/emporia-time/compare/v1.0.1...HEAD
 [1.0.1]: https://github.com/zimeg/emporia-time/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zimeg/emporia-time/compare/v0.1.1...v1.0.0
