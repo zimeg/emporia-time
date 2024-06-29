@@ -26,7 +26,10 @@
             gopls
             goreleaser
           ];
-          shellHook = "go mod tidy";
+          shellHook = ''
+            export PATH=/usr/bin:$PATH:${gon}/bin
+            go mod tidy
+          '';
         };
       });
 }
