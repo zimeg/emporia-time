@@ -13,7 +13,7 @@ jobs:
   snapshot:
     name: Save a snapshot
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
-    runs-on: macos-latest
+    runs-on: macos-13
     outputs:
       version: ${{ steps.tag.outputs.version }}
     steps:
