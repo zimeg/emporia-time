@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -34,6 +35,15 @@ func (bw *bufferWriter) Write(p []byte) (int, error) {
 
 // timerCommand forms the command struct for a timer to be parsed
 func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
+	timer, err := exec.LookPath("time")
+	if err != nil {
+		timer = "time"
+	} else {
+		timer, err = filepath.Abs(timer)
+		if err != nil {
+			timer = "time"
+		}
+	}
 	timeShell := []string{
 		strings.Join(command, " "),
 		";",
@@ -47,7 +57,7 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 		"-c",
 		strings.Join(timeShell, " "),
 	}
-	cmd := exec.Command("/usr/bin/time", timeArgs...)
+	cmd := exec.Command(timer, timeArgs...)
 	if errors.Is(cmd.Err, exec.ErrDot) {
 		cmd.Err = nil
 	}
