@@ -71,6 +71,9 @@ func parseTimeResults(output string) (times CommandTime, err error) {
 	lines := strings.TrimSpace(output)
 	for _, line := range strings.Split(lines, "\n") {
 		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			continue
+		}
 		measurement, value := fields[0], fields[1]
 		switch measurement {
 		case "real":

@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Fixed
+
+- Avoid assumptions about the $PATH to the `time` command
+
 ### Maintenance
 
 - Enforce common linter checks before building the binary
