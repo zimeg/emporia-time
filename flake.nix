@@ -27,7 +27,6 @@
             goreleaser
           ];
           shellHook = ''
-            export PATH=/usr/bin:$PATH:${gon}/bin
             go mod tidy
           '';
         };
