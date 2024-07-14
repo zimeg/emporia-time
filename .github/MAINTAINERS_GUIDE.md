@@ -8,7 +8,6 @@ Hey there! It's about time... Watt have you been jouling!?
 - [Testing](#testing)
 - [Merging pull requests](#merging-pull-requests)
 - [Cutting a release](#cutting-a-release)
-- [Runner setup](#runner-setup)
 
 ## Project setup
 
@@ -172,18 +171,6 @@ Unpackage the output disk image to make sure everything was successful with:
 $ spctl -a -vvv -t install ./etime
 ```
 
-## Runner setup
-
-A self-hosted runner is used to verify valid measurements are made when
-monitoring energy usage during the remote integration tests.
-
-To bring the runner online, [add a **New self-hosted runner**][runner] using a
-device connected to a smart plug.
-
-Then set values for `EMPORIA_DEVICE`, `EMPORIA_USERNAME`, and `EMPORIA_PASSWORD`
-in your action repository secrets using your Emporia information. Also add these
-for Dependabot to configure this workflow.
-
 [certificates]: https://www.apple.com/certificateauthority/
 [credentials]: https://developer.apple.com/account/resources/certificates/list
 [golang]: https://go.dev/dl/
@@ -192,5 +179,4 @@ for Dependabot to configure this workflow.
 [learn_go]: https://go.dev/learn/
 [nix]: https://zero-to-nix.com
 [releases]: https://github.com/zimeg/emporia-time/releases
-[runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
 [semver]: https://semver.org/spec/v2.0.0.html
