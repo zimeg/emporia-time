@@ -35,6 +35,11 @@
           ];
           shellHook = "go mod tidy";
         };
+        devShells.gh = pkgs.mkShell {
+          packages = with pkgs; [
+            github-runner
+          ];
+        };
         devShells.gon =
           if system == "x86_64-darwin" || system == "aarch64-darwin" then
             pkgs.mkShell

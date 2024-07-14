@@ -178,7 +178,14 @@ A self-hosted runner is used to verify valid measurements are made when
 monitoring energy usage during the remote integration tests.
 
 To bring the runner online, [add a **New self-hosted runner**][runner] using a
-device connected to a smart plug.
+device connected to a smart plug:
+
+```sh
+$ nix develop .#action
+$ cd .github/runners
+$ config.sh # https://github.com/zimeg/emporia-time/settings/actions/runners/new
+$ run.sh
+```
 
 Then set values for `EMPORIA_DEVICE`, `EMPORIA_USERNAME`, and `EMPORIA_PASSWORD`
 in your action repository secrets using your Emporia information. Also add these
