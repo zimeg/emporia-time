@@ -33,8 +33,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Reflect existing Nix
+        id: nixos
+        continue-on-error: true
+        run: ! uname -a | grep NixOS
       - name: Install a flaked Nix
-        if: ${{ ! uname -a | grep NixOS }}
+        if: steps.nixos.outcome != 'failure'
         uses: DeterminateSystems/nix-installer-action@v12
       - name: Clean the environment
         run: nix develop -c make clean
