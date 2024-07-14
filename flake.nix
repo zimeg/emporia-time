@@ -30,5 +30,10 @@
             go mod tidy
           '';
         };
+        devShells.gh = pkgs.mkShell {
+          packages = with pkgs; [
+            github-runner
+          ];
+        };
       });
 }
