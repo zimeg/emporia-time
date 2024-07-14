@@ -17,6 +17,7 @@ to [Semantic Versioning][semver].
 - Format markdown files according to rules of the marksman
 - Update go versions to 1.22 with other build dependencies
 - Establish some standard setup to the self hosted runners
+- Merge updates to dependencies after the test checks pass
 
 ## [1.0.1] - 2024-02-18
 
