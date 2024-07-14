@@ -181,7 +181,7 @@ To bring the runner online, [add a **New self-hosted runner**][runner] using a
 device connected to a smart plug:
 
 ```sh
-$ nix develop .#action
+$ nix develop .#gh
 $ cd .github/runners
 $ config.sh # https://github.com/zimeg/emporia-time/settings/actions/runners/new
 $ run.sh
