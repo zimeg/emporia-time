@@ -149,8 +149,12 @@ Account information is also needed as environment variables in the `.env` file.
 Signing and notarizing binaries is an automatic process that happens after
 making a release build.
 
-Special tooling and a macOS system is required for this process. A packaging
-tool called `gon` is included in the default development flake.
+Special tooling and a macOS system is required for this process. Tooling can be
+setup with a packaging flake:
+
+```sh
+$ flake develop .#gon
+```
 
 With the above ready the following commands will hopefully officiate things:
 

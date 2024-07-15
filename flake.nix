@@ -22,7 +22,6 @@
             gocyclo
             gofumpt
             golangci-lint
-            gon
             gopls
             goreleaser
           ];
@@ -34,6 +33,16 @@
           packages = with pkgs; [
             github-runner
           ];
+        };
+        devShells.gon = pkgs.mkShell {
+          packages = with pkgs; [
+            go
+            gon
+            goreleaser
+          ];
+          shellHook = ''
+            export PATH=/usr/bin:$PATH
+          '';
         };
       });
 }
