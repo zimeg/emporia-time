@@ -2,23 +2,15 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    zimeg.url = "github:zimeg/nur-packages";
   };
-  outputs = { nixpkgs, flake-utils, ... }:
+  outputs = { nixpkgs, flake-utils, ... } @ inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         gon =
-          if system == "x86_64-darwin" || system == "aarch64-darwin" then
-            let
-              gonZip = pkgs.fetchurl {
-                url = "https://github.com/Bearer/gon/releases/download/v0.0.36/gon_macos.zip";
-                sha256 = "1firj23pgdfx9hybjjr91chn1jzf7lzjrbx3nm1s9h3xbpx945x2";
-              };
-            in
-            pkgs.runCommand "gon" { nativeBuildInputs = [ pkgs.unzip ]; } ''
-              mkdir -p $out/bin
-              unzip ${gonZip} -d $out/bin
-            ''
+          if pkgs.stdenv.isDarwin then
+            inputs.zimeg.packages.${pkgs.system}.gon
           else
             null;
       in
@@ -33,7 +25,9 @@
             gopls
             goreleaser
           ];
-          shellHook = "go mod tidy";
+          shellHook = ''
+            go mod tidy
+          '';
         };
         devShells.gh = pkgs.mkShell {
           packages = with pkgs; [
@@ -41,16 +35,16 @@
           ];
         };
         devShells.gon =
-          if system == "x86_64-darwin" || system == "aarch64-darwin" then
+          if pkgs.stdenv.isDarwin then
             pkgs.mkShell
               {
-                buildInputs = with pkgs; [
+                packages = with pkgs; [
                   go
                   gon
                   goreleaser
                 ];
                 shellHook = ''
-                  export PATH=/usr/bin:$PATH:${gon}/bin
+                  export PATH=/usr/bin:$PATH # https://github.com/zimeg/nur-packages/issues/4
                 '';
               }
           else

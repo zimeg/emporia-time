@@ -18,6 +18,7 @@ to [Semantic Versioning][semver].
 - Update go versions to 1.22 with other build dependencies
 - Establish some standard setup to the self hosted runners
 - Merge updates to dependencies after the test checks pass
+- Build binaries for releases from an upstream nur package
 
 ## [1.0.1] - 2024-02-18
 
