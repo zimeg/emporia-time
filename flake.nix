@@ -44,7 +44,7 @@
                   goreleaser
                 ];
                 shellHook = ''
-                  export PATH=/usr/bin:$PATH
+                  export PATH=/usr/bin:$PATH # https://github.com/zimeg/nur-packages/issues/4
                 '';
               }
           else
