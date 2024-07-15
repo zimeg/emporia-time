@@ -9,7 +9,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         gon =
-          if system == "x86_64-darwin" || system == "aarch64-darwin" then
+          if pkgs.stdenv.isDarwin then
             inputs.zimeg.packages.${pkgs.system}.gon
           else
             null;
@@ -34,15 +34,20 @@
             github-runner
           ];
         };
-        devShells.gon = pkgs.mkShell {
-          packages = with pkgs; [
-            go
-            gon
-            goreleaser
-          ];
-          shellHook = ''
-            export PATH=/usr/bin:$PATH
-          '';
-        };
+        devShells.gon =
+          if pkgs.stdenv.isDarwin then
+            pkgs.mkShell
+              {
+                packages = with pkgs; [
+                  go
+                  gon
+                  goreleaser
+                ];
+                shellHook = ''
+                  export PATH=/usr/bin:$PATH
+                '';
+              }
+          else
+            null;
       });
 }
