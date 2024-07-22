@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][changelog], and this project adheres
 to [Semantic Versioning][semver].
 
+## [Unreleased]
+
+### Changed
+
+- Replace relative paths in reference to a global command
+
 ## [1.0.2] - 2024-07-14
 
 ### Fixed

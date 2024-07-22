@@ -26,7 +26,7 @@ $ mv etime /usr/local/bin
 4. Use the binary with your favorite command or script:
 
 ```sh
-$ ./etime sleep 12
+$ etime sleep 12
        12.00 real         0.00 user         0.00 sys
       922.63 joules      76.87 watts      100.0% sure
 ```
@@ -75,7 +75,7 @@ This program can be configured using positional flags and arguments to produce
 certain behaviors:
 
 ```sh
-$ ./etime [flags] <command> [args]
+$ etime [flags] <command> [args]
 ```
 
 - `flags`: optional flags to provide this program
