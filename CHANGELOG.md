@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Added
+
+- Document expected behavior using the manual `man` pages
+
 ### Changed
 
 - Replace relative paths in reference to a global command

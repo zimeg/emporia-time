@@ -1,0 +1,63 @@
+.TH ETIME "1" "2024-07-21" "etime 1.0.2" "etime Manual"
+.
+.SH NAME
+etime \- The \fBtime\fP command, with energy awareness.
+.
+.
+.SH SYNOPSIS
+.B
+etime [\fIflags\fP] <\fIcommand\fP> [\fIargs\fP]
+.
+.
+.SH DESCRIPTION
+The \fBetime\fP program invokes the provided \fIcommand\fP while gathering
+details about timing and energy usage.
+.
+.
+.SH OPTIONS
+.
+.IP "-h, --help"
+Print a helpful but brief message.
+.
+.IP "-p, --portable"
+Output measurements on separate lines for quick parsing.
+.
+.IP "--device <string>"
+Configure the name or ID of the smart plug to measure.
+.
+.IP "--username <string>"
+Account username for Emporia.
+.
+.IP "--password <string>"
+Account password for Emporia.
+.
+.IP "--version"
+Respond with the current version of the build.
+.
+.
+.SH EXAMPLES
+.IP "$ etime sleep 12"
+Gather baseline information for a resting machine.
+.
+.IP "$ etime -p sort --reverse numbers.in > numbers.out"
+Order input and output details about active usage.
+.
+.
+.SH SEE ALSO
+\fItime\fP(1)
+.
+.
+.SH BUGS
+Report strangeness or ask questions and track issues:
+.nf
+https://github.com/zimeg/emporia-time/issues
+.
+.
+.SH AUTHORS
+Created and maintained by @zimeg <zim@o526.net> with kind contributions:
+.nf
+https://github.com/zimeg/emporia-time/graphs/contributors
+.
+.SH LICENSE
+\fBetime\fP is licensed under the MIT license and is not affiliated with
+or endorsed by Emporia Energy.
