@@ -71,8 +71,8 @@ jobs:
         if: matrix.target == 'man.1'
         uses: actions/upload-artifact@v4
         with:
-          name: etime.1
-          path: ./etime_${{ env.version }}.1
+          name: etime_${{ env.version }}.1
+          path: ./etime.1
       - name: Upload a snapshot
         if: matrix.target != 'man.1'
         uses: actions/upload-artifact@v4
