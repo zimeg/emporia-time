@@ -58,6 +58,9 @@ jobs:
           - windows_arm64.zip
           - windows_i386.zip
           - windows_x86_64.zip
+        include:
+          - target: man.1
+            unique: true
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -66,7 +69,14 @@ jobs:
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
+      - name: Read the manual pages
+        if: ${{ matrix.unique }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_man.1
+          path: ./etime.1
       - name: Upload a snapshot
+        if: ${{ !matrix.unique }}
         uses: actions/upload-artifact@v4
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}

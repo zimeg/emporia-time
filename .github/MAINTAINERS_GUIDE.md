@@ -114,12 +114,13 @@ the following steps can be taken:
 
 1. Add the new version header to the `CHANGELOG.md` to mark the release
 2. Preemptively update the version links at the end of the `CHANGELOG.md`
-3. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
-4. Open then merge a pull request with these changes
-5. Draft a [new release][releases] using the version name and entries from the
+3. Bump the updated version and date of the release for manual `etime.1`
+4. Commit these changes to a branch called by the version name – e.g. `v1.2.3`
+5. Open then merge a pull request with these changes
+6. Draft a [new release][releases] using the version name and entries from the
    `CHANGELOG.md`
-6. Publish this as the latest release!
-7. Close the current milestone for the latest release then create a new one
+7. Publish this as the latest release!
+8. Close the current milestone for the latest release then create a new one
 
 In deciding a version number, best judgement should be used to follow
 [semantic versioning][semver].

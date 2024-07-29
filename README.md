@@ -12,7 +12,7 @@ The `time` command, with energy awareness.
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
-2. Install the [latest released version][releases] or
+2. Download the [latest released version][releases] or
    [build from source][source].
 3. Optionally, create a symbolic link to or move the compiled binary into your
    `/bin` to run the command globally:
@@ -31,9 +31,9 @@ $ etime sleep 12
       922.63 joules      76.87 watts      100.0% sure
 ```
 
-The first time you run `etime`, you will be prompted to login with your
-Emporia credentials and select a device. Credentials are only used to gather
-API tokens, and tokens are stored in `~/.config/etime/settings.json`.
+The first time you run `etime`, you will be prompted to login with your Emporia
+credentials and select a device. Credentials are only used to gather API tokens,
+and tokens are stored in `~/.config/etime/settings.json`.
 
 ## Measurement information
 
@@ -112,10 +112,23 @@ Environment variables can be used as another way to configure the program:
 - `EMPORIA_PASSWORD`: account password for Emporia
 - `XDG_CONFIG_HOME`: the directory to store configurations
 
+### Manual pages
+
+Program documentation can be downloaded from root or the [releases][releases]
+and added to reference:
+
+```sh
+$ cp etime.1 /usr/local/share/man/man1/
+$ mandb
+$ man etime
+```
+
+Additional permissions or created paths might be needed to complete the process.
+
 ## Repository information
 
-This project is licensed under the MIT license and is not affiliated with
-or endorsed by Emporia Energy.
+This project is licensed under the MIT license and is not affiliated with or
+endorsed by Emporia Energy.
 
 Documentation for the Emporia API was graciously gathered from the
 [`magico13/PyEmVue`][docs] project.
