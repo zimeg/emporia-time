@@ -112,6 +112,19 @@ Environment variables can be used as another way to configure the program:
 - `EMPORIA_PASSWORD`: account password for Emporia
 - `XDG_CONFIG_HOME`: the directory to store configurations
 
+### Manual pages
+
+Program documentation can be downloaded from root or the [releases][releases]
+and added to reference:
+
+```sh
+$ cp etime.1 /usr/local/share/man/man1/
+$ mandb
+$ man etime
+```
+
+Additional permissions or created paths might be needed to complete the process.
+
 ## Repository information
 
 This project is licensed under the MIT license and is not affiliated with or
