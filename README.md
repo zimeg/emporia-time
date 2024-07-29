@@ -12,7 +12,7 @@ The `time` command, with energy awareness.
 ## Getting started
 
 1. Purchase an [Emporia Smart Plug][plug] and set your device up.
-2. Install the [latest released version][releases] or
+2. Download the [latest released version][releases] or
    [build from source][source].
 3. Optionally, create a symbolic link to or move the compiled binary into your
    `/bin` to run the command globally:
