@@ -66,6 +66,11 @@ jobs:
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
+      - name: Read the manual pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime.1
+          path: ./etime.1
       - name: Upload a snapshot
         uses: actions/upload-artifact@v4
         with:
