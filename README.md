@@ -31,9 +31,9 @@ $ etime sleep 12
       922.63 joules      76.87 watts      100.0% sure
 ```
 
-The first time you run `etime`, you will be prompted to login with your
-Emporia credentials and select a device. Credentials are only used to gather
-API tokens, and tokens are stored in `~/.config/etime/settings.json`.
+The first time you run `etime`, you will be prompted to login with your Emporia
+credentials and select a device. Credentials are only used to gather API tokens,
+and tokens are stored in `~/.config/etime/settings.json`.
 
 ## Measurement information
 
@@ -114,8 +114,8 @@ Environment variables can be used as another way to configure the program:
 
 ## Repository information
 
-This project is licensed under the MIT license and is not affiliated with
-or endorsed by Emporia Energy.
+This project is licensed under the MIT license and is not affiliated with or
+endorsed by Emporia Energy.
 
 Documentation for the Emporia API was graciously gathered from the
 [`magico13/PyEmVue`][docs] project.
