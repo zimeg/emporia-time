@@ -1,4 +1,4 @@
-.TH ETIME "1" "2024-07-21" "etime 1.0.2" "etime Manual"
+.TH ETIME "1" "2024-07-28" "etime 1.0.2" "etime Manual"
 .
 .SH NAME
 etime \- The \fBtime\fP command, with energy awareness.
@@ -6,12 +6,35 @@ etime \- The \fBtime\fP command, with energy awareness.
 .
 .SH SYNOPSIS
 .B
-etime [\fIflags\fP] <\fIcommand\fP> [\fIargs\fP]
+etime [\fIflags\fP] \fIcommand\fP [\fIargs\fP]
 .
 .
 .SH DESCRIPTION
-The \fBetime\fP program invokes the provided \fIcommand\fP while gathering
-details about timing and energy usage.
+The \fBetime\fP program invokes the provided \fIcommand\fP while gathering details about timing and energy usage.
+.sp 2
+Options for this program are provided as \fIflags\fP before the \fIcommand\fP.
+.sp 2
+Arguments for the provided \fIcommand\fP should follow the \fIcommand\fP as separate \fIargs\fP. These values can represent flags or positional arguments and are provided to \fIcommand\fP when it is executed.
+.sp 2
+The resulting measurements from \fIcommand\fP follow outputs from execution and include:
+.
+.IP "real"
+Actual execution time from start to finish.
+.
+.IP "user"
+CPU time executing in user mode for the process.
+.
+.IP "sys"
+CPU time making system calls in kernel mode.
+.
+.IP "joules"
+Total energy used during the command duration.
+.
+.IP "watts"
+Average power output over the command duration.
+.
+.IP "sure"
+Ratio of observed-to-expected usage results.
 .
 .
 .SH OPTIONS
@@ -35,7 +58,46 @@ Account password for Emporia.
 Respond with the current version of the build.
 .
 .
+.SH EXIT STATUS
+An exit code of \fB0\fP is returned when both \fBetime\fP and the \fIcommand\fP exit with success.
+.sp 2
+Failure to reach the smart plug servers or execute the built-in \fBtime\fP command will cause the \fBetime\fP program to exit with a non-zero status code.
+.sp 2
+The \fIcommand\fP might exit with an error code that will be returned after gathering usage measurements.
+.
+.
+.SH ENVIRONMENT
+.
+.IP "EMPORIA_DEVICE"
+The name or ID of the smart plug to measure.
+.
+.IP "EMPORIA_USERNAME"
+The account username for Emporia.
+.
+.IP "EMPORIA_PASSWORD"
+The account password for Emporia.
+.
+.IP "XDG_CONFIG_HOME"
+The path to a directory for storing configurations.
+.
+.
+.SH FILES
+.
+.IP "$HOME/.config/etime/settings.json"
+Details about the active device and service tokens.
+.
+.
+.SH STANDARDS
+The built-in \fBtime\fP command must have the \fB-p\fP option to ouput timing measurements on separate lines.
+.sp 2
+That \fBtime\fP command also must print to \fBstderr\fP. Per \fBPOSIX.1\fP.
+.
+.
+.SH HISTORY
+\fIhttps://github.com/zimeg/emporia-time/releases/\fP
+.
 .SH EXAMPLES
+.
 .IP "$ etime sleep 12"
 Gather baseline information for a resting machine.
 .
@@ -43,21 +105,15 @@ Gather baseline information for a resting machine.
 Order input and output details about active usage.
 .
 .
+.SH REPORTING BUGS
+\fIhttps://github.com/zimeg/emporia-time/issues/\fP
+.
+.
+.SH COPYRIGHT
+\fBetime\fP is licensed under the MIT license and is not affiliated with or endorsed by Emporia Energy.
+.
+.
 .SH SEE ALSO
 \fItime\fP(1)
-.
-.
-.SH BUGS
-Report strangeness or ask questions and track issues:
 .nf
-https://github.com/zimeg/emporia-time/issues
-.
-.
-.SH AUTHORS
-Created and maintained by @zimeg <zim@o526.net> with kind contributions:
-.nf
-https://github.com/zimeg/emporia-time/graphs/contributors
-.
-.SH LICENSE
-\fBetime\fP is licensed under the MIT license and is not affiliated with
-or endorsed by Emporia Energy.
+\fIhttps://www.emporiaenergy.com/emporia-smart-plug/\fP
