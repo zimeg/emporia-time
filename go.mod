@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/aws/aws-sdk-go v1.54.19
+	github.com/aws/aws-sdk-go v1.55.5
 	github.com/stretchr/testify v1.9.0
 )
 
