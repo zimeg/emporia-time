@@ -41,6 +41,11 @@ jobs:
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
+      - name: Include documentation
+        run: |
+          gh release upload $(git describe --tags) etime.1
+        env:
+          GH_TOKEN: ${{ github.token }}
   artifacts:
     name: Share the artifacts
     needs: snapshot
@@ -133,3 +138,8 @@ jobs:
           AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
           AC_PROVIDER: ${{ secrets.AC_PROVIDER }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Include documentation
+        run: |
+          gh release upload $(git describe --tags) etime.1
+        env:
+          GH_TOKEN: ${{ github.token }}
