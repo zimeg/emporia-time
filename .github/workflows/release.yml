@@ -47,6 +47,7 @@ jobs:
         with:
           name: etime_${{ env.version }}_checksums.txt
           path: ./dist/etime_${{ env.version }}_checksums.txt
+          if-no-files-found: error
       - name: Cache the moments
         uses: actions/cache/save@v4
         if: always()
@@ -89,12 +90,14 @@ jobs:
         with:
           name: etime_${{ env.version }}_man.1
           path: ./etime.1
+          if-no-files-found: error
       - name: Upload a snapshot
         if: ${{ !matrix.unique }}
         uses: actions/upload-artifact@v4
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
+          if-no-files-found: error
   notify:
     name: Post a notification
     needs: artifacts
