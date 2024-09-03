@@ -42,11 +42,35 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v13
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yml
+      - name: Mark logged changes
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_CHANGELOG.md
+          path: ./CHANGELOG.md
+          if-no-files-found: error
       - name: Upload the checksums
         uses: actions/upload-artifact@v4
         with:
           name: etime_${{ env.version }}_checksums.txt
           path: ./dist/etime_${{ env.version }}_checksums.txt
+          if-no-files-found: error
+      - name: Enscribe legal letter
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_LICENSE
+          path: ./LICENSE
+          if-no-files-found: error
+      - name: Read the manual pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_man.1
+          path: ./etime.1
+          if-no-files-found: error
+      - name: Write welcoming markdown
+        uses: actions/upload-artifact@v4
+        with:
+          name: etime_${{ env.version }}_README.md
+          path: ./README.md
           if-no-files-found: error
       - name: Cache the moments
         uses: actions/cache/save@v4
@@ -73,9 +97,6 @@ jobs:
           - windows_arm64.zip
           - windows_i386.zip
           - windows_x86_64.zip
-        include:
-          - target: man.1
-            unique: true
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -84,15 +105,7 @@ jobs:
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
-      - name: Read the manual pages
-        if: ${{ matrix.unique }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: etime_${{ env.version }}_man.1
-          path: ./etime.1
-          if-no-files-found: error
       - name: Upload a snapshot
-        if: ${{ !matrix.unique }}
         uses: actions/upload-artifact@v4
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
@@ -155,6 +168,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Include documentation
         run: |
+          gh release upload ${{ env.version }} CHANGELOG.md#etime_${{ env.version }}_CHANGELOG.md
+          gh release upload ${{ env.version }} LICENSE#etime_${{ env.version }}_LICENSE
           gh release upload ${{ env.version }} etime.1#etime_${{ env.version }}_man.1
+          gh release upload ${{ env.version }} README.md#etime_${{ env.version }}_README.md
         env:
           GH_TOKEN: ${{ github.token }}
