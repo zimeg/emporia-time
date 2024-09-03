@@ -55,7 +55,9 @@ jobs:
           key: snapshots-${{ github.sha }}
   artifacts:
     name: Share the artifacts
-    needs: snapshot
+    needs:
+      - snapshot
+      - version
     runs-on: ubuntu-latest
     env:
       version: ${{ needs.version.outputs.version }}
