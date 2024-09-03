@@ -48,7 +48,7 @@ func (config *EmporiaConfig) SetTokens(auth EmporiaCognitoResponse) {
 	if auth.RefreshToken != nil {
 		config.Tokens.RefreshToken = *auth.RefreshToken
 	}
-	lifespan := time.Duration(*auth.ExpiresIn)
+	lifespan := time.Duration(auth.ExpiresIn)
 	config.Tokens.ExpiresAt = time.Now().Add(time.Second * lifespan).UTC()
 }
 
