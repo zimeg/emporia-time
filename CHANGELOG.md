@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Added
+
+- Release `README.md` and `CHANGELOG.md` and `LICENSE` file
+
 ### Fixed
 
 - Include the manual pages as part of the release artifacts
