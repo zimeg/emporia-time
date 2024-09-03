@@ -18,6 +18,7 @@ to [Semantic Versioning][semver].
 ### Maintenance
 
 - Set the `go` version to a fixed `1.22.6` for the toolchain
+- Update token authentication to use the latest Cognito SDK
 
 ## [1.1.0] - 2024-08-03
 

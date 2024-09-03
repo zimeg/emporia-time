@@ -1,35 +1,36 @@
 package emporia
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"context"
+
+	config "github.com/aws/aws-sdk-go-v2/config"
+	cognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
 )
 
 // EmporiaCognitoClientID is the AWS Cognito client ID used by Emporia
-const EmporiaCognitoClientID = "4qte47jbstod8apnfic0bunmrq"
+var EmporiaCognitoClientID string = "4qte47jbstod8apnfic0bunmrq"
 
 // EmporiaCognitoResponse holds the authentication information from Cognito
 type EmporiaCognitoResponse struct {
 	IdToken      *string
 	RefreshToken *string
-	ExpiresIn    *int64
+	ExpiresIn    int32
 }
 
 // GenerateTokens creates new auth tokens from credentials
 func GenerateTokens(credentials EmporiaCredentials) (EmporiaCognitoResponse, error) {
+	ctx := context.Background()
 	auth := cognito.InitiateAuthInput{
-		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
-		AuthParameters: map[string]*string{
-			"USERNAME": aws.String(credentials.Username),
-			"PASSWORD": aws.String(credentials.Password),
+		AuthFlow: "USER_PASSWORD_AUTH",
+		AuthParameters: map[string]string{
+			"USERNAME": credentials.Username,
+			"PASSWORD": credentials.Password,
 		},
-		ClientId: aws.String(EmporiaCognitoClientID),
+		ClientId: &EmporiaCognitoClientID,
 	}
-
 	if client, err := createCognitoClient(); err != nil {
 		return EmporiaCognitoResponse{}, err
-	} else if user, err := client.InitiateAuth(&auth); err != nil {
+	} else if user, err := client.InitiateAuth(ctx, &auth); err != nil {
 		return EmporiaCognitoResponse{}, err
 	} else {
 		return EmporiaCognitoResponse{
@@ -42,17 +43,17 @@ func GenerateTokens(credentials EmporiaCredentials) (EmporiaCognitoResponse, err
 
 // RefreshTokens regenerates auth tokens from the refresh token
 func RefreshTokens(refreshToken string) (EmporiaCognitoResponse, error) {
+	ctx := context.Background()
 	auth := cognito.InitiateAuthInput{
-		AuthFlow: aws.String("REFRESH_TOKEN_AUTH"),
-		AuthParameters: map[string]*string{
-			"REFRESH_TOKEN": aws.String(refreshToken),
+		AuthFlow: "REFRESH_TOKEN_AUTH",
+		AuthParameters: map[string]string{
+			"REFRESH_TOKEN": refreshToken,
 		},
-		ClientId: aws.String(EmporiaCognitoClientID),
+		ClientId: &EmporiaCognitoClientID,
 	}
-
 	if client, err := createCognitoClient(); err != nil {
 		return EmporiaCognitoResponse{}, err
-	} else if user, err := client.InitiateAuth(&auth); err != nil {
+	} else if user, err := client.InitiateAuth(ctx, &auth); err != nil {
 		return EmporiaCognitoResponse{}, err
 	} else {
 		return EmporiaCognitoResponse{
@@ -64,13 +65,11 @@ func RefreshTokens(refreshToken string) (EmporiaCognitoResponse, error) {
 }
 
 // createCognitoClient creates a configured identity provider
-func createCognitoClient() (*cognito.CognitoIdentityProvider, error) {
-	cfg := aws.Config{
-		Region: aws.String("us-east-2"),
+func createCognitoClient() (*cognito.Client, error) {
+	ctx := context.Background()
+	config, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-2"))
+	if err != nil {
+		return &cognito.Client{}, err
 	}
-	if sess, err := session.NewSession(&cfg); err != nil {
-		return &cognito.CognitoIdentityProvider{}, err
-	} else {
-		return cognito.New(sess), nil
-	}
+	return cognito.NewFromConfig(config), nil
 }
