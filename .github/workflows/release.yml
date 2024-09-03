@@ -10,12 +10,27 @@ on:
 permissions:
   contents: write
 jobs:
+  version:
+    name: Collect the version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Collect the current version
+        id: tag
+        run: |
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
+          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_OUTPUT"
   snapshot:
     name: Save a snapshot
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.tag.outputs.version }}
+    env:
+      version: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -25,11 +40,6 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v13
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yml
-      - name: Collect the current version
-        id: tag
-        run: |
-          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
-          echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_OUTPUT"
       - name: Upload the checksums
         uses: actions/upload-artifact@v4
         with:
@@ -51,7 +61,7 @@ jobs:
     needs: snapshot
     runs-on: ubuntu-latest
     env:
-      version: ${{ needs.snapshot.outputs.version }}
+      version: ${{ needs.version.outputs.version }}
     strategy:
       matrix:
         target:
@@ -112,6 +122,8 @@ jobs:
     name: Distribute a release
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: macos-latest
+    env:
+      version: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -140,6 +152,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Include documentation
         run: |
-          gh release upload $(git describe --tags) etime.1
+          gh release upload ${{ env.version }} etime.1#etime_${{ env.version }}_man.1
         env:
           GH_TOKEN: ${{ github.token }}
