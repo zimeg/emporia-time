@@ -23,6 +23,7 @@ jobs:
       - name: Collect the current version
         id: tag
         run: |
+          echo "$(git describe --dirty --always --tags)"
           echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_ENV"
           echo "version=$(git describe --dirty --always --tags)" >> "$GITHUB_OUTPUT"
   snapshot:
