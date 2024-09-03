@@ -1,6 +1,7 @@
 package emporia
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"log"
@@ -8,6 +9,15 @@ import (
 	"time"
 
 	"github.com/zimeg/emporia-time/internal/program"
+	"github.com/zimeg/emporia-time/pkg/cognito"
+)
+
+const (
+	// EmporiaClientID is the AWS Cognito client ID used by Emporia
+	EmporiaClientID string = "4qte47jbstod8apnfic0bunmrq"
+
+	// EmporiaRegion is the AWS Cognito region used by Emporia
+	EmporiaRegion string = "us-east-2"
 )
 
 // EmporiaConfig contains device configurations and user authentications
@@ -25,16 +35,27 @@ type EmporiaTokenSet struct {
 
 // SetupConfig prepares the local configurations for a command
 func SetupConfig(flags program.Flags) (EmporiaConfig, error) {
-	if config, err := LoadConfigFile(); err != nil {
+	ctx := context.Background()
+	cog, err := cognito.NewClient(ctx, EmporiaClientID, EmporiaRegion)
+	if err != nil {
 		return EmporiaConfig{}, err
-	} else if err := config.gatherTokens(flags); err != nil {
+	}
+	config, err := LoadConfigFile()
+	if err != nil {
 		return EmporiaConfig{}, err
-	} else if err := config.gatherDevice(flags); err != nil {
+	}
+	tokens, err := config.gatherTokens(ctx, cog, flags)
+	if err != nil {
 		return EmporiaConfig{}, err
 	} else {
-		config.SaveConfig()
-		return config, nil
+		config.SetTokens(tokens)
 	}
+	err = config.gatherDevice(flags)
+	if err != nil {
+		return EmporiaConfig{}, err
+	}
+	config.SaveConfig()
+	return config, nil
 }
 
 // SetDevice stores the active device in the config
@@ -43,7 +64,7 @@ func (config *EmporiaConfig) SetDevice(device string) {
 }
 
 // SetTokens stores newly gathered auth tokens in the config
-func (config *EmporiaConfig) SetTokens(auth EmporiaCognitoResponse) {
+func (config *EmporiaConfig) SetTokens(auth cognito.CognitoResponse) {
 	config.Tokens.IdToken = *auth.IdToken
 	if auth.RefreshToken != nil {
 		config.Tokens.RefreshToken = *auth.RefreshToken

@@ -1,6 +1,7 @@
 package emporia
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/zimeg/emporia-time/internal/program"
 	"github.com/zimeg/emporia-time/internal/terminal"
+	"github.com/zimeg/emporia-time/pkg/cognito"
 )
 
 // EmporiaCredentials contains basic authentication information
@@ -32,23 +34,30 @@ func (config *EmporiaConfig) useCredentials(flags program.Flags) bool {
 }
 
 // gatherTokens collects and sets the tokens needed for calling the Emporia API
-func (config *EmporiaConfig) gatherTokens(flags program.Flags) error {
+func (config *EmporiaConfig) gatherTokens(
+	ctx context.Context,
+	cog cognito.Congintoir,
+	flags program.Flags,
+) (
+	cognito.CognitoResponse,
+	error,
+) {
 	if config.useCredentials(flags) {
-		if credentials, err := config.gatherCredentials(flags); err != nil {
-			return err
-		} else if resp, err := GenerateTokens(credentials); err != nil {
-			return err
-		} else {
-			config.SetTokens(resp)
+		credentials, err := config.gatherCredentials(flags)
+		if err != nil {
+			return cognito.CognitoResponse{}, err
 		}
-	} else if time.Now().After(config.Tokens.ExpiresAt) {
-		if resp, err := RefreshTokens(config.Tokens.RefreshToken); err != nil {
-			return err
-		} else {
-			config.SetTokens(resp)
-		}
+		return cog.GenerateTokens(ctx, credentials.Username, credentials.Password)
 	}
-	return nil
+	if time.Now().After(config.Tokens.ExpiresAt) {
+		return cog.RefreshTokens(ctx, config.Tokens.RefreshToken)
+	}
+	response := cognito.CognitoResponse{
+		IdToken:      &config.Tokens.IdToken,
+		RefreshToken: &config.Tokens.RefreshToken,
+		ExpiresIn:    int32(config.Tokens.ExpiresAt.Unix()),
+	}
+	return response, nil
 }
 
 // gatherCredentials prompts for an Emporia username and password
