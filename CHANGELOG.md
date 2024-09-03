@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][changelog], and this project adheres
 to [Semantic Versioning][semver].
 
+## [Unreleased]
+
+### Fixed
+
+- Include the manual pages as part of the release artifacts
+
 ## [1.1.0] - 2024-08-03
 
 ### Added
