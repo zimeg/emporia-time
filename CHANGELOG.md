@@ -15,6 +15,10 @@ to [Semantic Versioning][semver].
 
 - Include the manual pages as part of the release artifacts
 
+### Maintenance
+
+- Set the `go` version to a fixed `1.22.6` for the toolchain
+
 ## [1.1.0] - 2024-08-03
 
 ### Added
