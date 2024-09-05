@@ -16,6 +16,8 @@ jobs:
           fetch-depth: 0
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@v13
+      - name: Install dependencies
+        run: nix develop -c go get
       - name: Check formatting
         run: nix develop -c make check
       - name: Build binary
