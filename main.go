@@ -1,43 +1,36 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"os"
 
-	etime "github.com/zimeg/emporia-time/cmd"
-	"github.com/zimeg/emporia-time/internal/display/templates"
-	"github.com/zimeg/emporia-time/pkg/emporia"
+	"github.com/spf13/afero"
+	"github.com/zimeg/emporia-time/cmd"
+	"github.com/zimeg/emporia-time/pkg/api"
+	"github.com/zimeg/emporia-time/pkg/cognito"
 )
 
 // version is the title of this current build
 var version = "development"
 
+const (
+	clientID string = "4qte47jbstod8apnfic0bunmrq" // Emporia AWS Cognito client ID
+	region   string = "us-east-2"                  // Emporia AWS region
+)
+
 // main manages the lifecycle of this program
 func main() {
-	command, client, err := etime.Setup(os.Args)
-	if err != nil {
-		log.Fatalf("Error: %s", err)
-	} else if command.Flags.Version {
-		fmt.Printf("%s\n", version)
-		os.Exit(0)
-	} else if command.Flags.Help {
-		templates.PrintHelpMessage()
-		os.Exit(0)
-	}
-	if available, err := emporia.EmporiaStatus(); err != nil {
-		log.Fatalf("Error: %s", err)
-	} else if !available {
-		log.Fatalf("Error: Cannot measure energy during Emporia maintenance\n")
-	}
-	results, err := etime.Run(command, client)
+	ctx := context.Background()
+	fs := afero.NewOsFs()
+	req := api.New()
+	cog, err := cognito.NewClient(ctx, clientID, region)
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	}
-	if stats, err := templates.FormatUsage(results, command.Flags.Portable); err != nil {
+	result, err := cmd.Root(ctx, cog, fs, req, os.Args, version)
+	if err != nil {
 		log.Fatalf("Error: %s", err)
-	} else {
-		fmt.Fprintf(os.Stderr, "%s\n", stats)
 	}
-	os.Exit(results.ExitCode)
+	os.Exit(result.ExitCode)
 }

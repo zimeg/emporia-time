@@ -8,8 +8,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/zimeg/emporia-time/internal/program"
 )
 
 // TimeMeasurement holds information of a command run
@@ -43,7 +41,7 @@ func (times TimeMeasurement) GetSys() float64 {
 }
 
 // TimeExec performs the command and prints outputs while measuring timing
-func TimeExec(command program.Command) (TimeMeasurement, error) {
+func TimeExec(args []string) (TimeMeasurement, error) {
 	times := TimeMeasurement{}
 	stderr := bufferWriter{
 		buff:   &bytes.Buffer{},
@@ -51,7 +49,7 @@ func TimeExec(command program.Command) (TimeMeasurement, error) {
 		bounds: makeBounds(),
 	}
 
-	cmd := timerCommand(command.Args, stderr)
+	cmd := timerCommand(args, stderr)
 	times.Start = time.Now().UTC()
 	err := cmd.Run()
 	times.End = time.Now().UTC()

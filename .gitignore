@@ -1,5 +1,5 @@
 # Built binaries
-etime
+/etime
 dist/*
 
 # Development leftovers
