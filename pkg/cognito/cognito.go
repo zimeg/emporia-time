@@ -14,8 +14,8 @@ type CognitoResponse struct {
 	ExpiresIn    int32
 }
 
-// Congintoir suggests expected interactions around authentication
-type Congintoir interface {
+// Cognitoir suggests expected interactions around authentication
+type Cognitoir interface {
 	GenerateTokens(ctx context.Context, username string, password string) (CognitoResponse, error)
 	RefreshTokens(ctx context.Context, refreshToken string) (CognitoResponse, error)
 }

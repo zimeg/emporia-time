@@ -1,4 +1,4 @@
-package program
+package config
 
 import (
 	"bytes"
@@ -15,16 +15,9 @@ type Flags struct {
 	Version  bool
 }
 
-// Command contains the command line configurations
-type Command struct {
-	Args  []string // Args contains arguments to use in the provided program
-	Flags Flags    // Flags holds command specific flags and configurations
-}
-
 // ParseFlags prepares the command using provided arguments
-func ParseFlags(arguments []string) (Command, error) {
+func ParseFlags(args []string) (cmd []string, flags Flags, err error) {
 	flagset := flag.NewFlagSet("etime", flag.ContinueOnError)
-	var flags Flags
 
 	flagset.BoolVar(&flags.Help, "h", false, "display this very informative message")
 	flagset.BoolVar(&flags.Help, "help", false, "display this very informative message")
@@ -37,13 +30,13 @@ func ParseFlags(arguments []string) (Command, error) {
 	flagset.StringVar(&flags.Username, "username", "", "account username for Emporia")
 
 	flagset.SetOutput(&bytes.Buffer{})
-	err := flagset.Parse(arguments[1:])
+	err = flagset.Parse(args[1:])
 	if err != nil {
-		return Command{}, err
+		return []string{}, Flags{}, err
 	}
-	commandArgs := flagset.Args()
-	if len(commandArgs) <= 0 {
+	cmd = flagset.Args()
+	if len(cmd) <= 0 {
 		flags.Help = true
 	}
-	return Command{Args: commandArgs, Flags: flags}, nil
+	return cmd, flags, nil
 }
