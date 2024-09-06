@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/spf13/afero"
@@ -45,19 +46,21 @@ func Load(
 	cfg Config,
 	err error,
 ) {
-	homeDir, err := os.UserHomeDir()
+	configs := ""
+	if home, ok := os.LookupEnv("XDG_CONFIG_HOME"); ok {
+		configs = filepath.Join(home, "etime")
+	} else {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return Config{}, err
+		}
+		configs = filepath.Join(home, ".config", "etime")
+	}
+	err = fs.MkdirAll(configs, 0o755)
 	if err != nil {
 		return Config{}, err
 	}
-	configDir := homeDir + "/.config/etime"
-	if val, ok := os.LookupEnv("XDG_CONFIG_HOME"); ok {
-		configDir = val + "/etime"
-	}
-	err = fs.MkdirAll(configDir, 0o755)
-	if err != nil {
-		return Config{}, err
-	}
-	path := configDir + "/settings.json"
+	path := filepath.Join(configs, "settings.json")
 	data, err := afero.ReadFile(fs, path)
 	if err != nil {
 		if !errors.Is(err, os.ErrNotExist) {
