@@ -19,6 +19,8 @@ import (
 func TestLoad(t *testing.T) {
 	mockIDToken := "eyJ-example-token"
 	mockRefreshToken := "eyJ-example-refresh"
+	mockHomeDir, err := os.UserHomeDir() // FIXME: mock os!
+	require.NoError(t, err)
 
 	tests := map[string]struct {
 		mockConfigFile                 string
@@ -31,6 +33,7 @@ func TestLoad(t *testing.T) {
 		mockRefreshTokensResponse      cognito.CognitoResponse
 		mockRefreshTokensError         error
 		expectedConfig                 Config
+		expectedConfigPath             string
 		expectedError                  error
 	}{
 		"loads the saved and valid credentials into configurations": {
@@ -56,6 +59,7 @@ func TestLoad(t *testing.T) {
 					ExpiresAt:    time.Date(2222, 2, 22, 22, 22, 22, 0, time.UTC),
 				},
 			},
+			expectedConfigPath: filepath.Join("tmp", "configs", "etime", "settings.json"),
 		},
 		"writes configured authentication from provided credentials": {
 			mockFlags: Flags{
@@ -79,6 +83,7 @@ func TestLoad(t *testing.T) {
 					RefreshToken: mockRefreshToken,
 				},
 			},
+			expectedConfigPath: filepath.Join(mockHomeDir, ".config", "etime", "settings.json"),
 		},
 	}
 	for name, tt := range tests {
@@ -122,7 +127,7 @@ func TestLoad(t *testing.T) {
 				assert.Equal(t, tt.expectedConfig.Tokens.IdToken, cfg.Tokens.IdToken)
 				assert.Equal(t, tt.expectedConfig.Tokens.RefreshToken, cfg.Tokens.RefreshToken)
 				assert.Greater(t, cfg.Tokens.ExpiresAt, time.Now())
-				assert.Equal(t, configFilePath, cfg.path)
+				assert.Equal(t, tt.expectedConfigPath, cfg.path)
 				req.AssertCalled(t, "SetDevice", tt.expectedConfig.Device)
 				req.AssertCalled(t, "SetToken", tt.expectedConfig.Tokens.IdToken)
 				actualConfigFile, err := afero.ReadFile(fs, cfg.path)
