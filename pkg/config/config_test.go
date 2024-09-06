@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -95,7 +96,7 @@ func TestLoad(t *testing.T) {
 			dir, err := os.UserHomeDir()
 			require.NoError(t, err)
 			if tt.mockConfigFile != "" {
-				settings, err := fs.Create(dir + "/.config/etime/settings.json")
+				settings, err := fs.Create(filepath.Join(dir, ".config", "etime", "settings.json"))
 				require.NoError(t, err)
 				_, err = settings.WriteString(tt.mockConfigFile)
 				require.NoError(t, err)
@@ -111,7 +112,7 @@ func TestLoad(t *testing.T) {
 				assert.Equal(t, tt.expectedConfig.Tokens.IdToken, cfg.Tokens.IdToken)
 				assert.Equal(t, tt.expectedConfig.Tokens.RefreshToken, cfg.Tokens.RefreshToken)
 				assert.Greater(t, cfg.Tokens.ExpiresAt, time.Now())
-				assert.Equal(t, dir+"/.config/etime/settings.json", cfg.path)
+				assert.Equal(t, filepath.Join(dir, ".config", "etime", "settings.json"), cfg.path)
 				req.AssertCalled(t, "SetDevice", tt.expectedConfig.Device)
 				req.AssertCalled(t, "SetToken", tt.expectedConfig.Tokens.IdToken)
 				actualConfigFile, err := afero.ReadFile(fs, cfg.path)
