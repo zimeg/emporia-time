@@ -14,6 +14,7 @@ to [Semantic Versioning][semver].
 ### Fixed
 
 - Include the manual pages as part of the release artifacts
+- Adjust filepath separators to gather configured settings
 
 ### Maintenance
 
