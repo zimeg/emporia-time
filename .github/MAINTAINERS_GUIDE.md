@@ -6,6 +6,7 @@ Hey there! It's about time... Watt have you been jouling!?
 
 - [Project setup](#project-setup)
 - [Testing](#testing)
+- [Updating the wiki](#updating-the-wiki)
 - [Merging pull requests](#merging-pull-requests)
 - [Cutting a release](#cutting-a-release)
 
@@ -94,6 +95,29 @@ is performed to verify stability in any changes.
 
 Additionally, some change to the `CHANGELOG.md` is checked for on pull requests.
 
+## Updating the wiki
+
+Occasional reminders from PG&E are sent with details for the [wiki][wiki] pages.
+Some discretion around sharing account numbers is recommended, and liberties are
+encouraged for emoji replacement, but numbers for pricing ought to remain right.
+
+### Writing a file
+
+Markdown files that make these pages exist in a hidden repo that moves all files
+to the top level path:
+
+```sh
+$ git clone https://github.com/zimeg/emporia-time.wiki.git
+$ cd emporia-time.wiki
+$ vim -o _Sidebar.md Statements/March-2080.md
+$ git commit --all -m "chore: upload the statement from 2080-03-08 as markdown"
+$ git push
+$ open https://github.com/zimeg/emporia-time/wiki/March-2080
+```
+
+Emails with uploaded details should be archived or deleted or removed from thou
+inbox once complete.
+
 ## Merging pull requests
 
 Confidence in the tests should cover edge cases well enough to trust the suite.
@@ -181,3 +205,4 @@ $ spctl -a -vvv -t install ./etime
 [nix]: https://zero-to-nix.com
 [releases]: https://github.com/zimeg/emporia-time/releases
 [semver]: https://semver.org/spec/v2.0.0.html
+[wiki]: https://github.com/zimeg/emporia-time/wiki
