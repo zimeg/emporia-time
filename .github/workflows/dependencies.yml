@@ -23,7 +23,7 @@ jobs:
           check-name: "Monitor energy usage"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
-      - name: Wait for packag to succeed
+      - name: Wait for packaging to pass
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: ${{ github.ref }}
