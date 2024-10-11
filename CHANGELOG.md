@@ -10,6 +10,7 @@ to [Semantic Versioning][semver].
 ### Maintenance
 
 - Write reminders for the steps involved in wiki page updates
+- Wait until tests pass before merging updates to dependencies
 
 ## [1.1.1] - 2024-09-08
 
