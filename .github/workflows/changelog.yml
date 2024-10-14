@@ -15,7 +15,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          check-name: "Monitor energy usage"
+          check-name: "Inspect the code health"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
       - name: Check for logged changes
