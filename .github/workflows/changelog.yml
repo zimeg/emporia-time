@@ -14,8 +14,22 @@ jobs:
       - name: Wait for tests to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           check-name: "Inspect the code health"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Wait for the next queued test
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          check-name: "Monitor energy usage"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Now wait for the releases
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          check-name: "Save a snapshot"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
       - name: Check for logged changes
