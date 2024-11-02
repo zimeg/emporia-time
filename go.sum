@@ -16,8 +16,8 @@ github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.22 h1:981MHwBaRZM7+9QSR6
 github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.22/go.mod h1:1RA1+aBEfn+CAB/Mh0MB6LsdCYCnjZm7tKXtnk499ZQ=
 github.com/aws/aws-sdk-go-v2/internal/ini v1.8.1 h1:VaRN3TlFdd6KxX1x3ILT5ynH6HvKgqdiXoTxAF4HQcQ=
 github.com/aws/aws-sdk-go-v2/internal/ini v1.8.1/go.mod h1:FbtygfRFze9usAadmnGJNc8KsP346kEe+y2/oyhGAGc=
-github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.45.3 h1:MGNJDvz+5wf1CeBNvdmm2Fs1VEtppI07OqxQkOAtVVg=
-github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.45.3/go.mod h1:h5enb9YgyDSRi4uGwhSJ89n3iTr32JH71pSkS9T2llI=
+github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.46.3 h1:psaBtnzfGXdAbQblMRMB66b5rQ4EfqRuNeD71DsAa2s=
+github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.46.3/go.mod h1:FAKuqIR85M3yrw9AtlzCd0MLq6KZPllx17m+oCyr9j0=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.0 h1:TToQNkvGguu209puTojY/ozlqy2d/SFNcoLIqTFi42g=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.0/go.mod h1:0jp+ltwkf+SwG2fm/PKo8t4y8pJSgOCO4D8Lz3k0aHQ=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.3 h1:qcxX0JYlgWH3hpPUnd6U0ikcl6LLA9sLkXE2w1fpMvY=
