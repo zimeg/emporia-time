@@ -39,7 +39,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v14
+        uses: DeterminateSystems/nix-installer-action@v16
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yml
       - name: Mark logged changes
@@ -158,7 +158,7 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v14
+        uses: DeterminateSystems/nix-installer-action@v16
       - name: Create releases
         run: nix develop .#gon -c goreleaser release --clean --config .goreleaser.release.yml
         env:
