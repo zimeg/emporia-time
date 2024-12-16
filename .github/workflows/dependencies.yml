@@ -10,6 +10,7 @@ jobs:
     name: Merge automatic pull requests
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
+    timeout-minutes: 12
     steps:
       - name: Collect update metadata
         id: metadata
@@ -30,6 +31,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
+          allowed-conclusions: success
       - name: Wait for packaging to pass
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
