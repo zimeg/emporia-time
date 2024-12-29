@@ -60,7 +60,7 @@
           ];
           doCheck = false;
           vendorHash = "sha256-G5sLF3awEQGkSqaXmhSw+IcBq+NoG3QoR+L8XymWfDU=";
-          propagatedBuildInputs = [
+          buildInputs = [
             pkgs.time
           ];
           meta = {
