@@ -47,7 +47,9 @@ jobs:
       - name: Clean the environment
         run: nix develop -c make clean
       - name: Sleep for a short while
-        run: nix run . -- sleep 4
+        run: |
+          nix shell nixpkgs#time
+          nix run . -- sleep 4
         env:
           EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
           EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
