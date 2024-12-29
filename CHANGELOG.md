@@ -12,6 +12,7 @@ to [Semantic Versioning][semver].
 - Write reminders for the steps involved in wiki page updates
 - Wait until tests pass before merging updates to dependencies
 - Find missing references that the above changes might expect
+- Check that upstream merges do not let dependencies skip test
 
 ## [1.1.1] - 2024-09-08
 
