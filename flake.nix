@@ -49,5 +49,25 @@
               }
           else
             null;
+        packages.default = pkgs.buildGoModule {
+          pname = "emporia-time";
+          version = "unversioned";
+          src = ./.;
+          ldflags = [
+            "-s"
+            "-w"
+            "-X main.version=dev"
+          ];
+          doCheck = false;
+          vendorHash = "sha256-G5sLF3awEQGkSqaXmhSw+IcBq+NoG3QoR+L8XymWfDU=";
+          propagatedBuildInputs = [
+            pkgs.time
+          ];
+          meta = {
+            description = "an energy aware time command";
+            homepage = "https://github.com/zimeg/emporia-time";
+            license = pkgs.lib.licenses.mit;
+          };
+        };
       });
 }
