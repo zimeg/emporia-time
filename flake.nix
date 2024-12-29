@@ -15,6 +15,11 @@
             null;
       in
       {
+        devShells.tom = pkgs.mkShell {
+          packages = with pkgs; [
+            time
+          ];
+        };
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             gnumake
