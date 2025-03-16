@@ -23,6 +23,7 @@ to [Semantic Versioning][semver].
 - Find missing references that the above changes might expect
 - Check that upstream merges do not let dependencies skip test
 - Setup the self hosted runner on other computed configuration
+- Upload test results to gather insights into possible flakes
 
 ## [1.1.1] - 2024-09-08
 
