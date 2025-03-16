@@ -24,6 +24,7 @@ to [Semantic Versioning][semver].
 - Check that upstream merges do not let dependencies skip test
 - Setup the self hosted runner on other computed configuration
 - Upload test results to gather insights into possible flakes
+- Run tests after each push or workflow dispatch for sureness
 
 ## [1.1.1] - 2024-09-08
 
