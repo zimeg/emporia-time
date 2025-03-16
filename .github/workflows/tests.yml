@@ -2,9 +2,7 @@
 name: Makes valid measurements
 on:
   push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
 jobs:
   checkup:
     name: Inspect the code health
