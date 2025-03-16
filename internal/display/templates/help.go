@@ -2,13 +2,13 @@ package templates
 
 import (
 	"fmt"
-	"os"
+	"io"
 	"regexp"
 	"strings"
 )
 
 // PrintHelpMessage outputs an informative message for this program
-func PrintHelpMessage() {
+func PrintHelpMessage(out io.Writer) {
 	helpTemplate := `
 Measure the time and energy used while executing a command
 
@@ -39,7 +39,7 @@ Measure the time and energy used while executing a command
 {{ Bold "EXAMPLE" }}
   $ {{ CommandName }} sleep 12
          12.00 real         0.00 user         0.00 sys
-        922.63 joules      76.87 watts      100.0%% sure
+        922.63 joules      76.87 watts      100.0% sure
 
 `
 	if body, err := templateBuilder(helpTemplate, nil); err != nil {
@@ -47,8 +47,8 @@ Measure the time and energy used while executing a command
 		body = boldRegex.ReplaceAllString(helpTemplate, "$1")
 		commandNameRegex := regexp.MustCompile(`{{ CommandName }}`)
 		body = commandNameRegex.ReplaceAllString(body, "etime")
-		fmt.Fprint(os.Stderr, strings.TrimLeft(body, "\n"))
+		fmt.Fprint(out, strings.TrimLeft(body, "\n"))
 	} else {
-		fmt.Fprint(os.Stderr, strings.TrimLeft(body, "\n"))
+		fmt.Fprint(out, strings.TrimLeft(body, "\n"))
 	}
 }

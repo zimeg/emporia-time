@@ -32,7 +32,7 @@ func Root(
 		fmt.Printf("%s\n", version)
 		return etime.CommandResult{}, nil
 	} else if flags.Help {
-		templates.PrintHelpMessage()
+		templates.PrintHelpMessage(os.Stderr)
 		return etime.CommandResult{}, nil
 	}
 	cfg, err := config.Load(ctx, cog, fs, req, flags)
