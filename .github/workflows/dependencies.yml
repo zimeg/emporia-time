@@ -3,7 +3,7 @@ name: Update dependencies
 on:
   pull_request:
   schedule:
-    - cron: "12 34 * * *"
+    - cron: "43 21 * * *"
   workflow_dispatch:
 permissions:
   contents: write
