@@ -13,11 +13,6 @@
         gon = if pkgs.stdenv.isDarwin then inputs.zimeg.packages.${pkgs.system}.gon else null;
       in
       {
-        devShells.tom = pkgs.mkShell {
-          packages = with pkgs; [
-            time
-          ];
-        };
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             gnumake
@@ -46,6 +41,11 @@
             }
           else
             null;
+        devShells.tom = pkgs.mkShell {
+          packages = with pkgs; [
+            time
+          ];
+        };
         packages.default = pkgs.buildGoModule {
           pname = "emporia-time";
           version = "unversioned";
