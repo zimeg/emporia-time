@@ -85,7 +85,14 @@ jobs:
              -f "ref=update"
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Wait for testing to complete
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          check-name: "Inspect the code health"
+          ref: update
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Wait for a testing benchmark
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           check-regexp: "Monitor energy usage"
