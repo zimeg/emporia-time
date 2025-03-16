@@ -7,6 +7,9 @@ jobs:
   checkup:
     name: Inspect the code health
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,6 +40,18 @@ jobs:
           files: coverage/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+      - name: Commit this check
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/statuses/${{ github.sha }} \
+             -f "state=${{ job.status }}" \
+             -f "target_url=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+             -f "description=Makes valid measurements / Inspect the code health"
+        env:
+          GH_TOKEN: ${{ github.token }}
   measurement:
     name: Monitor energy usage
     needs: checkup
