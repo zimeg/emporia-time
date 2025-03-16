@@ -57,7 +57,7 @@
           ];
           doCheck = true;
           vendorHash = "sha256-G5sLF3awEQGkSqaXmhSw+IcBq+NoG3QoR+L8XymWfDU=";
-          buildInputs = [
+          checkInputs = [
             pkgs.time
           ];
           meta = {
