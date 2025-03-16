@@ -7,6 +7,14 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Added
+
+- Package the build in a flake and test with propogated timing
+
+### Fixed
+
+- Set the version of the latest flake builds to be unversioned
+
 ### Maintenance
 
 - Write reminders for the steps involved in wiki page updates
@@ -14,8 +22,6 @@ to [Semantic Versioning][semver].
 - Find missing references that the above changes might expect
 - Check that upstream merges do not let dependencies skip test
 - Setup the self hosted runner on other computed configuration
-- Package the build in a flake and test with propogated timing
-- Set the version of the latest flake builds to be unversioned
 
 ## [1.1.1] - 2024-09-08
 
