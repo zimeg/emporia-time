@@ -25,6 +25,7 @@ to [Semantic Versioning][semver].
 - Setup the self hosted runner on other computed configuration
 - Upload test results to gather insights into possible flakes
 - Run tests after each push or workflow dispatch for sureness
+- Update development and release dependencies on some schedule
 
 ## [1.1.1] - 2024-09-08
 
