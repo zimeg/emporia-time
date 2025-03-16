@@ -14,6 +14,7 @@ to [Semantic Versioning][semver].
 ### Fixed
 
 - Set the version of the latest flake builds to be unversioned
+- Remove an extra percent sign from help page sureness example
 
 ### Maintenance
 
