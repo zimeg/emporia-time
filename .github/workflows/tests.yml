@@ -48,7 +48,6 @@ jobs:
         run: nix develop -c make clean
       - name: Sleep for a short while
         run: |
-          nix develop .#tom
           nix run . -- sleep 4
         env:
           EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
@@ -56,7 +55,6 @@ jobs:
           EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
       - name: Sleep for a bit longer
         run: |
-          nix shell nixpkgs#time
           nix run . -- sleep 12
         env:
           EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
