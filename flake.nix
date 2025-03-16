@@ -17,6 +17,7 @@
           packages = with pkgs; [
             gnumake
             go
+            go-junit-report
             gocyclo
             gofumpt
             golangci-lint

@@ -14,3 +14,6 @@ result
 # Release artifacts
 .gon.hcl
 certificate.p12
+
+# Test remnants
+coverage
