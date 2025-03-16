@@ -46,14 +46,14 @@
             time
           ];
         };
-        packages.default = pkgs.buildGoModule {
+        packages.default = pkgs.buildGoModule rec {
           pname = "emporia-time";
           version = "unversioned";
           src = ./.;
           ldflags = [
             "-s"
             "-w"
-            "-X main.version=dev"
+            "-X main.version=${version}"
           ];
           doCheck = true;
           vendorHash = "sha256-G5sLF3awEQGkSqaXmhSw+IcBq+NoG3QoR+L8XymWfDU=";
