@@ -1,12 +1,13 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Package this version
 on:
+  pull_request:
   push:
     branches:
       - main
     tags:
       - "v*"
-  pull_request:
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
