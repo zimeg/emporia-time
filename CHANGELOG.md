@@ -26,6 +26,7 @@ to [Semantic Versioning][semver].
 - Upload test results to gather insights into possible flakes
 - Run tests after each push or workflow dispatch for sureness
 - Update development and release dependencies on some schedule
+- Bump the go runtime version to version 1.24.1 when building
 
 ## [1.1.1] - 2024-09-08
 
