@@ -1,6 +1,6 @@
 module github.com/zimeg/emporia-time
 
-go 1.22.6
+go 1.24.1
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
