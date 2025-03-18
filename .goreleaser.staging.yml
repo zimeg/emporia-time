@@ -13,26 +13,7 @@ builds:
     goos:
       - linux
       - windows
-  - id: etime_macos
-    binary: etime_{{.Summary}}
-    goos:
       - darwin
-    hooks:
-      post: |-
-        sh -c '
-        cat > .gon.hcl << EOF
-        source = ["./dist/etime_macos_{{.Target}}/etime_{{.Summary}}"]
-        bundle_id = "net.o526.etime"
-        sign {
-          application_identity = "Developer ID Application: Ethan Garrett Zimbelman (SA8WRA75UN)"
-        }
-        dmg {
-          output_path = "./dist/etime_{{.Target}}_{{.Summary}}.dmg"
-          volume_name = "etime_{{.Target}}"
-        }
-        EOF
-        gon .gon.hcl
-        '
 archives:
   - formats:
       - tar.gz
