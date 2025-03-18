@@ -20,7 +20,7 @@ builds:
     hooks:
       post: |-
         sh -c '
-        cat > .gon.hcl << EOF
+        cat > .gon.hcl <<EOF
         source = ["./dist/etime_macos_{{.Target}}/etime_{{.Summary}}"]
         bundle_id = "net.o526.etime"
         sign {
