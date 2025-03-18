@@ -31,6 +31,7 @@ to [Semantic Versioning][semver].
 - Update the vendor hash of go modules after updates are made
 - Run tests and packaging scripts again after automatic merges
 - Include the required token for starting the testing workflow
+- Request updates to dependencies at a much more frequent time
 
 ## [1.1.1] - 2024-09-08
 
