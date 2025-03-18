@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     permissions:
+      actions: write
       contents: write
       pull-requests: write
     steps:
@@ -20,18 +21,64 @@ jobs:
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Checkout this repo
+        if: steps.metadata.outputs.package-ecosystem == 'go_modules'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: "0"
+          ref: ${{ github.head_ref }}
+      - name: Configure git credentials
+        if: steps.metadata.outputs.package-ecosystem == 'go_modules'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Install a flaked Nix
+        if: steps.metadata.outputs.package-ecosystem == 'go_modules'
+        uses: DeterminateSystems/nix-installer-action@v16
+      - name: Update hashed dependencies
+        if: steps.metadata.outputs.package-ecosystem == 'go_modules'
+        run: |
+          nix develop -c go mod tidy
+          sed -i 's|vendorHash = \"[^"]*\";|vendorHash = \"\";|' flake.nix
+          nix run .# --log-format internal-json 2&> vendors.json || true
+          VENDORHASH="$(grep -o 'sha256-[^ ]*=' vendors.json | tail -n 1)"
+          sed -i 's|vendorHash = \"\";|vendorHash = \"'"$VENDORHASH"'\";|' flake.nix
+          git diff
+          git add flake.nix go.mod go.sum
+          git commit -m "chore(deps): update go dependencies vendor hash to the packages"
+          git push -u origin ${{ github.head_ref }}
+      - name: Start the tests
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/actions/workflows/tests.yml/dispatches \
+             -f "ref=${{ github.head_ref }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Take a snapshot
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/actions/workflows/release.yml/dispatches \
+             -f "ref=${{ github.head_ref }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Wait for tests to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           check-name: "Inspect the code health"
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.head_ref }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
       - name: Wait for a testing benchmark
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           check-name: "Monitor energy usage"
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.head_ref }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           allowed-conclusions: success
@@ -39,9 +86,10 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           check-name: "Save a snapshot"
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.head_ref }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
+          allowed-conclusions: success
       - name: Merge requests from the kind dependabot
         if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: gh pr merge --auto --squash "$PR_URL"
