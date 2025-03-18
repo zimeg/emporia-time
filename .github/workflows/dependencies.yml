@@ -114,6 +114,8 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository }}/actions/workflows/release.yml/dispatches \
              -f "ref=main"
+        env:
+          GH_TOKEN: ${{ github.token }}
   flake:
     name: Freeze the latest lockfile
     if: github.event_name != 'pull_request'
@@ -191,3 +193,5 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/${{ github.repository }}/actions/workflows/release.yml/dispatches \
              -f "ref=main"
+        env:
+          GH_TOKEN: ${{ github.token }}

@@ -30,6 +30,7 @@ to [Semantic Versioning][semver].
 - Run release snapshots when starting with a workflow dispatch
 - Update the vendor hash of go modules after updates are made
 - Run tests and packaging scripts again after automatic merges
+- Include the required token for starting the testing workflow
 
 ## [1.1.1] - 2024-09-08
 
