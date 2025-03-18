@@ -34,7 +34,8 @@ builds:
         gon .gon.hcl
         '
 archives:
-  - format: tar.gz
+  - formats:
+      - tar.gz
     name_template: >-
       etime_
       {{- .Summary }}_
@@ -45,7 +46,8 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
 changelog:
   disable: true
 checksum:
