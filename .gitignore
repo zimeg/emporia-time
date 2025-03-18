@@ -5,6 +5,7 @@ result
 
 # Development leftovers
 *.swp
+vendors.json
 
 # Environment settings
 .direnv

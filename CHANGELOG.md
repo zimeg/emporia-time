@@ -28,6 +28,7 @@ to [Semantic Versioning][semver].
 - Update development and release dependencies on some schedule
 - Bump the go runtime version to version 1.24.1 when building
 - Run release snapshots when starting with a workflow dispatch
+- Update the vendor hash of go modules after updates are made
 
 ## [1.1.1] - 2024-09-08
 
