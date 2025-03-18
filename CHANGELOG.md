@@ -32,6 +32,7 @@ to [Semantic Versioning][semver].
 - Run tests and packaging scripts again after automatic merges
 - Include the required token for starting the testing workflow
 - Request updates to dependencies at a much more frequent time
+- Remove deprecated options from packaging program for release
 
 ## [1.1.1] - 2024-09-08
 
