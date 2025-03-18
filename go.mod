@@ -6,7 +6,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.28.5
 	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.48.3
-	github.com/spf13/afero v1.11.0
+	github.com/spf13/afero v1.14.0
 	github.com/stretchr/testify v1.10.0
 )
 
@@ -32,6 +32,6 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/term v0.1.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
