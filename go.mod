@@ -1,6 +1,7 @@
 module github.com/zimeg/emporia-time
 
 go 1.24.1
+
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.29.12
