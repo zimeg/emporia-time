@@ -118,7 +118,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
   flake:
     name: Freeze the latest lockfile
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       actions: write
