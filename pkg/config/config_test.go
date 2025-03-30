@@ -118,7 +118,7 @@ func TestLoad(t *testing.T) {
 			}
 			os.Setenv("EMPORIA_USERNAME", tt.mockFlags.Username) // FIXME: use flags!
 			os.Setenv("EMPORIA_PASSWORD", tt.mockFlags.Password) // FIXME: use flags!
-			cfg, err := Load(ctx, cog, fs, req, tt.mockFlags)
+			cfg, err := Setup(ctx, cog, fs, req, tt.mockFlags)
 			if tt.expectedError != nil {
 				require.Error(t, err)
 			} else {

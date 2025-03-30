@@ -2,12 +2,13 @@ package times
 
 import (
 	"bytes"
-	"errors"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // TimeMeasurement holds information of a command run
@@ -61,13 +62,16 @@ func TimeExec(args []string) (TimeMeasurement, error) {
 	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
 
-	return times, err
+	if err != nil {
+		return times, err
+	}
+	return times, nil
 }
 
 // parseTimeResults extracts the time information from output
 func parseTimeResults(output string) (times CommandTime, err error) {
 	lines := strings.TrimSpace(output)
-	for _, line := range strings.Split(lines, "\n") {
+	for line := range strings.SplitSeq(lines, "\n") {
 		fields := strings.Fields(line)
 		if len(fields) < 2 {
 			continue
@@ -75,23 +79,24 @@ func parseTimeResults(output string) (times CommandTime, err error) {
 		measurement, value := fields[0], fields[1]
 		switch measurement {
 		case "real":
-			if times.Real, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the real time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				return times, errors.Wrap(errors.ErrTimeParseReal, err)
 			}
+			times.Real = parsed
 		case "user":
-			if times.User, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the user time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				return times, errors.Wrap(errors.ErrTimeParseUser, err)
 			}
+			times.User = parsed
 		case "sys":
-			if times.Sys, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the sys time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				return times, errors.Wrap(errors.ErrTimeParseSys, err)
 			}
+			times.Sys = parsed
 		}
 	}
 	return times, err
-}
-
-// parseTimeValue converts a string to a float64
-func parseTimeValue(value string) (float64, error) {
-	return strconv.ParseFloat(value, 64)
 }

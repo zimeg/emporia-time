@@ -4,13 +4,15 @@ linters:
   enable:
     - gocyclo
     - misspell
+    - wrapcheck
   exclusions:
     presets:
       - std-error-handling
-    rules:
-      - linters:
-          - staticcheck
-        text: "ST1005:"
+  settings:
+    wrapcheck:
+      ignore-sigs:
+        - "func (github.com/stretchr/testify/mock.Arguments).Error(index int) error"
+        - "func (*os/exec.Cmd).Run() error"
 formatters:
   enable:
     - gofumpt

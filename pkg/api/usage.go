@@ -1,12 +1,11 @@
 package api
 
 import (
-	"errors"
 	"fmt"
-	"log"
 	"net/url"
 	"time"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -27,7 +26,6 @@ func (emp *Emporia) GetChartUsage(times times.TimeMeasurement) (energy.EnergyRes
 	time.Sleep(200 * time.Millisecond)
 	chart, err := emp.LookupEnergyUsage(times)
 	if err != nil {
-		log.Printf("Error: Failed to gather energy usage data!\n")
 		return energy.EnergyResult{}, err
 	}
 
@@ -52,7 +50,8 @@ func (emp *Emporia) LookupEnergyUsage(times times.TimeMeasurement) ([]float64, e
 	if err != nil {
 		return []float64{}, err
 	} else if response.Message != "" {
-		return []float64{}, errors.New(response.Message)
+		return []float64{},
+			errors.Wrap(errors.ErrEmporiaMessage, fmt.Errorf("%s", response.Message))
 	}
 	chart := response.UsageList
 	for ii, kwh := range chart {

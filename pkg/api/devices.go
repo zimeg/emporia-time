@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // Device represents a device that can be measured
@@ -27,7 +29,8 @@ func (emp *Emporia) GetCustomerDevices() ([]Device, error) {
 		return []Device{}, err
 	}
 	if response.Message != "" {
-		return []Device{}, fmt.Errorf("%s", response.Message)
+		return []Device{},
+			errors.Wrap(errors.ErrEmporiaMessage, fmt.Errorf("%s", response.Message))
 	}
 	return response.Devices, nil
 }

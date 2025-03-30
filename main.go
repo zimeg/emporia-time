@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/spf13/afero"
 	"github.com/zimeg/emporia-time/cmd"
+	"github.com/zimeg/emporia-time/internal/logs"
 	"github.com/zimeg/emporia-time/pkg/api"
 	"github.com/zimeg/emporia-time/pkg/cognito"
 )
@@ -23,14 +23,15 @@ const (
 func main() {
 	ctx := context.Background()
 	fs := afero.NewOsFs()
+	log := logs.NewLogger(os.Stderr)
 	req := api.New()
 	cog, err := cognito.NewClient(ctx, clientID, region)
 	if err != nil {
-		log.Fatalf("Error: %s", err)
+		log.Fatal(err)
 	}
 	result, err := cmd.Root(ctx, cog, fs, req, os.Args, version)
 	if err != nil {
-		log.Fatalf("Error: %s", err)
+		log.Fatal(err)
 	}
 	os.Exit(result.ExitCode)
 }

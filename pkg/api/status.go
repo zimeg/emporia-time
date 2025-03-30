@@ -2,6 +2,8 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // StatusURL points to a file that appears during maintenance
@@ -13,7 +15,7 @@ const StatusURL string = "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/
 func (emp *Emporia) Status() (bool, error) {
 	resp, err := http.Get(StatusURL)
 	if err != nil {
-		return false, err
+		return false, errors.Wrap(errors.ErrEmporiaStatus, err)
 	}
 	defer resp.Body.Close()
 	status := resp.StatusCode == 403

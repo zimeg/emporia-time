@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -53,19 +54,23 @@ func (emp *Emporia) SetDevice(deviceID string) {
 func (emp *Emporia) get(url string, data any) error {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaRequest, err)
 	}
 	if emp.token != "" {
 		req.Header.Add("authToken", emp.token)
 	}
 	resp, err := emp.client.Do(req)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaResponse, err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaResult, err)
 	}
-	return json.Unmarshal(body, &data)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return errors.Wrap(errors.ErrEmporiaFormat, err)
+	}
+	return nil
 }

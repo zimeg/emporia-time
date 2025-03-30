@@ -7,6 +7,10 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Added
+
+- Output errors and related messages with charms logging print
+
 ### Maintenance
 
 - Update language linter configurations to the latest version

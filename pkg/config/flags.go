@@ -3,6 +3,8 @@ package config
 import (
 	"bytes"
 	"flag"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // Flags holds command line flags specific to etime
@@ -32,7 +34,7 @@ func ParseFlags(args []string) (cmd []string, flags Flags, err error) {
 	flagset.SetOutput(&bytes.Buffer{})
 	err = flagset.Parse(args[1:])
 	if err != nil {
-		return []string{}, Flags{}, err
+		return []string{}, Flags{}, errors.Wrap(errors.ErrConfigFlag, err)
 	}
 	cmd = flagset.Args()
 	if len(cmd) <= 0 {
