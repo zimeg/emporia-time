@@ -62,12 +62,12 @@ func TimeExec(args []string, logger logs.Logger) (TimeMeasurement, error) {
 	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
 	if err != nil {
-		var exits *exec.ExitError
-		ok := errors.As(err, &exits)
+		var exitErr *exec.ExitError
+		ok := errors.As(err, &exitErr)
 		if !ok {
 			return times, errors.Wrap(errors.ErrTimeCommand, err)
 		}
-		times.Command.Code = exits.ExitCode()
+		times.Command.Code = exitErr.ExitCode()
 	}
 	return times, nil
 }
