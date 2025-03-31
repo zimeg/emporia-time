@@ -83,7 +83,7 @@ func parseTimeResults(output string) (times CommandTime, errs []error) {
 		measurement, value := fields[0], fields[1]
 		switch measurement {
 		case "code":
-			parsed, err := strconv.ParseInt(value, 10, 64)
+			parsed, err := strconv.ParseInt(value, 10, 32)
 			if err != nil {
 				errs = append(errs, errors.Wrap(errors.ErrTimeParseReal, err))
 			}
