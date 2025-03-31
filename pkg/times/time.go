@@ -85,7 +85,7 @@ func parseTimeResults(output string) (times CommandTime, errs []error) {
 		case "code":
 			parsed, err := strconv.ParseInt(value, 10, 32)
 			if err != nil {
-				errs = append(errs, errors.Wrap(errors.ErrTimeParseReal, err))
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseCode, err))
 			}
 			times.Code = int(parsed)
 		case "real":
