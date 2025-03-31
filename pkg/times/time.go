@@ -3,6 +3,7 @@ package times
 import (
 	"bytes"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -21,6 +22,7 @@ type TimeMeasurement struct {
 
 // CommandTime contains the values from the time command
 type CommandTime struct {
+	Code int
 	Real float64
 	User float64
 	Sys  float64
@@ -60,7 +62,12 @@ func TimeExec(args []string, logger logs.Logger) (TimeMeasurement, error) {
 	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
 	if err != nil {
-		return times, err
+		var exitErr *exec.ExitError
+		ok := errors.As(err, &exitErr)
+		if !ok {
+			return times, errors.Wrap(errors.ErrTimeCommand, err)
+		}
+		times.Command.Code = exitErr.ExitCode()
 	}
 	return times, nil
 }
@@ -75,6 +82,12 @@ func parseTimeResults(output string) (times CommandTime, errs []error) {
 		}
 		measurement, value := fields[0], fields[1]
 		switch measurement {
+		case "code":
+			parsed, err := strconv.ParseInt(value, 10, 32)
+			if err != nil {
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseCode, err))
+			}
+			times.Code = int(parsed)
 		case "real":
 			parsed, err := strconv.ParseFloat(value, 64)
 			if err != nil {

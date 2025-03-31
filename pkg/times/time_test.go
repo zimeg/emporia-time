@@ -17,11 +17,13 @@ func TestParseTimeResults(t *testing.T) {
 	}{
 		"parse the portable output of the time command": {
 			[]string{
+				"code 0",
 				"real 6.00",
 				"user 121.20",
 				"sys 0.80",
 			},
 			CommandTime{
+				Code: 0,
 				Real: 6.0,
 				User: 121.2,
 				Sys:  0.8,
@@ -30,11 +32,13 @@ func TestParseTimeResults(t *testing.T) {
 		},
 		"continues parsing even if one output errors": {
 			[]string{
+				"code 12",
 				"real 1.23",
 				"user ****",
 				"sys 90000",
 			},
 			CommandTime{
+				Code: 12,
 				Real: 1.23,
 				Sys:  90000,
 			},
@@ -46,12 +50,16 @@ func TestParseTimeResults(t *testing.T) {
 		},
 		"continues parsing even if all outputs error": {
 			[]string{
+				"code x",
 				"real ~6.00",
 				"user ~121.20",
 				"sys ~0.80",
 			},
 			CommandTime{},
 			[]error{
+				errors.Err{
+					Code: errors.ErrTimeParseCode,
+				},
 				errors.Err{
 					Code: errors.ErrTimeParseReal,
 				},

@@ -38,6 +38,7 @@ const (
 	ErrTemplatePrint           errorCode = "err_template_print"
 	ErrTimeCommand             errorCode = "err_time_command"
 	ErrTimeExecution           errorCode = "err_time_execution"
+	ErrTimeParseCode           errorCode = "err_time_parse_code"
 	ErrTimeParseReal           errorCode = "err_time_parse_real"
 	ErrTimeParseSys            errorCode = "err_time_parse_sys"
 	ErrTimeParseUser           errorCode = "err_time_parse_user"
@@ -164,6 +165,9 @@ func New(code errorCode) (err Err) {
 		},
 		ErrTimeExecution: {
 			Message: "failed to execute time command",
+		},
+		ErrTimeParseCode: {
+			Message: "failed to parse exit code",
 		},
 		ErrTimeParseReal: {
 			Message: "failed to parse 'real' time",

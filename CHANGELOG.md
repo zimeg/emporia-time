@@ -11,6 +11,10 @@ to [Semantic Versioning][semver].
 
 - Output errors and related messages with charms logging print
 
+### Fixed
+
+- Return exit codes after time command subshell measures usage
+
 ### Maintenance
 
 - Update language linter configurations to the latest version

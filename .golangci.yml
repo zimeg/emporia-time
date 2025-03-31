@@ -17,7 +17,6 @@ linters:
     wrapcheck:
       ignore-sigs:
         - "func (github.com/stretchr/testify/mock.Arguments).Error(index int) error"
-        - "func (*os/exec.Cmd).Run() error"
 formatters:
   enable:
     - gofumpt
