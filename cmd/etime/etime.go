@@ -26,7 +26,8 @@ func Run(cmd []string, cfg config.Configure) (results CommandResult, err error) 
 	}
 	measurements, err := times.TimeExec(cmd)
 	if err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
+		exitError := &exec.ExitError{}
+		if errors.As(err, exitError) {
 			results.ExitCode = exitError.ExitCode()
 		} else {
 			return CommandResult{}, errors.Wrap(errors.ErrTimeExecution, err)

@@ -33,15 +33,17 @@ func CollectInput(prompt *Prompt) (string, error) {
 	}
 	switch prompt.Hidden {
 	case false:
-		if err := survey.AskOne(&survey.Input{Message: prompt.Message}, &value); err != nil {
-			if err == terminal.InterruptErr {
+		err := survey.AskOne(&survey.Input{Message: prompt.Message}, &value)
+		if err != nil {
+			if errors.Is(err, terminal.InterruptErr) {
 				os.Exit(TerminalInterruptCode)
 			}
 			return "", errors.Wrap(errors.ErrPromptInput, err)
 		}
 	case true:
-		if err := survey.AskOne(&survey.Password{Message: prompt.Message}, &value); err != nil {
-			if err == terminal.InterruptErr {
+		err := survey.AskOne(&survey.Password{Message: prompt.Message}, &value)
+		if err != nil {
+			if errors.Is(err, terminal.InterruptErr) {
 				os.Exit(TerminalInterruptCode)
 			}
 			return "", errors.Wrap(errors.ErrPromptInput, err)
@@ -70,8 +72,9 @@ func CollectSelect(prompt Prompt) (int, error) {
 	}
 
 	var selectedIndex int
-	if err := survey.AskOne(&question, &selectedIndex); err != nil {
-		if err == terminal.InterruptErr {
+	err := survey.AskOne(&question, &selectedIndex)
+	if err != nil {
+		if errors.Is(err, terminal.InterruptErr) {
 			os.Exit(TerminalInterruptCode)
 		}
 		return 0, errors.Wrap(errors.ErrPromptSelect, err)

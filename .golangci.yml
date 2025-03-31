@@ -2,8 +2,16 @@
 version: "2"
 linters:
   enable:
+    - errcheck
+    - errorlint
     - gocyclo
+    - govet
+    - ineffassign
     - misspell
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
     - wrapcheck
   settings:
     wrapcheck:

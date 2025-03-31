@@ -42,6 +42,11 @@ func (err Err) Is(target error) bool {
 	return false
 }
 
+// As check if tree errors match target
+func As(tree error, target any) bool {
+	return errors.As(tree, target)
+}
+
 // Is check if tree errors match target
 func Is(tree error, target error) bool {
 	return errors.Is(tree, target)
