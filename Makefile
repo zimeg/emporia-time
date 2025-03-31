@@ -15,6 +15,7 @@ test: build
 coverage: build
 	mkdir -p coverage
 	go test -v 2>&1 -coverprofile=coverage/coverage.txt ./... | tee coverage/results.out
+	go tool cover -html coverage/coverage.txt -o coverage/coverage.html
 	go-junit-report -in coverage/results.out -set-exit-code > coverage/coverage.xml
 
 staging: clean
