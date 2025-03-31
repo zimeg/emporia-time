@@ -33,5 +33,5 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	os.Exit(result.ExitCode)
+	os.Exit(result.Command.Code)
 }

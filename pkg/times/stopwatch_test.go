@@ -31,6 +31,17 @@ func TestBufferWriter(t *testing.T) {
 				"information from the time",
 			},
 		},
+		"groups buffered output after bounds": {
+			bounds: "-",
+			output: []string{
+				"-details go here",
+				"and more might follow",
+			},
+			expectedBuff: []string{
+				"details go here",
+				"and more might follow",
+			},
+		},
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {

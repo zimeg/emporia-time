@@ -23,16 +23,17 @@ type bufferWriter struct {
 
 // Write writes to the stream until bounds is reached then writes to buffer
 func (bw *bufferWriter) Write(p []byte) (int, error) {
-	if string(p) == bw.bounds {
+	output := string(p)
+	if strings.HasPrefix(output, bw.bounds) {
 		bw.stored = true
-		return len(bw.bounds), nil
+		output = strings.TrimPrefix(output, bw.bounds)
 	}
 	if bw.stored {
-		n, err := bw.buff.Write(p)
+		n, err := bw.buff.Write([]byte(output))
 		if err != nil {
 			return n, errors.Wrap(errors.ErrWriteBuffer, err)
 		}
-		return n, nil
+		return len(p), nil
 	} else {
 		n, err := bw.std.Write(p)
 		if err != nil {
@@ -53,12 +54,20 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 			timer = "time"
 		}
 	}
+	if strings.HasPrefix(command[0], "./") {
+		command = append([]string{"source"}, command...)
+	}
 	timeShell := []string{
-		strings.Join(command, " "),
+		"(" + strings.Join(command, " ") + ")",
+		";",
+		"EMPORIA_TIME_EXIT_CODE_STATUS=$?",
 		";",
 		"1>&2",
 		"echo",
 		stderr.bounds,
+		"1>&2",
+		"echo",
+		"code $EMPORIA_TIME_EXIT_CODE_STATUS",
 	}
 	timeArgs := []string{
 		"-p",

@@ -1,8 +1,6 @@
 package etime
 
 import (
-	"os/exec"
-
 	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/internal/logs"
 	"github.com/zimeg/emporia-time/pkg/config"
@@ -14,7 +12,6 @@ import (
 type CommandResult struct {
 	energy.EnergyResult
 	times.TimeMeasurement
-	ExitCode int
 }
 
 // Run executes the command and returns the usage statistics
@@ -34,13 +31,7 @@ func Run(
 	}
 	measurements, err := times.TimeExec(cmd, logger)
 	if err != nil {
-		exitError := &exec.ExitError{}
-		if errors.As(err, exitError) {
-			results.ExitCode = exitError.ExitCode()
-		} else {
-			return CommandResult{}, errors.Wrap(errors.ErrTimeExecution, err)
-		}
-		results.TimeMeasurement = measurements
+		return CommandResult{}, errors.Wrap(errors.ErrTimeExecution, err)
 	} else {
 		results.TimeMeasurement = measurements
 	}
