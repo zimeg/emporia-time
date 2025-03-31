@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 func TestParseTimeResults(t *testing.T) {
@@ -26,13 +28,51 @@ func TestParseTimeResults(t *testing.T) {
 			},
 			nil,
 		},
+		"continues parsing even if one output errors": {
+			[]string{
+				"real 1.23",
+				"user ****",
+				"sys 90000",
+			},
+			CommandTime{
+				Real: 1.23,
+				Sys:  90000,
+			},
+			[]error{
+				errors.Err{
+					Code: errors.ErrTimeParseUser,
+				},
+			},
+		},
+		"continues parsing even if all outputs error": {
+			[]string{
+				"real ~6.00",
+				"user ~121.20",
+				"sys ~0.80",
+			},
+			CommandTime{},
+			[]error{
+				errors.Err{
+					Code: errors.ErrTimeParseReal,
+				},
+				errors.Err{
+					Code: errors.ErrTimeParseUser,
+				},
+				errors.Err{
+					Code: errors.ErrTimeParseSys,
+				},
+			},
+		},
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			output := strings.Join(tt.Output, "\n")
 			times, errs := parseTimeResults(output)
-			assert.Equal(t, tt.Errors, errs)
 			assert.Equal(t, tt.Times, times)
+			require.Equal(t, len(tt.Errors), len(errs))
+			for ii, err := range tt.Errors {
+				assert.True(t, errors.Is(err, errs[ii]))
+			}
 		})
 	}
 }
