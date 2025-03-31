@@ -11,7 +11,7 @@ func TestParseTimeResults(t *testing.T) {
 	tests := map[string]struct {
 		Output []string
 		Times  CommandTime
-		Error  error
+		Errors []error
 	}{
 		"parse the portable output of the time command": {
 			[]string{
@@ -30,8 +30,8 @@ func TestParseTimeResults(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			output := strings.Join(tt.Output, "\n")
-			times, err := parseTimeResults(output)
-			assert.Equal(t, tt.Error, err)
+			times, errs := parseTimeResults(output)
+			assert.Equal(t, tt.Errors, errs)
 			assert.Equal(t, tt.Times, times)
 		})
 	}

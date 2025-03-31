@@ -29,7 +29,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	result, err := cmd.Root(ctx, cog, fs, req, os.Args, version)
+	result, err := cmd.Root(ctx, cog, fs, logger, req, os.Args, version)
 	if err != nil {
 		logger.Fatal(err)
 	}

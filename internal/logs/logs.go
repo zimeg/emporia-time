@@ -9,25 +9,46 @@ import (
 )
 
 // Logger outputs information
-type Logger struct {
+type Logger interface {
+	Warn(err error)
+	Error(err error)
+	Fatal(err error)
+}
+
+// Logger outputs information
+type Logs struct {
 	charms *log.Logger
 }
 
 // NewLogger creates a new logger
-func NewLogger(out io.Writer) *Logger {
+func NewLogger(out io.Writer) *Logs {
 	logger := log.NewWithOptions(
 		out,
 		log.Options{
 			TimeFormat: time.RFC3339Nano,
 		},
 	)
-	return &Logger{
+	return &Logs{
 		charms: logger,
 	}
 }
 
+// Warn logs the warning
+func (l *Logs) Warn(err error) {
+	cast := errors.Unwrap(err)
+	if cast.Source != nil {
+		if errors.Unwrap(cast.Source).Code != errors.ErrUnexpectedProblem {
+			l.Warn(cast.Source)
+		} else {
+			l.charms.Warn(cast.Message, "code", cast.Code, "source", cast.Source)
+			return
+		}
+	}
+	l.charms.Warn(cast.Message, "code", cast.Code)
+}
+
 // Error logs the error
-func (l *Logger) Error(err error) {
+func (l *Logs) Error(err error) {
 	cast := errors.Unwrap(err)
 	if cast.Source != nil {
 		if errors.Unwrap(cast.Source).Code != errors.ErrUnexpectedProblem {
@@ -41,7 +62,7 @@ func (l *Logger) Error(err error) {
 }
 
 // Fatal logs the error and exits
-func (l *Logger) Fatal(err error) {
+func (l *Logs) Fatal(err error) {
 	cast := errors.Unwrap(err)
 	if cast.Source != nil {
 		if errors.Unwrap(cast.Source).Code != errors.ErrUnexpectedProblem {

@@ -9,6 +9,7 @@ import (
 	"github.com/zimeg/emporia-time/cmd/etime"
 	"github.com/zimeg/emporia-time/internal/display/templates"
 	"github.com/zimeg/emporia-time/internal/errors"
+	"github.com/zimeg/emporia-time/internal/logs"
 	"github.com/zimeg/emporia-time/pkg/api"
 	"github.com/zimeg/emporia-time/pkg/cognito"
 	"github.com/zimeg/emporia-time/pkg/config"
@@ -19,6 +20,7 @@ func Root(
 	ctx context.Context,
 	cog cognito.Cognitoir,
 	fs afero.Fs,
+	logger logs.Logger,
 	req api.Emporiac,
 	args []string,
 	version string,
@@ -43,7 +45,7 @@ func Root(
 	if err != nil {
 		return etime.CommandResult{}, errors.Wrap(errors.ErrConfigSetup, err)
 	}
-	results, err := etime.Run(cmd, &cfg)
+	results, err := etime.Run(cmd, &cfg, logger)
 	if err != nil {
 		return etime.CommandResult{}, errors.Wrap(errors.ErrTimeCommand, err)
 	}

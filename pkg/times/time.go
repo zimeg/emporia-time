@@ -2,13 +2,13 @@ package times
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/zimeg/emporia-time/internal/errors"
+	"github.com/zimeg/emporia-time/internal/logs"
 )
 
 // TimeMeasurement holds information of a command run
@@ -42,26 +42,23 @@ func (times TimeMeasurement) GetSys() float64 {
 }
 
 // TimeExec performs the command and prints outputs while measuring timing
-func TimeExec(args []string) (TimeMeasurement, error) {
+func TimeExec(args []string, logger logs.Logger) (TimeMeasurement, error) {
 	times := TimeMeasurement{}
 	stderr := bufferWriter{
 		buff:   &bytes.Buffer{},
 		std:    os.Stderr,
 		bounds: makeBounds(),
 	}
-
 	cmd := timerCommand(args, stderr)
 	times.Start = time.Now().UTC()
 	err := cmd.Run()
 	times.End = time.Now().UTC()
-
-	results, warning := parseTimeResults(stderr.buff.String())
-	if warning != nil {
-		log.Printf("Warning: %s", warning)
+	results, warnings := parseTimeResults(stderr.buff.String())
+	for _, warning := range warnings {
+		logger.Warn(warning)
 	}
 	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
-
 	if err != nil {
 		return times, err
 	}
@@ -69,7 +66,7 @@ func TimeExec(args []string) (TimeMeasurement, error) {
 }
 
 // parseTimeResults extracts the time information from output
-func parseTimeResults(output string) (times CommandTime, err error) {
+func parseTimeResults(output string) (times CommandTime, errs []error) {
 	lines := strings.TrimSpace(output)
 	for line := range strings.SplitSeq(lines, "\n") {
 		fields := strings.Fields(line)
@@ -81,22 +78,22 @@ func parseTimeResults(output string) (times CommandTime, err error) {
 		case "real":
 			parsed, err := strconv.ParseFloat(value, 64)
 			if err != nil {
-				return times, errors.Wrap(errors.ErrTimeParseReal, err)
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseReal, err))
 			}
 			times.Real = parsed
 		case "user":
 			parsed, err := strconv.ParseFloat(value, 64)
 			if err != nil {
-				return times, errors.Wrap(errors.ErrTimeParseUser, err)
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseUser, err))
 			}
 			times.User = parsed
 		case "sys":
 			parsed, err := strconv.ParseFloat(value, 64)
 			if err != nil {
-				return times, errors.Wrap(errors.ErrTimeParseSys, err)
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseSys, err))
 			}
 			times.Sys = parsed
 		}
 	}
-	return times, err
+	return times, errs
 }
