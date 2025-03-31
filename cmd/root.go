@@ -37,7 +37,7 @@ func Root(
 	} else if flags.Help {
 		err := templates.PrintHelpMessage(os.Stderr)
 		if err != nil {
-			return etime.CommandResult{}, errors.Wrap(errors.ErrConfigHome, err)
+			return etime.CommandResult{}, errors.Wrap(errors.ErrConfigHelp, err)
 		}
 		return etime.CommandResult{}, nil
 	}
