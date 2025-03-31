@@ -75,7 +75,7 @@ jobs:
           nix run .# dream
           STATUS=$?
           echo $STATUS
-          [ "$STATUS" -ne 127 ] && exit 1 || true
+          [ "$STATUS" -eq 127 ] || exit 1
         env:
           EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
           EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
