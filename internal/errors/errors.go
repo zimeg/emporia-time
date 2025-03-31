@@ -53,7 +53,7 @@ func New(code errorCode) (err Err) {
 			err.Code = code
 		}
 	}()
-	errors := map[errorCode]Err{
+	errorMap := map[errorCode]Err{
 		ErrCognitoAuthenticate: {
 			Message: "failed to initiate authentication",
 		},
@@ -181,7 +181,7 @@ func New(code errorCode) (err Err) {
 			Message: "failed to write to output",
 		},
 	}
-	err, ok := errors[code]
+	err, ok := errorMap[code]
 	if !ok {
 		return Err{
 			Code:    ErrUnexpectedProblem,
