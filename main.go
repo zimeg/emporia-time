@@ -23,15 +23,15 @@ const (
 func main() {
 	ctx := context.Background()
 	fs := afero.NewOsFs()
-	log := logs.NewLogger(os.Stderr)
+	logger := logs.NewLogger(os.Stderr)
 	req := api.New()
 	cog, err := cognito.NewClient(ctx, clientID, region)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	result, err := cmd.Root(ctx, cog, fs, req, os.Args, version)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 	os.Exit(result.ExitCode)
 }
