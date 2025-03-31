@@ -6,6 +6,7 @@ const (
 	ErrCognitoRefresh          errorCode = "err_cognito_refresh"
 	ErrCognitoSetup            errorCode = "err_cognito_setup"
 	ErrConfigFlag              errorCode = "err_config_flag"
+	ErrConfigHelp              errorCode = "err_config_help"
 	ErrConfigHome              errorCode = "err_config_home"
 	ErrConfigLoad              errorCode = "err_config_load"
 	ErrConfigParse             errorCode = "err_config_parse"
@@ -16,6 +17,7 @@ const (
 	ErrConfigWrite             errorCode = "err_config_write"
 	ErrEmporiaChart            errorCode = "err_emporia_chart"
 	ErrEmporiaCheckup          errorCode = "err_emporia_checkup"
+	ErrEmporiaComplete         errorCode = "err_emporia_complete"
 	ErrEmporiaDevice           errorCode = "err_emporia_device"
 	ErrEmporiaDevices          errorCode = "err_emporia_devices"
 	ErrEmporiaFormat           errorCode = "err_emporia_format"
@@ -33,6 +35,7 @@ const (
 	ErrTemplateBuild           errorCode = "err_template_build"
 	ErrTemplateFormat          errorCode = "err_template_format"
 	ErrTemplateParse           errorCode = "err_template_parse"
+	ErrTemplatePrint           errorCode = "err_template_print"
 	ErrTimeCommand             errorCode = "err_time_command"
 	ErrTimeExecution           errorCode = "err_time_execution"
 	ErrTimeParseReal           errorCode = "err_time_parse_real"
@@ -66,6 +69,9 @@ func New(code errorCode) (err Err) {
 		ErrConfigFlag: {
 			Message: "failed to parse config flags",
 		},
+		ErrConfigHelp: {
+			Message: "failed to print config help",
+		},
 		ErrConfigHome: {
 			Message: "failed to find config home",
 		},
@@ -95,6 +101,9 @@ func New(code errorCode) (err Err) {
 		},
 		ErrEmporiaCheckup: {
 			Message: "failed to check uptime",
+		},
+		ErrEmporiaComplete: {
+			Message: "failed to complete response",
 		},
 		ErrEmporiaDevice: {
 			Message: "failed to find device",
@@ -146,6 +155,9 @@ func New(code errorCode) (err Err) {
 		},
 		ErrTemplateParse: {
 			Message: "failed to parse template",
+		},
+		ErrTemplatePrint: {
+			Message: "failed to print template",
 		},
 		ErrTimeCommand: {
 			Message: "failed to run time command",

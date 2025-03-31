@@ -33,7 +33,10 @@ func Root(
 		fmt.Printf("%s\n", version)
 		return etime.CommandResult{}, nil
 	} else if flags.Help {
-		templates.PrintHelpMessage(os.Stderr)
+		err := templates.PrintHelpMessage(os.Stderr)
+		if err != nil {
+			return etime.CommandResult{}, errors.Wrap(errors.ErrConfigHome, err)
+		}
 		return etime.CommandResult{}, nil
 	}
 	cfg, err := config.Setup(ctx, cog, fs, req, flags)

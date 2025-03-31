@@ -54,8 +54,9 @@ func TestPrintHelpMessage(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			buff := bytes.Buffer{}
-			PrintHelpMessage(&buff)
+			err := PrintHelpMessage(&buff)
 			expected := strings.Join(tt.expected, "\n")
+			assert.NoError(t, err)
 			assert.Equal(t, expected, buff.String())
 		})
 	}

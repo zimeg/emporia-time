@@ -5,9 +5,6 @@ linters:
     - gocyclo
     - misspell
     - wrapcheck
-  exclusions:
-    presets:
-      - std-error-handling
   settings:
     wrapcheck:
       ignore-sigs:

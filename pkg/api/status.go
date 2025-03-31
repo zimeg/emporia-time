@@ -12,12 +12,17 @@ const StatusURL string = "https://s3.amazonaws.com/com.emporiaenergy.manual.ota/
 // Status returns if the Emporia API is available
 //
 // https://github.com/magico13/PyEmVue/blob/master/api_docs.md#detection-of-maintenance
-func (emp *Emporia) Status() (bool, error) {
+func (emp *Emporia) Status() (online bool, err error) {
 	resp, err := http.Get(StatusURL)
 	if err != nil {
 		return false, errors.Wrap(errors.ErrEmporiaStatus, err)
 	}
-	defer resp.Body.Close()
-	status := resp.StatusCode == 403
-	return status, nil
+	defer func() {
+		done := resp.Body.Close()
+		if done != nil {
+			err = errors.Wrap(errors.ErrEmporiaComplete, done)
+		}
+	}()
+	online = resp.StatusCode == 403
+	return
 }
