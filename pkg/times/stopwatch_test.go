@@ -62,6 +62,46 @@ func TestBufferWriter(t *testing.T) {
 	}
 }
 
+func TestTimerCommand(t *testing.T) {
+	tests := map[string]struct {
+		args     []string
+		bounds   string
+		expected []string
+	}{
+		"creates a sleep command in subshell": {
+			args:   []string{"sleep 12"},
+			bounds: "xoxo",
+			expected: []string{
+				"-p",
+				"sh",
+				"-c",
+				"(sleep 12) ; EMPORIA_TIME_EXIT_CODE_STATUS=$? ; 1>&2 echo xoxo 1>&2 echo code $EMPORIA_TIME_EXIT_CODE_STATUS",
+			},
+		},
+		"sources dotfile paths for returnings": {
+			args:   []string{"./start"},
+			bounds: "31415",
+			expected: []string{
+				"-p",
+				"sh",
+				"-c",
+				"(source ./start) ; EMPORIA_TIME_EXIT_CODE_STATUS=$? ; 1>&2 echo 31415 1>&2 echo code $EMPORIA_TIME_EXIT_CODE_STATUS",
+			},
+		},
+	}
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			bw := bufferWriter{
+				bounds: tt.bounds,
+				buff:   &bytes.Buffer{},
+			}
+			cmd := timerCommand(tt.args, bw)
+			actual := cmd.Args[1:]
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
 func TestMakeBounds(t *testing.T) {
 	t.Run("bounds are different between runs", func(t *testing.T) {
 		bounds1 := makeBounds()

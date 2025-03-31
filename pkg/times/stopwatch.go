@@ -76,9 +76,6 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 		strings.Join(timeShell, " "),
 	}
 	cmd := exec.Command(timer, timeArgs...)
-	if errors.Is(cmd.Err, exec.ErrDot) {
-		cmd.Err = nil
-	}
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = &stderr
 	return cmd
