@@ -2,7 +2,6 @@ package times
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"math/rand"
 	"os"
@@ -10,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // bufferWriter contains two writers to write to and a bounds for toggles
@@ -27,9 +28,17 @@ func (bw *bufferWriter) Write(p []byte) (int, error) {
 		return len(bw.bounds), nil
 	}
 	if bw.stored {
-		return bw.buff.Write(p)
+		n, err := bw.buff.Write(p)
+		if err != nil {
+			return n, errors.Wrap(errors.ErrWriteBuffer, err)
+		}
+		return n, nil
 	} else {
-		return bw.std.Write(p)
+		n, err := bw.std.Write(p)
+		if err != nil {
+			return n, errors.Wrap(errors.ErrWriteOutput, err)
+		}
+		return n, nil
 	}
 }
 
@@ -72,7 +81,7 @@ func makeBounds() string {
 	const size = 64
 	var bounds strings.Builder
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < size; i++ {
+	for range size {
 		bounds.WriteByte(charset[random.Intn(len(charset))])
 	}
 	bounds.WriteByte('\n')

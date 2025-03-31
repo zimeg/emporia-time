@@ -2,12 +2,13 @@ package times
 
 import (
 	"bytes"
-	"errors"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/zimeg/emporia-time/internal/errors"
+	"github.com/zimeg/emporia-time/internal/logs"
 )
 
 // TimeMeasurement holds information of a command run
@@ -41,33 +42,33 @@ func (times TimeMeasurement) GetSys() float64 {
 }
 
 // TimeExec performs the command and prints outputs while measuring timing
-func TimeExec(args []string) (TimeMeasurement, error) {
+func TimeExec(args []string, logger logs.Logger) (TimeMeasurement, error) {
 	times := TimeMeasurement{}
 	stderr := bufferWriter{
 		buff:   &bytes.Buffer{},
 		std:    os.Stderr,
 		bounds: makeBounds(),
 	}
-
 	cmd := timerCommand(args, stderr)
 	times.Start = time.Now().UTC()
 	err := cmd.Run()
 	times.End = time.Now().UTC()
-
-	results, warning := parseTimeResults(stderr.buff.String())
-	if warning != nil {
-		log.Printf("Warning: %s", warning)
+	results, warnings := parseTimeResults(stderr.buff.String())
+	for _, warning := range warnings {
+		logger.Warn(warning)
 	}
 	times.Elapsed = times.End.Sub(times.Start)
 	times.Command = results
-
-	return times, err
+	if err != nil {
+		return times, err
+	}
+	return times, nil
 }
 
 // parseTimeResults extracts the time information from output
-func parseTimeResults(output string) (times CommandTime, err error) {
+func parseTimeResults(output string) (times CommandTime, errs []error) {
 	lines := strings.TrimSpace(output)
-	for _, line := range strings.Split(lines, "\n") {
+	for line := range strings.SplitSeq(lines, "\n") {
 		fields := strings.Fields(line)
 		if len(fields) < 2 {
 			continue
@@ -75,23 +76,24 @@ func parseTimeResults(output string) (times CommandTime, err error) {
 		measurement, value := fields[0], fields[1]
 		switch measurement {
 		case "real":
-			if times.Real, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the real time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseReal, err))
 			}
+			times.Real = parsed
 		case "user":
-			if times.User, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the user time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseUser, err))
 			}
+			times.User = parsed
 		case "sys":
-			if times.Sys, err = parseTimeValue(value); err != nil {
-				return times, errors.New("Failed to parse the sys time value!")
+			parsed, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				errs = append(errs, errors.Wrap(errors.ErrTimeParseSys, err))
 			}
+			times.Sys = parsed
 		}
 	}
-	return times, err
-}
-
-// parseTimeValue converts a string to a float64
-func parseTimeValue(value string) (float64, error) {
-	return strconv.ParseFloat(value, 64)
+	return times, errs
 }

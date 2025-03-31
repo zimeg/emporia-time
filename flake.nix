@@ -57,7 +57,7 @@
             "-X main.version=${version}"
           ];
           doCheck = true;
-          vendorHash = "sha256-8Ohdjvy63FJ2mk4Zoas79YDSQOH0OmnxjTVYQ1vg0nY=";
+          vendorHash = "sha256-XmPSOoyKVC6nFdIyGAbLDfzAJAhIZqqe90JTaepRZKI=";
           meta = {
             description = "an energy aware time command";
             homepage = "https://github.com/zimeg/emporia-time";

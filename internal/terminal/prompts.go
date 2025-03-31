@@ -1,12 +1,12 @@
 package terminal
 
 import (
-	"errors"
 	"flag"
 	"os"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // TerminalInterruptCode is the exit status for interrupted prompts
@@ -33,18 +33,20 @@ func CollectInput(prompt *Prompt) (string, error) {
 	}
 	switch prompt.Hidden {
 	case false:
-		if err := survey.AskOne(&survey.Input{Message: prompt.Message}, &value); err != nil {
-			if err == terminal.InterruptErr {
+		err := survey.AskOne(&survey.Input{Message: prompt.Message}, &value)
+		if err != nil {
+			if errors.Is(err, terminal.InterruptErr) {
 				os.Exit(TerminalInterruptCode)
 			}
-			return "", err
+			return "", errors.Wrap(errors.ErrPromptInput, err)
 		}
 	case true:
-		if err := survey.AskOne(&survey.Password{Message: prompt.Message}, &value); err != nil {
-			if err == terminal.InterruptErr {
+		err := survey.AskOne(&survey.Password{Message: prompt.Message}, &value)
+		if err != nil {
+			if errors.Is(err, terminal.InterruptErr) {
 				os.Exit(TerminalInterruptCode)
 			}
-			return "", err
+			return "", errors.Wrap(errors.ErrPromptInput, err)
 		}
 	}
 	return value, nil
@@ -54,11 +56,10 @@ func CollectInput(prompt *Prompt) (string, error) {
 func CollectSelect(prompt Prompt) (int, error) {
 	switch {
 	case len(prompt.Options) == 0:
-		return 0, errors.New("No options to select from!")
+		return 0, errors.New(errors.ErrPromptSelectMissing)
 	case prompt.Descriptions != nil && len(prompt.Options) != len(prompt.Descriptions):
-		return 0, errors.New("Mismatched option and description count for select")
+		return 0, errors.New(errors.ErrPromptSelectDescription)
 	}
-
 	question := survey.Select{
 		Message: prompt.Message,
 		Options: prompt.Options,
@@ -68,13 +69,13 @@ func CollectSelect(prompt Prompt) (int, error) {
 			return prompt.Descriptions[index]
 		}
 	}
-
 	var selectedIndex int
-	if err := survey.AskOne(&question, &selectedIndex); err != nil {
-		if err == terminal.InterruptErr {
+	err := survey.AskOne(&question, &selectedIndex)
+	if err != nil {
+		if errors.Is(err, terminal.InterruptErr) {
 			os.Exit(TerminalInterruptCode)
 		}
-		return 0, err
+		return 0, errors.Wrap(errors.ErrPromptSelect, err)
 	}
 	return selectedIndex, nil
 }

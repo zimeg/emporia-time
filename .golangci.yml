@@ -2,15 +2,22 @@
 version: "2"
 linters:
   enable:
+    - errcheck
+    - errorlint
     - gocyclo
+    - govet
+    - ineffassign
     - misspell
-  exclusions:
-    presets:
-      - std-error-handling
-    rules:
-      - linters:
-          - staticcheck
-        text: "ST1005:"
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - wrapcheck
+  settings:
+    wrapcheck:
+      ignore-sigs:
+        - "func (github.com/stretchr/testify/mock.Arguments).Error(index int) error"
+        - "func (*os/exec.Cmd).Run() error"
 formatters:
   enable:
     - gofumpt
