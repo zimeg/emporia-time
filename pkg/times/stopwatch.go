@@ -81,7 +81,7 @@ func makeBounds() string {
 	const size = 64
 	var bounds strings.Builder
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < size; i++ {
+	for range size {
 		bounds.WriteByte(charset[random.Intn(len(charset))])
 	}
 	bounds.WriteByte('\n')

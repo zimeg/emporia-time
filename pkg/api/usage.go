@@ -19,22 +19,21 @@ type UsageResponse struct {
 
 // GetChartUsage calls the Emporia API for usage information over and over until
 // a certain confidence is reached
+//
+// A quick pause is used before lookups to respect latency
 func (emp *Emporia) GetChartUsage(times times.TimeMeasurement) (energy.EnergyResult, error) {
-	confidence := 0.80
-
-	// Delay before lookup to respect latency
 	time.Sleep(200 * time.Millisecond)
+	confidence := 0.80
 	chart, err := emp.LookupEnergyUsage(times)
 	if err != nil {
 		return energy.EnergyResult{}, err
 	}
-
-	results := energy.ExtrapolateUsage(energy.EnergyMeasurement{
-		Chart:    chart,
-		Duration: times.Elapsed,
-	})
-
-	// Repeat lookup for unsure results
+	results := energy.ExtrapolateUsage(
+		energy.EnergyMeasurement{
+			Chart:    chart,
+			Duration: times.Elapsed,
+		},
+	)
 	for results.Sureness < confidence {
 		results, err = emp.GetChartUsage(times)
 		if err != nil {

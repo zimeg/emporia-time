@@ -45,6 +45,9 @@ func ScaleKWhToWs(kwh float64) float64 {
 }
 
 // ExtrapolateUsage scales the measured energy response over the actual duration
+//
+// The measured joule summation is scaled across the actual timed duration using
+// a ratio of observed-to-expected measurements
 func ExtrapolateUsage(measurements EnergyMeasurement) EnergyResult {
 	actualSeconds := measurements.Duration.Seconds()
 	measuredSeconds := float64(len(measurements.Chart))
@@ -58,17 +61,12 @@ func ExtrapolateUsage(measurements EnergyMeasurement) EnergyResult {
 	if measuredSeconds == 0 || measuredJoules == 0 {
 		return EnergyResult{Joules: 0, Watts: 0, Sureness: 0}
 	}
-
-	// Scale the measured summation across the actual duration
 	estimatedJoules := measuredJoules * (actualSeconds / measuredSeconds)
 	estimatedWatts := estimatedJoules / actualSeconds
-
-	// Calculate the observed-to-expected measurement ratio
 	sureness := measuredSeconds / actualSeconds
 	if measuredSeconds > actualSeconds {
 		sureness = 1.0
 	}
-
 	return EnergyResult{
 		Joules:   estimatedJoules,
 		Watts:    estimatedWatts,

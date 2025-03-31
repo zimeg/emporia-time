@@ -60,7 +60,6 @@ func CollectSelect(prompt Prompt) (int, error) {
 	case prompt.Descriptions != nil && len(prompt.Options) != len(prompt.Descriptions):
 		return 0, errors.New(errors.ErrPromptSelectDescription)
 	}
-
 	question := survey.Select{
 		Message: prompt.Message,
 		Options: prompt.Options,
@@ -70,7 +69,6 @@ func CollectSelect(prompt Prompt) (int, error) {
 			return prompt.Descriptions[index]
 		}
 	}
-
 	var selectedIndex int
 	err := survey.AskOne(&question, &selectedIndex)
 	if err != nil {
