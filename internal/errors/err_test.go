@@ -43,6 +43,41 @@ func TestErrorsError(t *testing.T) {
 	}
 }
 
+func TestErrorsAs(t *testing.T) {
+	tests := map[string]struct {
+		tree     error
+		target   any
+		expected bool
+	}{
+		"matching errors are same": {
+			tree:     New("err_emporia_maintenance"),
+			target:   New("err_emporia_maintenance"),
+			expected: true,
+		},
+		"nested errors are same": {
+			tree: Err{
+				Code: "err_emporia_maintenance",
+				Source: Err{
+					Code: "err_emporia_status",
+				},
+			},
+			target:   New("err_emporia_status"),
+			expected: true,
+		},
+		"different errors are different": {
+			tree:     New("err_emporia_maintenance"),
+			target:   New("err_emporia_status"),
+			expected: true,
+		},
+	}
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			actual := As(tt.tree, &tt.target)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
 func TestErrorsIs(t *testing.T) {
 	tests := map[string]struct {
 		tree     error
