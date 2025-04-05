@@ -5,10 +5,12 @@ import (
 	"io"
 	"regexp"
 	"strings"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // PrintHelpMessage outputs an informative message for this program
-func PrintHelpMessage(out io.Writer) {
+func PrintHelpMessage(out io.Writer) error {
 	helpTemplate := `
 Measure the time and energy used while executing a command
 
@@ -42,13 +44,16 @@ Measure the time and energy used while executing a command
         922.63 joules      76.87 watts      100.0% sure
 
 `
-	if body, err := templateBuilder(helpTemplate, nil); err != nil {
+	body, err := templateBuilder(helpTemplate, nil)
+	if err != nil {
 		boldRegex := regexp.MustCompile(`{{ Bold "([^"]+)" }}`)
 		body = boldRegex.ReplaceAllString(helpTemplate, "$1")
 		commandNameRegex := regexp.MustCompile(`{{ CommandName }}`)
 		body = commandNameRegex.ReplaceAllString(body, "etime")
-		fmt.Fprint(out, strings.TrimLeft(body, "\n"))
-	} else {
-		fmt.Fprint(out, strings.TrimLeft(body, "\n"))
 	}
+	_, err = fmt.Fprint(out, strings.TrimLeft(body, "\n"))
+	if err != nil {
+		return errors.Wrap(errors.ErrTemplateParse, err)
+	}
+	return nil
 }

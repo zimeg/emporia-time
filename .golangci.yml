@@ -1,7 +1,23 @@
 # yaml-language-server: $schema=https://json.schemastore.org/golangci-lint.json
+version: "2"
 linters:
   enable:
+    - errcheck
+    - errorlint
     - gocyclo
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - wrapcheck
+  settings:
+    wrapcheck:
+      ignore-sigs:
+        - "func (github.com/stretchr/testify/mock.Arguments).Error(index int) error"
+formatters:
+  enable:
     - gofumpt
     - goimports
-    - misspell

@@ -5,6 +5,7 @@ import (
 
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 	awscognito "github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // CognitoResponse holds the authentication information from Cognito
@@ -30,7 +31,7 @@ type Cognito struct {
 func NewClient(ctx context.Context, clientID string, region string) (*Cognito, error) {
 	config, err := awsconfig.LoadDefaultConfig(ctx, awsconfig.WithRegion(region))
 	if err != nil {
-		return &Cognito{}, err
+		return &Cognito{}, errors.Wrap(errors.ErrCognitoSetup, err)
 	}
 	client := awscognito.NewFromConfig(config)
 	return &Cognito{
@@ -54,7 +55,7 @@ func (cog *Cognito) GenerateTokens(ctx context.Context, username string, passwor
 	}
 	user, err := cog.client.InitiateAuth(ctx, &auth)
 	if err != nil {
-		return CognitoResponse{}, err
+		return CognitoResponse{}, errors.Wrap(errors.ErrCognitoAuthenticate, err)
 	}
 	return CognitoResponse{
 		IdToken:      user.AuthenticationResult.IdToken,
@@ -77,7 +78,7 @@ func (cog *Cognito) RefreshTokens(ctx context.Context, refreshToken string) (
 	}
 	user, err := cog.client.InitiateAuth(ctx, &auth)
 	if err != nil {
-		return CognitoResponse{}, err
+		return CognitoResponse{}, errors.Wrap(errors.ErrCognitoAuthenticate, err)
 	}
 	return CognitoResponse{
 		IdToken:      user.AuthenticationResult.IdToken,

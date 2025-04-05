@@ -7,10 +7,11 @@ import (
 	"text/template"
 
 	"github.com/zimeg/emporia-time/internal/display"
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // templateBuilder creates a string using a template and variables
-func templateBuilder(templateStr string, body interface{}) (string, error) {
+func templateBuilder(templateStr string, body any) (string, error) {
 	funcs := template.FuncMap{
 		"Bold": func(f string) string {
 			return fmt.Sprintf("\x1b[1m%s\x1b[0m", f)
@@ -33,11 +34,11 @@ func templateBuilder(templateStr string, body interface{}) (string, error) {
 	}
 	tmpl, err := template.New("outputs").Funcs(funcs).Parse(templateStr)
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(errors.ErrTemplateParse, err)
 	}
 	var result strings.Builder
 	if err := tmpl.Execute(&result, body); err != nil {
-		return "", err
+		return "", errors.Wrap(errors.ErrTemplateBuild, err)
 	}
 	return result.String(), nil
 }

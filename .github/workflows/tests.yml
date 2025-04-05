@@ -69,3 +69,14 @@ jobs:
           EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
           EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
           EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
+      - name: End with an exit code
+        run: |
+          set +e
+          nix run .# dream
+          STATUS=$?
+          echo $STATUS
+          [ "$STATUS" -eq 127 ] || exit 1
+        env:
+          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
+          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
+          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
