@@ -149,7 +149,7 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Save the flake locks
-        if: needs.diff.outputs.changed == 'true'
+        if: steps.diff.outputs.changed == 'true'
         run: |
           git commit --all --message "chore(deps): automatic version bump to the most recent packages"
           git push -u origin update
