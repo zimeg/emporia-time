@@ -181,6 +181,7 @@ jobs:
           wait-interval: 10
           allowed-conclusions: success
       - name: Save changed version
+        if: needs.diff.outputs.changed == 'true'
         run: |
           git checkout main
           git merge update
