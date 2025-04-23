@@ -5,7 +5,7 @@ go 1.24.1
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
-	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.51.4
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.52.0
 	github.com/charmbracelet/log v0.4.1
 	github.com/spf13/afero v1.14.0
 	github.com/stretchr/testify v1.10.0
