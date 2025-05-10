@@ -14,6 +14,7 @@ to [Semantic Versioning][semver].
 ### Fixed
 
 - Return exit codes after time command subshell measures usage
+- Output flake build as shorter etime instead of project name
 
 ### Maintenance
 
