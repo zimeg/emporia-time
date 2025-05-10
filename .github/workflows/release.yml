@@ -8,12 +8,12 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
-permissions:
-  contents: write
 jobs:
   version:
     name: Collect the version
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       version: ${{ steps.tag.outputs.version }}
     steps:
@@ -32,6 +32,8 @@ jobs:
     needs: version
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       version: ${{ needs.version.outputs.version }}
     steps:
@@ -85,6 +87,8 @@ jobs:
       - snapshot
       - version
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       version: ${{ needs.version.outputs.version }}
     strategy:
@@ -139,6 +143,8 @@ jobs:
     needs: version
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: macos-latest
+    permissions:
+      contents: write
     env:
       version: ${{ needs.version.outputs.version }}
     steps:

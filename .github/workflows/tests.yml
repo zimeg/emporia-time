@@ -7,6 +7,8 @@ jobs:
   checkup:
     name: Inspect the code health
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,6 +43,8 @@ jobs:
     name: Monitor energy usage
     needs: checkup
     runs-on: self-hosted
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
