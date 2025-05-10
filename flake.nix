@@ -48,7 +48,7 @@
           ];
         };
         packages.default = pkgs.buildGoModule rec {
-          pname = "emporia-time";
+          pname = "etime";
           version = "unversioned";
           src = ./.;
           ldflags = [
