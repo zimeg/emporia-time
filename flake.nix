@@ -48,7 +48,7 @@
           ];
         };
         packages.default = pkgs.buildGoModule rec {
-          pname = "emporia-time";
+          pname = "etime";
           version = "unversioned";
           src = ./.;
           ldflags = [
@@ -58,6 +58,10 @@
           ];
           doCheck = true;
           vendorHash = "sha256-smJr1p+FbEG65sfu7TWhpWtR8R8gKR6tRI+w/1dDdfs=";
+          installPhase = ''
+            mkdir -p $out/bin
+            mv $GOPATH/bin/emporia-time $out/bin/etime
+          '';
           meta = {
             description = "an energy aware time command";
             homepage = "https://github.com/zimeg/emporia-time";
