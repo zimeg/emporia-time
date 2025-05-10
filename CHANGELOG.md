@@ -22,6 +22,7 @@ to [Semantic Versioning][semver].
 - Update language linter configurations to the latest version
 - Make test coverage dashboards when running coverage commands
 - Exit with success if updates to dependencies were not found
+- Reduce the set of permission required for the action runners
 
 ## [1.1.2] - 2025-03-17
 
