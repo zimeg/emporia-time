@@ -18,9 +18,10 @@ jobs:
       version: ${{ steps.tag.outputs.version }}
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Collect the current version
         id: tag
         run: |
@@ -38,45 +39,46 @@ jobs:
       version: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v17
+        uses: DeterminateSystems/nix-installer-action@21a544727d0c62386e78b4befe52d19ad12692e3 # v17
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yml
       - name: Mark logged changes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_CHANGELOG.md
           path: ./CHANGELOG.md
           if-no-files-found: error
       - name: Upload the checksums
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_checksums.txt
           path: ./dist/etime_${{ env.version }}_checksums.txt
           if-no-files-found: error
       - name: Enscribe legal letter
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_LICENSE
           path: ./LICENSE
           if-no-files-found: error
       - name: Read the manual pages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_man.1
           path: ./etime.1
           if-no-files-found: error
       - name: Write welcoming markdown
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_README.md
           path: ./README.md
           if-no-files-found: error
       - name: Cache the moments
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         if: always()
         with:
           path: ./dist
@@ -104,14 +106,16 @@ jobs:
           - windows_x86_64.zip
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Restore cached snapshots
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
       - name: Upload a snapshot
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
@@ -127,8 +131,8 @@ jobs:
       - name: Leave a comment
         run: |
           PR_COMMENT="Latest builds: https://github.com/$GH_REPO/actions/runs/$GH_RUN_ID"
-          PR_REF="${{ github.ref_name }}"
-          if [[ $PR_REF == *"/merge" ]]; then
+          PR_REF="$GH_REF"
+          if [[ "$PR_REF" == *"/merge" ]]; then
             PR_REF="${PR_REF%%/merge}"
           fi
           if ! gh pr comment "$PR_REF" --repo "$GH_REPO" --edit-last --body "$PR_COMMENT"; then
@@ -136,6 +140,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REF: ${{ github.ref_name }}
           GH_REPO: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
   release:
@@ -149,9 +154,10 @@ jobs:
       version: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Secure the keychain
         run: |
           echo $CERTIFICATE_P12 | base64 --decode > certificate.p12
@@ -165,7 +171,7 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@v17
+        uses: DeterminateSystems/nix-installer-action@21a544727d0c62386e78b4befe52d19ad12692e3 # v17
       - name: Create releases
         run: nix develop .#gon -c goreleaser release --clean --config .goreleaser.release.yml
         env:
@@ -175,9 +181,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Include documentation
         run: |
-          gh release upload ${{ env.version }} CHANGELOG.md#etime_${{ env.version }}_CHANGELOG.md
-          gh release upload ${{ env.version }} LICENSE#etime_${{ env.version }}_LICENSE
-          gh release upload ${{ env.version }} etime.1#etime_${{ env.version }}_man.1
-          gh release upload ${{ env.version }} README.md#etime_${{ env.version }}_README.md
+          gh release upload "$VERSION" "CHANGELOG.md#etime_${VERSION}_CHANGELOG.md"
+          gh release upload "$VERSION" "LICENSE#etime_${VERSION}_LICENSE"
+          gh release upload "$VERSION" "etime.1#etime_${VERSION}_man.1"
+          gh release upload "$VERSION" "README.md#etime_${VERSION}_README.md"
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ env.version }}
