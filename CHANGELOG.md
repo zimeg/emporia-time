@@ -23,6 +23,7 @@ to [Semantic Versioning][semver].
 - Make test coverage dashboards when running coverage commands
 - Exit with success if updates to dependencies were not found
 - Reduce the set of permission required for the action runners
+- Set action steps to a pinned version with escaped variables
 
 ## [1.1.2] - 2025-03-17
 
