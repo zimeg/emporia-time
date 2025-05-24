@@ -19,14 +19,14 @@
       devShells = each (pkgs: {
         default = pkgs.mkShell {
           packages = with pkgs; [
-            gnumake
-            go
-            go-junit-report
-            gocyclo
-            gofumpt
-            golangci-lint
-            gopls
-            goreleaser
+            gnumake # https://github.com/mirror/make
+            go # https://github.com/golang/go
+            go-junit-report # https://github.com/jstemmer/go-junit-report
+            gocyclo # https://github.com/fzipp/gocyclo
+            gofumpt # https://github.com/mvdan/gofumpt
+            golangci-lint # https://github.com/golangci/golangci-lint
+            gopls # https://github.com/golang/tools
+            goreleaser # https://github.com/goreleaser/goreleaser
           ];
           shellHook = ''
             go mod tidy
@@ -36,9 +36,9 @@
           if pkgs.stdenv.isDarwin then
             pkgs.mkShell {
               packages = with pkgs; [
-                go
-                inputs.zimeg.packages.${pkgs.system}.gon
-                goreleaser
+                go # https://github.com/golang/go
+                inputs.zimeg.packages.${pkgs.system}.gon # https://github.com/Bearer/gon
+                goreleaser # https://github.com/goreleaser/goreleaser
               ];
               shellHook = ''
                 export PATH=/usr/bin:$PATH # https://github.com/zimeg/nur-packages/issues/4
@@ -48,7 +48,7 @@
             null;
         tom = pkgs.mkShell {
           packages = with pkgs; [
-            time
+            time # https://git.savannah.gnu.org/cgit/time.git
           ];
         };
       });
