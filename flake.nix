@@ -1,19 +1,23 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     zimeg.url = "github:zimeg/nur-packages";
   };
   outputs =
-    { nixpkgs, flake-utils, ... }@inputs:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-        gon = if pkgs.stdenv.isDarwin then inputs.zimeg.packages.${pkgs.system}.gon else null;
-      in
-      {
-        devShells.default = pkgs.mkShell {
+    { nixpkgs, ... }@inputs:
+    let
+      each =
+        function:
+        nixpkgs.lib.genAttrs [
+          "x86_64-darwin"
+          "x86_64-linux"
+          "aarch64-darwin"
+          "aarch64-linux"
+        ] (system: function nixpkgs.legacyPackages.${system});
+    in
+    {
+      devShells = each (pkgs: {
+        default = pkgs.mkShell {
           packages = with pkgs; [
             gnumake
             go
@@ -28,12 +32,12 @@
             go mod tidy
           '';
         };
-        devShells.gon =
+        gon =
           if pkgs.stdenv.isDarwin then
             pkgs.mkShell {
               packages = with pkgs; [
                 go
-                gon
+                inputs.zimeg.packages.${pkgs.system}.gon
                 goreleaser
               ];
               shellHook = ''
@@ -42,12 +46,14 @@
             }
           else
             null;
-        devShells.tom = pkgs.mkShell {
+        tom = pkgs.mkShell {
           packages = with pkgs; [
             time
           ];
         };
-        packages.default = pkgs.buildGoModule rec {
+      });
+      packages = each (pkgs: {
+        default = pkgs.buildGoModule rec {
           pname = "etime";
           version = "unversioned";
           src = ./.;
@@ -72,6 +78,6 @@
             license = pkgs.lib.licenses.mit;
           };
         };
-      }
-    );
+      });
+    };
 }
