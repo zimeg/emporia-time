@@ -1,7 +1,10 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    zimeg.url = "github:zimeg/nur-packages";
+    zimeg = {
+      url = "github:zimeg/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     { nixpkgs, ... }@inputs:
