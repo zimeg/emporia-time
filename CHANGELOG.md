@@ -25,6 +25,7 @@ to [Semantic Versioning][semver].
 - Reduce the set of permission required for the action runners
 - Set action steps to a pinned version with escaped variables
 - Remove flake utilities not needed for packaging this project
+- Change the spelling of some implementations in code comments
 
 ## [1.1.2] - 2025-03-17
 
