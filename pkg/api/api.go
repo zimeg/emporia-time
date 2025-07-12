@@ -23,7 +23,7 @@ type Emporiac interface {
 // Emporia holds information for and from the Emporia API
 type Emporia struct {
 	client interface {
-		// Do does the HTTP request and is often implmented using net/http
+		// Do does the HTTP request and is often implemented using net/http
 		Do(req *http.Request) (*http.Response, error)
 	}
 	deviceID string
