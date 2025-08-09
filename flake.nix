@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    zimeg.url = "github:zimeg/nur-packages";
+    zimeg.url = "github:zimeg/nur-packages/a8803c614be37734167b90ed9289868cd185690a";
   };
   outputs =
     { nixpkgs, flake-utils, ... }@inputs:
@@ -10,7 +10,7 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        gon = if pkgs.stdenv.isDarwin then inputs.zimeg.packages.${pkgs.system}.gon else null;
+        quill = if pkgs.stdenv.isDarwin then inputs.zimeg.packages.${pkgs.system}.quill else null;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -28,12 +28,12 @@
             go mod tidy
           '';
         };
-        devShells.gon =
+        devShells.quill =
           if pkgs.stdenv.isDarwin then
             pkgs.mkShell {
               packages = with pkgs; [
                 go
-                gon
+                quill
                 goreleaser
               ];
               shellHook = ''
