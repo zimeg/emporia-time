@@ -208,8 +208,8 @@ $ spctl -a -vvv -t install ./etime
 [goreleaser]: https://github.com/goreleaser/goreleaser
 [learn_go]: https://go.dev/learn/
 [nix]: https://zero-to-nix.com
+[quill]: https://github.com/anchore/quill
 [releases]: https://github.com/zimeg/emporia-time/releases
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
 [semver]: https://semver.org/spec/v2.0.0.html
-[quill]: https://github.com/anchore/quill
 [wiki]: https://github.com/zimeg/emporia-time/wiki
