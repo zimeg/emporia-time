@@ -35,17 +35,14 @@
             go mod tidy
           '';
         };
-        gon =
+        quill =
           if pkgs.stdenv.isDarwin then
             pkgs.mkShell {
               packages = with pkgs; [
                 go # https://github.com/golang/go
-                inputs.zimeg.packages.${pkgs.system}.gon # https://github.com/Bearer/gon
                 goreleaser # https://github.com/goreleaser/goreleaser
+                inputs.zimeg.packages.${pkgs.system}.quill # https://github.com/anchore/quill
               ];
-              shellHook = ''
-                export PATH=/usr/bin:$PATH # https://github.com/zimeg/nur-packages/issues/4
-              '';
             }
           else
             null;

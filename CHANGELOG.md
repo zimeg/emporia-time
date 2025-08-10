@@ -13,6 +13,7 @@ to [Semantic Versioning][semver].
 
 ### Fixed
 
+- Sign releases for mac machines without configuration errors
 - Return exit codes after time command subshell measures usage
 - Output flake build as shorter etime instead of project name
 - Include manual pages when installing using flake derivation

@@ -158,27 +158,17 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Secure the keychain
-        run: |
-          echo $CERTIFICATE_P12 | base64 --decode > certificate.p12
-          security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
-          security import certificate.p12 -k build.keychain -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
-        env:
-          CERTIFICATE_P12: ${{ secrets.CERTIFICATE_P12 }}
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
       - name: Create releases
-        run: nix develop .#gon -c goreleaser release --clean --config .goreleaser.release.yml
+        run: nix develop .#quill -c goreleaser release --clean --config .goreleaser.release.yml
         env:
-          AC_USERNAME: ${{ secrets.AC_USERNAME }}
-          AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
-          AC_PROVIDER: ${{ secrets.AC_PROVIDER }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
+          MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
+          MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
+          MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
+          MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
       - name: Include documentation
         run: |
           gh release upload "$VERSION" "CHANGELOG.md#etime_${VERSION}_CHANGELOG.md"

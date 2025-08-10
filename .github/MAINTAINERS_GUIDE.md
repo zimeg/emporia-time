@@ -161,7 +161,7 @@ In deciding a version number, best judgement should be used to follow
 Packaging for the release process begins after a new version tag is created.
 
 Builds for various targets are made with [goreleaser][goreleaser] then signed by
-[gon][gon] and uploaded to the action artifacts.
+[quill][quill] and uploaded to the action artifacts.
 
 Only compilations for macOS are signed at this time. Verifying binaries made for
 other operating systems is left as an exercise for the developer.
@@ -185,14 +185,13 @@ Special tooling and a macOS system is required for this process. Tooling can be
 setup with a packaging flake:
 
 ```sh
-$ flake develop .#gon
+$ nix develop .#quill
 ```
 
 With the above ready the following commands will hopefully officiate things:
 
 ```sh
 $ make release  # Build and notarize a release
-$ gon .gon.hcl  # Troubleshoot specific errors
 ```
 
 #### Verifying a signature
@@ -206,10 +205,10 @@ $ spctl -a -vvv -t install ./etime
 [certificates]: https://www.apple.com/certificateauthority/
 [credentials]: https://developer.apple.com/account/resources/certificates/list
 [golang]: https://go.dev/dl/
-[gon]: https://github.com/Bearer/gon
 [goreleaser]: https://github.com/goreleaser/goreleaser
 [learn_go]: https://go.dev/learn/
 [nix]: https://zero-to-nix.com
+[quill]: https://github.com/anchore/quill
 [releases]: https://github.com/zimeg/emporia-time/releases
 [runner]: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
 [semver]: https://semver.org/spec/v2.0.0.html

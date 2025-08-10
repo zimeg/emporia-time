@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1753754573,
-        "narHash": "sha256-KhYz7lbiuNklWqGUuUyX/6Ivn3A/eJvtZIdGvIUGXQ8=",
+        "lastModified": 1754852749,
+        "narHash": "sha256-B7VKtZ/SM15RK0Paw2GZaD35G+9sA75mBcWC/H4JZSE=",
         "owner": "zimeg",
         "repo": "nur-packages",
-        "rev": "848eef18db0e0633289b27b2e5a56331e79ee0df",
+        "rev": "a05908bb020b56c3731121868e7a280172d96212",
         "type": "github"
       },
       "original": {
