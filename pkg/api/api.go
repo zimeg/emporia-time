@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -22,7 +23,7 @@ type Emporiac interface {
 // Emporia holds information for and from the Emporia API
 type Emporia struct {
 	client interface {
-		// Do does the HTTP request and is often implmented using net/http
+		// Do does the HTTP request and is often implemented using net/http
 		Do(req *http.Request) (*http.Response, error)
 	}
 	deviceID string
@@ -50,22 +51,34 @@ func (emp *Emporia) SetDevice(deviceID string) {
 }
 
 // get makes an authenticated GET request to URL and saves the response to data
-func (emp *Emporia) get(url string, data any) error {
+func (emp *Emporia) get(url string, data any) (err error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaRequest, err)
 	}
 	if emp.token != "" {
 		req.Header.Add("authToken", emp.token)
 	}
 	resp, err := emp.client.Do(req)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaResponse, err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		done := resp.Body.Close()
+		if err != nil {
+			return
+		}
+		if done != nil {
+			err = errors.Wrap(errors.ErrEmporiaComplete, done)
+		}
+	}()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return errors.Wrap(errors.ErrEmporiaResult, err)
 	}
-	return json.Unmarshal(body, &data)
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return errors.Wrap(errors.ErrEmporiaFormat, err)
+	}
+	return nil
 }

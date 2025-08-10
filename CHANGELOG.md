@@ -7,15 +7,33 @@ to [Semantic Versioning][semver].
 
 ## [Unreleased]
 
+### Added
+
+- Output errors and related messages with charms logging print
+
 ### Fixed
 
 - Sign releases for mac machines without configuration errors
+- Return exit codes after time command subshell measures usage
+- Output flake build as shorter etime instead of project name
+- Include manual pages when installing using flake derivation
+- Correct spellings of documentation to match common wordings
+
+### Maintenance
+
+- Update language linter configurations to the latest version
+- Make test coverage dashboards when running coverage commands
+- Exit with success if updates to dependencies were not found
+- Reduce the set of permission required for the action runners
+- Set action steps to a pinned version with escaped variables
+- Remove flake utilities not needed for packaging this project
+- Follow the unstable packages of nix with development inputs
 
 ## [1.1.2] - 2025-03-17
 
 ### Added
 
-- Package the build in a flake and test with propogated timing
+- Package the build in a flake and test with propagated timing
 
 ### Fixed
 
@@ -93,7 +111,7 @@ to [Semantic Versioning][semver].
 
 ### Added
 
-- Print the current build version with a `--verison` flag
+- Print the current build version with a `--version` flag
 
 ### Fixed
 
@@ -143,7 +161,7 @@ to [Semantic Versioning][semver].
 - Environment variables `EMPORIA_USERNAME` and `EMPORIA_PASSWORD` will login too
 - Specify a device to measure with flag `--device` or variable `EMPORIA_DEVICE`
 - Detailed information about this program is included in the README
-- Include the average power used over a command executation in watts
+- Include the average power used over a command execution in watts
 - Display measurements on separate lines with the `--portable` or `-p` flags
 - Documentation created for collaboration and contribution processes
 
@@ -160,8 +178,8 @@ to [Semantic Versioning][semver].
 - Clarify confusing or error prone steps in the getting started process
 - Path to the repository was changed and now it matches
 - Timing outputs are now consistent across operating systems
-- Errors from the provided command are properly propogated
-- Correctly dislpay energy as joules and power as watts
+- Errors from the provided command are properly propagated
+- Correctly display energy as joules and power as watts
 - Replace the command name in help templates on build errors
 
 ### Maintenance

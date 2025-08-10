@@ -1,9 +1,8 @@
 package etime
 
 import (
-	"fmt"
-	"os/exec"
-
+	"github.com/zimeg/emporia-time/internal/errors"
+	"github.com/zimeg/emporia-time/internal/logs"
 	"github.com/zimeg/emporia-time/pkg/config"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
@@ -13,31 +12,32 @@ import (
 type CommandResult struct {
 	energy.EnergyResult
 	times.TimeMeasurement
-	ExitCode int
 }
 
 // Run executes the command and returns the usage statistics
-func Run(cmd []string, cfg config.Configure) (results CommandResult, err error) {
+func Run(
+	cmd []string,
+	cfg config.Configure,
+	logger logs.Logger,
+) (
+	results CommandResult,
+	err error,
+) {
 	available, err := cfg.API().Status()
 	if err != nil {
-		return CommandResult{}, err
+		return CommandResult{}, errors.Wrap(errors.ErrEmporiaCheckup, err)
 	} else if !available {
-		return CommandResult{}, fmt.Errorf("Error: Cannot measure energy during Emporia maintenance")
+		return CommandResult{}, errors.New(errors.ErrEmporiaMaintenance)
 	}
-	measurements, err := times.TimeExec(cmd)
+	measurements, err := times.TimeExec(cmd, logger)
 	if err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
-			results.ExitCode = exitError.ExitCode()
-		} else {
-			return CommandResult{}, err
-		}
-		results.TimeMeasurement = measurements
+		return CommandResult{}, errors.Wrap(errors.ErrTimeExecution, err)
 	} else {
 		results.TimeMeasurement = measurements
 	}
 	usage, err := cfg.API().GetChartUsage(results.TimeMeasurement)
 	if err != nil {
-		return results, err
+		return results, errors.Wrap(errors.ErrEmporiaChart, err)
 	} else {
 		results.EnergyResult = usage
 	}

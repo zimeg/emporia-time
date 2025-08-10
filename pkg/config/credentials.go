@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/internal/terminal"
 	"github.com/zimeg/emporia-time/pkg/cognito"
 )
@@ -50,14 +51,14 @@ func (cfg *Config) GetTokens(
 		}
 		tokens, err := cog.GenerateTokens(ctx, username, password)
 		if err != nil {
-			return cognito.CognitoResponse{}, err
+			return cognito.CognitoResponse{}, errors.Wrap(errors.ErrCognitoGenerate, err)
 		}
 		return tokens, nil
 	}
 	if time.Now().After(cfg.Tokens.ExpiresAt) {
 		tokens, err := cog.RefreshTokens(ctx, cfg.Tokens.RefreshToken)
 		if err != nil {
-			return cognito.CognitoResponse{}, err
+			return cognito.CognitoResponse{}, errors.Wrap(errors.ErrCognitoRefresh, err)
 		}
 		return tokens, nil
 	}
@@ -94,7 +95,7 @@ func (cfg *Config) gatherCredentials(
 		Environment: "EMPORIA_USERNAME",
 	})
 	if err != nil {
-		return "", "", err
+		return "", "", errors.Wrap(errors.ErrPromptInput, err)
 	}
 	password, err = terminal.CollectInput(&terminal.Prompt{
 		Message:     "Password",
@@ -103,7 +104,7 @@ func (cfg *Config) gatherCredentials(
 		Hidden:      true,
 	})
 	if err != nil {
-		return "", "", err
+		return "", "", errors.Wrap(errors.ErrPromptInput, err)
 	}
 	return username, password, nil
 }

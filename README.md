@@ -51,7 +51,7 @@ A more detailed explanation can be found in [this StackOverflow answer][time].
 
 ### Energy
 
-Measurments of electricity used while executing the input command are collected
+Measurements of electricity used while executing the input command are collected
 from the Smart Plug.
 
 This usage is shown in the following units:

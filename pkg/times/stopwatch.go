@@ -2,7 +2,6 @@ package times
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"math/rand"
 	"os"
@@ -10,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/zimeg/emporia-time/internal/errors"
 )
 
 // bufferWriter contains two writers to write to and a bounds for toggles
@@ -22,14 +23,23 @@ type bufferWriter struct {
 
 // Write writes to the stream until bounds is reached then writes to buffer
 func (bw *bufferWriter) Write(p []byte) (int, error) {
-	if string(p) == bw.bounds {
+	output := string(p)
+	if strings.HasPrefix(output, bw.bounds) {
 		bw.stored = true
-		return len(bw.bounds), nil
+		output = strings.TrimPrefix(output, bw.bounds)
 	}
 	if bw.stored {
-		return bw.buff.Write(p)
+		n, err := bw.buff.Write([]byte(output))
+		if err != nil {
+			return n, errors.Wrap(errors.ErrWriteBuffer, err)
+		}
+		return len(p), nil
 	} else {
-		return bw.std.Write(p)
+		n, err := bw.std.Write(p)
+		if err != nil {
+			return n, errors.Wrap(errors.ErrWriteOutput, err)
+		}
+		return n, nil
 	}
 }
 
@@ -44,12 +54,20 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 			timer = "time"
 		}
 	}
+	if strings.HasPrefix(command[0], "./") {
+		command = append([]string{"source"}, command...)
+	}
 	timeShell := []string{
-		strings.Join(command, " "),
+		"(" + strings.Join(command, " ") + ")",
+		";",
+		"EMPORIA_TIME_EXIT_CODE_STATUS=$?",
 		";",
 		"1>&2",
 		"echo",
 		stderr.bounds,
+		"1>&2",
+		"echo",
+		"code $EMPORIA_TIME_EXIT_CODE_STATUS",
 	}
 	timeArgs := []string{
 		"-p",
@@ -58,9 +76,6 @@ func timerCommand(command []string, stderr bufferWriter) *exec.Cmd {
 		strings.Join(timeShell, " "),
 	}
 	cmd := exec.Command(timer, timeArgs...)
-	if errors.Is(cmd.Err, exec.ErrDot) {
-		cmd.Err = nil
-	}
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = &stderr
 	return cmd
@@ -72,7 +87,7 @@ func makeBounds() string {
 	const size = 64
 	var bounds strings.Builder
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i < size; i++ {
+	for range size {
 		bounds.WriteByte(charset[random.Intn(len(charset))])
 	}
 	bounds.WriteByte('\n')

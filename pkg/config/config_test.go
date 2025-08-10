@@ -102,10 +102,12 @@ func TestLoad(t *testing.T) {
 			req.On("SetDevice", mock.Anything)
 			configFilePath := ""
 			if tt.mockConfigPath != "" {
-				os.Setenv("XDG_CONFIG_HOME", tt.mockConfigPath)
+				err := os.Setenv("XDG_CONFIG_HOME", tt.mockConfigPath)
+				require.NoError(t, err)
 				configFilePath = filepath.Join(tt.mockConfigPath, "etime", "settings.json")
 			} else {
-				os.Unsetenv("XDG_CONFIG_HOME")
+				err := os.Unsetenv("XDG_CONFIG_HOME")
+				require.NoError(t, err)
 				dir, err := os.UserHomeDir()
 				require.NoError(t, err)
 				configFilePath = filepath.Join(dir, ".config", "etime", "settings.json")
@@ -116,11 +118,13 @@ func TestLoad(t *testing.T) {
 				_, err = settings.WriteString(tt.mockConfigFile)
 				require.NoError(t, err)
 			}
-			os.Setenv("EMPORIA_USERNAME", tt.mockFlags.Username) // FIXME: use flags!
-			os.Setenv("EMPORIA_PASSWORD", tt.mockFlags.Password) // FIXME: use flags!
-			cfg, err := Load(ctx, cog, fs, req, tt.mockFlags)
+			err := os.Setenv("EMPORIA_USERNAME", tt.mockFlags.Username) // FIXME: use flags!
+			require.NoError(t, err)
+			err = os.Setenv("EMPORIA_PASSWORD", tt.mockFlags.Password) // FIXME: use flags!
+			require.NoError(t, err)
+			cfg, err := Setup(ctx, cog, fs, req, tt.mockFlags)
 			if tt.expectedError != nil {
-				require.Error(t, err)
+				assert.Error(t, err)
 			} else {
 				require.NoError(t, err)
 				assert.Equal(t, tt.expectedConfig.Device, cfg.Device)

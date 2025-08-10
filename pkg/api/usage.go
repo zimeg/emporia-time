@@ -1,12 +1,11 @@
 package api
 
 import (
-	"errors"
 	"fmt"
-	"log"
 	"net/url"
 	"time"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/pkg/energy"
 	"github.com/zimeg/emporia-time/pkg/times"
 )
@@ -20,23 +19,21 @@ type UsageResponse struct {
 
 // GetChartUsage calls the Emporia API for usage information over and over until
 // a certain confidence is reached
+//
+// A quick pause is used before lookups to respect latency
 func (emp *Emporia) GetChartUsage(times times.TimeMeasurement) (energy.EnergyResult, error) {
-	confidence := 0.80
-
-	// Delay before lookup to respect latency
 	time.Sleep(200 * time.Millisecond)
+	confidence := 0.80
 	chart, err := emp.LookupEnergyUsage(times)
 	if err != nil {
-		log.Printf("Error: Failed to gather energy usage data!\n")
 		return energy.EnergyResult{}, err
 	}
-
-	results := energy.ExtrapolateUsage(energy.EnergyMeasurement{
-		Chart:    chart,
-		Duration: times.Elapsed,
-	})
-
-	// Repeat lookup for unsure results
+	results := energy.ExtrapolateUsage(
+		energy.EnergyMeasurement{
+			Chart:    chart,
+			Duration: times.Elapsed,
+		},
+	)
 	for results.Sureness < confidence {
 		results, err = emp.GetChartUsage(times)
 		if err != nil {
@@ -52,7 +49,8 @@ func (emp *Emporia) LookupEnergyUsage(times times.TimeMeasurement) ([]float64, e
 	if err != nil {
 		return []float64{}, err
 	} else if response.Message != "" {
-		return []float64{}, errors.New(response.Message)
+		return []float64{},
+			errors.Wrap(errors.ErrEmporiaMessage, fmt.Errorf("%s", response.Message))
 	}
 	chart := response.UsageList
 	for ii, kwh := range chart {

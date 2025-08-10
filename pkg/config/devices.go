@@ -1,11 +1,11 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
 
+	"github.com/zimeg/emporia-time/internal/errors"
 	"github.com/zimeg/emporia-time/internal/terminal"
 )
 
@@ -27,10 +27,10 @@ func (cfg *Config) GetDevice(flags Flags) (Device, error) {
 	device := ""
 	devices, err := cfg.API().GetCustomerDevices()
 	if err != nil {
-		return Device{}, err
+		return Device{}, errors.Wrap(errors.ErrEmporiaDevices, err)
 	}
 	if len(devices) == 0 {
-		return Device{}, errors.New("No available devices found!")
+		return Device{}, errors.New(errors.ErrEmporiaUnplugged)
 	}
 	switch {
 	case flags.Device != "":
@@ -53,7 +53,7 @@ func (cfg *Config) GetDevice(flags Flags) (Device, error) {
 		gidLabels = append(gidLabels, fmt.Sprintf("#%d", val.DeviceGid))
 	}
 	if device != "" {
-		return Device{}, errors.New("No matching device found!")
+		return Device{}, errors.New(errors.ErrEmporiaDevice)
 	}
 	selection, err := terminal.CollectSelect(terminal.Prompt{
 		Message:      "Select a device:",
@@ -61,7 +61,7 @@ func (cfg *Config) GetDevice(flags Flags) (Device, error) {
 		Descriptions: gidLabels,
 	})
 	if err != nil {
-		return Device{}, err
+		return Device{}, errors.Wrap(errors.ErrPromptSelect, err)
 	}
 	response := Device{
 		DeviceID: gids[selection],
