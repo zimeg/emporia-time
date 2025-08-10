@@ -77,17 +77,16 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1754766597,
-        "narHash": "sha256-1gwImD6Tl4vvC7RHGIss3HIvk+eXYfiEk1NrAB0o+OQ=",
+        "lastModified": 1754852749,
+        "narHash": "sha256-B7VKtZ/SM15RK0Paw2GZaD35G+9sA75mBcWC/H4JZSE=",
         "owner": "zimeg",
         "repo": "nur-packages",
-        "rev": "a8803c614be37734167b90ed9289868cd185690a",
+        "rev": "a05908bb020b56c3731121868e7a280172d96212",
         "type": "github"
       },
       "original": {
         "owner": "zimeg",
         "repo": "nur-packages",
-        "rev": "a8803c614be37734167b90ed9289868cd185690a",
         "type": "github"
       }
     }

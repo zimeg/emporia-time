@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    zimeg.url = "github:zimeg/nur-packages/a8803c614be37734167b90ed9289868cd185690a";
+    zimeg.url = "github:zimeg/nur-packages";
   };
   outputs =
     { nixpkgs, flake-utils, ... }@inputs:
