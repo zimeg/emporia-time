@@ -63,11 +63,7 @@ jobs:
         run: nix develop -c make clean
       - name: Sleep for a short while
         run: |
-          nix run .# sleep 4
-        env:
-          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
-          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
-          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
+          nix develop .#tom -c sops exec-env vault.json 'nix run .# sleep 4'
       - name: Sleep for a bit longer
         run: |
           nix run .# sleep 12
