@@ -65,12 +65,12 @@ jobs:
         run: |
           nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 4'
         env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}
       - name: Sleep for a bit longer
         run: |
           nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 12'
         env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}
       - name: End with an exit code
         run: |
           set +e
@@ -79,4 +79,4 @@ jobs:
           echo $STATUS
           [ "$STATUS" -eq 127 ] || exit 1
         env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}

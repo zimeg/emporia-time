@@ -7,12 +7,16 @@
 	"sops": {
 		"age": [
 			{
-				"recipient": "age1exgt6neyetzrg9wgf4vxqmc93sjwqmqm3283hp5zx4m9hy9dpunqh3q4xj",
-				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4M0cyR2RhWVdtbkMzRUJN\nbzRyTCs2KzlsaTZ3TVg4UVhwMzRmb2dBRmtzCnM5M29NRDdwR0c4c0xPZGZ6Q0tS\nMGRnV0hkci9HV0doZFJNN1ZWb01mVHMKLS0tIHB2bHIyRGVOYUxnSFFNelZRckRq\nNFJteU9mZ0xwRml1VGJacHB4WHJsTWcKEZHjDXyY7yleszrZFq0zBc/ldyqzbniS\nmqm0QIy6xC024POnz+C8+ywTAyWHZzO34k335DkIbLCEq//gDIJgJQ==\n-----END AGE ENCRYPTED FILE-----\n"
+				"recipient": "age12y22htyhxwncxcp2au55a24qzjphdfseqc09jn7f9jmjkfrchvrq73src6",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5aWpXSUdXaHZLL0tSVmU0\nRW9ycGVOTHlKWEpqZk1EVEc5WGVpdnBObnlvClhvNWNuZ2RBcTAvRi9pWlVTbzN4\nY1hJZWw2L1o0SE5ZVXJUbHg4T3RPclEKLS0tIEdlWEMxaE5iNFFTb0pxV1hHclp5\nS0swY3R2VTZEMk9NSWFPRFJtL3JYR28Kn8KXNmBi7hSJsQwPlOYxwx02k3j559OJ\nmvtQZS3i7eqeZWNkNNy7gDPNUnJ6WyyGwpqGAN+8LuWJmabmrP6CMg==\n-----END AGE ENCRYPTED FILE-----\n"
 			},
 			{
 				"recipient": "age1dujf55uzev2nnpq6c2drn0e8pmpxay22qqfsavwaxqakwn9se5hsputgx4",
-				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpZ29obHR1WkZwaW13Qmxn\nYkRkZ0dPUWxJNlArK0lQYU04dVVlSnNNeWdRCmJOanRSSmpoYnFDSDMyNTUweHNm\ndkM3bkxqaWhIKzRoeHoxNTVoTjQ5blkKLS0tIE5kYjN4bHp3V1lYQWRUMDUwNTlq\nUHAvUWxoWDAxVTA4dXRVT3VBL1hVUkkKyhd7zCqyV354ys1y0QSyj0+nW6XSfOjU\nqenJt2CeNmIwlfH4q69kG7ONAjGJ1gn+8oAQHsQlVWuFMMqP1WAMOA==\n-----END AGE ENCRYPTED FILE-----\n"
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnMksxRkllK254bG9STmNt\nOVJQTnp3VDhBOFV0YkpzaVpOQ1NaUjYzaXpFCjBiblJFUVdPbnFDMm44ZUtYcU9H\nSTZodTlKdndiSUpmZXJlOW91V2JvRnMKLS0tIEJIZXIzSExUc3NQUFBjcjRkQjNm\nM0NzT0lXeFFpZHdlUzlzZnV1ZTYxVmsKLaUiv2mOx+FgxbnzVoyydUctLovRUc20\nrEy/0+xE7xeFClnbu5bFptC8ELWG+uxnD4ONaJn7TCds0nkd6g+mIQ==\n-----END AGE ENCRYPTED FILE-----\n"
+			},
+			{
+				"recipient": "age1exgt6neyetzrg9wgf4vxqmc93sjwqmqm3283hp5zx4m9hy9dpunqh3q4xj",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBBejlkWXI0SFhDLzNJN2Fr\nbm9Ca01LclRZNzNqODlsYkxrdUViVkxJa0FVCmVacTM1MnVzQXhSbTN5QVJLMmpx\nRll6Rk5WZVlBM2FmSCtlS21PMm44MzQKLS0tIHdvZ3pTVWdvWW1haTFTV0ZHNUxs\nUmlPSE5EcllUdlN2R0sxWWxGa0NJZ3MKeB+bwq2OTDbm1r1uHEvgKlzAM+21paSq\n5uk0ZjYmvVhzqfJw1thBljKSIVjuNxOjF+j7PqR0m02EeTB2OdJHeQ==\n-----END AGE ENCRYPTED FILE-----\n"
 			}
 		],
 		"lastmodified": "2025-08-11T06:07:13Z",
