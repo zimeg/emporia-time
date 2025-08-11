@@ -37,6 +37,7 @@
         };
         tom = pkgs.mkShell {
           packages = with pkgs; [
+            goreleaser # https://github.com/goreleaser/goreleaser
             sops # https://github.com/getsops/sops
             time # https://git.savannah.gnu.org/cgit/time.git
             inputs.zimeg.packages.${pkgs.system}.quill # https://github.com/anchore/quill
