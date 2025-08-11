@@ -174,23 +174,16 @@ Apple holds the keys for [developer credentials][credentials] and
 [system certificates][certificates]. A "Developer ID Application" is needed on
 the system keychain and any missing but matching certificates too.
 
-Account details from the release vault are needed as environment variables:
+Account details from the release vault can be used as environment variables:
 
 ```sh
-nix develop .#tom -c sops exec-env vault.release.json 'sh'
+$ nix develop .#tom -c sops exec-env vault.release.json 'sh'
 ```
 
 #### Processing packages
 
 Signing and notarizing binaries is an automatic process that happens after
 making a release build.
-
-Special tooling and a macOS system is required for this process. Tooling can be
-setup with a packaging flake:
-
-```sh
-$ nix develop .#quill
-```
 
 With the above ready the following commands will hopefully officiate things:
 
