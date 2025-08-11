@@ -174,7 +174,11 @@ Apple holds the keys for [developer credentials][credentials] and
 [system certificates][certificates]. A "Developer ID Application" is needed on
 the system keychain and any missing but matching certificates too.
 
-Account details from the `vault.json` file is needed as environment variables.
+Account details from the release vault are needed as environment variables:
+
+```sh
+nix develop .#tom -c sops exec-env vault.release.json 'sh'
+```
 
 #### Processing packages
 
