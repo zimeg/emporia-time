@@ -35,17 +35,13 @@
             go mod tidy
           '';
         };
-        quill =
-          if pkgs.stdenv.isDarwin then
-            pkgs.mkShell {
-              packages = with pkgs; [
-                go # https://github.com/golang/go
-                goreleaser # https://github.com/goreleaser/goreleaser
-                inputs.zimeg.packages.${pkgs.system}.quill # https://github.com/anchore/quill
-              ];
-            }
-          else
-            null;
+        quill = pkgs.mkShell {
+          packages = with pkgs; [
+            go # https://github.com/golang/go
+            goreleaser # https://github.com/goreleaser/goreleaser
+            inputs.zimeg.packages.${pkgs.system}.quill # https://github.com/anchore/quill
+          ];
+        };
         tom = pkgs.mkShell {
           packages = with pkgs; [
             sops # https://github.com/getsops/sops
