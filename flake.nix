@@ -37,6 +37,7 @@
         };
         tom = pkgs.mkShell {
           packages = with pkgs; [
+            go # https://github.com/golang/go
             goreleaser # https://github.com/goreleaser/goreleaser
             sops # https://github.com/getsops/sops
             time # https://git.savannah.gnu.org/cgit/time.git
