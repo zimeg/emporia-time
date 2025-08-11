@@ -48,6 +48,7 @@
             null;
         tom = pkgs.mkShell {
           packages = with pkgs; [
+            sops # https://github.com/getsops/sops
             time # https://git.savannah.gnu.org/cgit/time.git
           ];
         };

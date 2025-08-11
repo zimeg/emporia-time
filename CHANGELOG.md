@@ -28,6 +28,7 @@ to [Semantic Versioning][semver].
 - Set action steps to a pinned version with escaped variables
 - Remove flake utilities not needed for packaging this project
 - Follow the unstable packages of nix with development inputs
+- Store secrets in obfuscated writing among other project file
 
 ## [1.1.2] - 2025-03-17
 
