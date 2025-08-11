@@ -63,22 +63,20 @@ jobs:
         run: nix develop -c make clean
       - name: Sleep for a short while
         run: |
-          nix develop .#tom -c sops exec-env vault.json 'nix run .# sleep 4'
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 4'
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Sleep for a bit longer
         run: |
-          nix run .# sleep 12
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 12'
         env:
-          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
-          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
-          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: End with an exit code
         run: |
           set +e
-          nix run .# dream
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# dream'
           STATUS=$?
           echo $STATUS
           [ "$STATUS" -eq 127 ] || exit 1
         env:
-          EMPORIA_DEVICE: ${{ secrets.EMPORIA_DEVICE }}
-          EMPORIA_USERNAME: ${{ secrets.EMPORIA_USERNAME }}
-          EMPORIA_PASSWORD: ${{ secrets.EMPORIA_PASSWORD }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
