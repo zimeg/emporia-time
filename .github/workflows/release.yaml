@@ -165,7 +165,7 @@ jobs:
           nix develop .#tom -c sops exec-env vault.release.json 'goreleaser release --clean --config .goreleaser.release.yaml'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOPS_AGE_RELEASE_KEY: ${{ secrets.SOPS_AGE_RELEASE_KEY }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_RELEASE_KEY }}
       - name: Include documentation
         run: |
           gh release upload "$VERSION" "CHANGELOG.md#etime_${VERSION}_CHANGELOG.md"
