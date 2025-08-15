@@ -1,0 +1,18 @@
+keys:
+  - &release age12y22htyhxwncxcp2au55a24qzjphdfseqc09jn7f9jmjkfrchvrq73src6
+  - &testing age17j76c07mzuw3pp5ypg52zj56vecww3a4gzmhz3p35hxy4ahlnenqua86ms
+  - &theorderingmachine age1dujf55uzev2nnpq6c2drn0e8pmpxay22qqfsavwaxqakwn9se5hsputgx4
+  - &zimeg age1exgt6neyetzrg9wgf4vxqmc93sjwqmqm3283hp5zx4m9hy9dpunqh3q4xj
+creation_rules:
+  - path_regex: vault.release.json
+    key_groups:
+      - age:
+          - *release
+          - *theorderingmachine
+          - *zimeg
+  - path_regex: vault.testing.json
+    key_groups:
+      - age:
+          - *testing
+          - *theorderingmachine
+          - *zimeg

@@ -46,7 +46,7 @@ jobs:
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
       - name: Create snapshots
-        run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yml
+        run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Mark logged changes
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -161,14 +161,11 @@ jobs:
       - name: Install a flaked Nix
         uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
       - name: Create releases
-        run: nix develop .#quill -c goreleaser release --clean --config .goreleaser.release.yml
+        run: |
+          nix develop .#tom -c sops exec-env vault.release.json 'goreleaser release --clean --config .goreleaser.release.yaml'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
-          MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
-          MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
-          MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
-          MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_RELEASE_KEY }}
       - name: Include documentation
         run: |
           gh release upload "$VERSION" "CHANGELOG.md#etime_${VERSION}_CHANGELOG.md"

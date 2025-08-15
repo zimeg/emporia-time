@@ -9,12 +9,7 @@ vendors.json
 
 # Environment settings
 .direnv
-.env
 .path
-
-# Release artifacts
-.gon.hcl
-certificate.p12
 
 # Test remnants
 coverage

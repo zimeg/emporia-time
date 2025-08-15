@@ -56,7 +56,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
              -f "ref=$GH_REF"
         env:
           GH_REF: ${{ github.head_ref }}
@@ -68,7 +68,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/release.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/release.yaml/dispatches" \
              -f "ref=$GH_REF"
         env:
           GH_REF: ${{ github.head_ref }}
@@ -109,7 +109,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
              -f "ref=main"
         env:
           GH_REPO: ${{ github.repository }}
@@ -120,7 +120,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/release.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/release.yaml/dispatches" \
              -f "ref=main"
         env:
           GH_REPO: ${{ github.repository }}
@@ -170,7 +170,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
              -f "ref=update"
         env:
           GH_REPO: ${{ github.repository }}
@@ -206,7 +206,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
              -f "ref=main"
         env:
           GH_REPO: ${{ github.repository }}
@@ -218,7 +218,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/release.yml/dispatches" \
+            "/repos/$GH_REPO/actions/workflows/release.yaml/dispatches" \
              -f "ref=main"
         env:
           GH_REPO: ${{ github.repository }}

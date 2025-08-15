@@ -19,10 +19,10 @@ coverage: build
 	go-junit-report -in coverage/results.out -set-exit-code > coverage/coverage.xml
 
 staging: clean
-	goreleaser build --snapshot --config .goreleaser.staging.yml
+	goreleaser build --snapshot --config .goreleaser.staging.yaml
 
 release: clean
-	goreleaser build --snapshot --config .goreleaser.release.yml
+	goreleaser build --snapshot --config .goreleaser.release.yaml
 
 clean:
 	rm -f $(BIN)
