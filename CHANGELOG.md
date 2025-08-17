@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][changelog], and this project adheres
 to [Semantic Versioning][semver].
 
-## [Unreleased]
+## [1.1.3] - 2025-08-16
 
 ### Added
 
@@ -236,7 +236,8 @@ to [Semantic Versioning][semver].
 
 <!-- a collection of releases -->
 
-[Unreleased]: https://github.com/zimeg/emporia-time/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/zimeg/emporia-time/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/zimeg/emporia-time/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/zimeg/emporia-time/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/zimeg/emporia-time/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/zimeg/emporia-time/compare/v1.0.2...v1.1.0
