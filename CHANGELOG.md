@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog][changelog], and this project adheres
 to [Semantic Versioning][semver].
 
+## [Unreleased]
+
+### Maintenance
+
+- Group updates to the authentication configuration providers
+
 ## [1.1.3] - 2025-08-16
 
 ### Added
