@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.31.7
 	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.57.4
 	github.com/charmbracelet/log v0.4.2
-	github.com/spf13/afero v1.14.0
+	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.11.1
 )
 
@@ -46,6 +46,6 @@ require (
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/term v0.1.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
