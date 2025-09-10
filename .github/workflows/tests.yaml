@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
+        uses: DeterminateSystems/nix-installer-action@786fff0690178f1234e4e1fe9b536e94f5433196 # v20
       - name: Install dependencies
         run: nix develop -c go get
       - name: Check formatting
@@ -58,7 +58,7 @@ jobs:
         run: uname -a | grep NixOS
       - name: Install a flaked Nix
         if: steps.nixos.outcome != 'success'
-        uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
+        uses: DeterminateSystems/nix-installer-action@786fff0690178f1234e4e1fe9b536e94f5433196 # v20
       - name: Clean the environment
         run: nix develop -c make clean
       - name: Sleep for a short while
