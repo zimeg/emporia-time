@@ -72,12 +72,12 @@ func Unwrap(in error) (err Err) {
 			} else {
 				err.Source = detail
 			}
-			return
+			return err
 		default:
 			err = New(errorCode(detail))
 		}
 	}
-	return
+	return err
 }
 
 // Wrap sets the error source of an error
