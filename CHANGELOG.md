@@ -10,6 +10,7 @@ to [Semantic Versioning][semver].
 ### Maintenance
 
 - Group updates to the authentication configuration providers
+- Use variables in function return statements to be more clear
 
 ## [1.1.3] - 2025-08-16
 
