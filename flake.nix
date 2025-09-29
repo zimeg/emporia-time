@@ -56,7 +56,7 @@
             "-X main.version=${version}"
           ];
           doCheck = true;
-          vendorHash = "sha256-gxU330Ud43ghwKQzzHM9cbf36tJnWfgMqA/ngkhFJSA=";
+          vendorHash = "sha256-gu8uXYFaZIgTRr/+Is4IsYMjiyU/NUjz5lPkkTaB1lM=";
           nativeBuildInputs = [
             pkgs.installShellFiles
           ];
