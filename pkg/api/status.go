@@ -24,5 +24,5 @@ func (emp *Emporia) Status() (online bool, err error) {
 		}
 	}()
 	online = resp.StatusCode == 403
-	return
+	return online, nil
 }
