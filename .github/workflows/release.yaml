@@ -48,31 +48,31 @@ jobs:
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Mark logged changes
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_CHANGELOG.md
           path: ./CHANGELOG.md
           if-no-files-found: error
       - name: Upload the checksums
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_checksums.txt
           path: ./dist/etime_${{ env.version }}_checksums.txt
           if-no-files-found: error
       - name: Enscribe legal letter
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_LICENSE
           path: ./LICENSE
           if-no-files-found: error
       - name: Read the manual pages
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_man.1
           path: ./etime.1
           if-no-files-found: error
       - name: Write welcoming markdown
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_README.md
           path: ./README.md
@@ -115,7 +115,7 @@ jobs:
           path: ./dist
           key: snapshots-${{ github.sha }}
       - name: Upload a snapshot
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: etime_${{ env.version }}_${{ matrix.target }}
           path: ./dist/etime_${{ env.version }}_${{ matrix.target }}
