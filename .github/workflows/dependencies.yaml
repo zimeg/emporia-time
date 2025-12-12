@@ -40,6 +40,7 @@ jobs:
         if: steps.metadata.outputs.package-ecosystem == 'go_modules'
         run: |
           nix develop -c go mod tidy
+          nix develop -c go get -t -u
           sed -i 's|vendorHash = \"[^"]*\";|vendorHash = \"\";|' flake.nix
           nix run .# --log-format internal-json 2&> vendors.json || true
           VENDORHASH="$(grep -o 'sha256-[^ ]*=' vendors.json | tail -n 1)"

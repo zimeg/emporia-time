@@ -11,6 +11,7 @@ to [Semantic Versioning][semver].
 
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
+- Update indirect dependencies alongside latest package change
 
 ## [1.1.3] - 2025-08-16
 
