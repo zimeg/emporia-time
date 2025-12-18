@@ -14,6 +14,7 @@ to [Semantic Versioning][semver].
 - Update indirect dependencies alongside latest package change
 - Avoid erroring test retries with repeated packaging updates
 - Remove prior indirect dependencies after updating packaging
+- Replace a deprecated test result measurement with the recent
 
 ## [1.1.3] - 2025-08-16
 
