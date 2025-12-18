@@ -39,8 +39,8 @@ jobs:
       - name: Update hashed dependencies
         if: steps.metadata.outputs.package-ecosystem == 'go_modules'
         run: |
-          nix develop -c go mod tidy
           nix develop -c go get -t -u
+          nix develop -c go mod tidy
           sed -i 's|vendorHash = \"[^"]*\";|vendorHash = \"\";|' flake.nix
           nix run .# --log-format internal-json 2&> vendors.json || true
           VENDORHASH="$(grep -o 'sha256-[^ ]*=' vendors.json | tail -n 1)"

@@ -13,6 +13,7 @@ to [Semantic Versioning][semver].
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
 - Avoid erroring test retries with repeated packaging updates
+- Remove prior indirect dependencies after updating packaging
 
 ## [1.1.3] - 2025-08-16
 
