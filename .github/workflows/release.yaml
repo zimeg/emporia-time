@@ -78,7 +78,7 @@ jobs:
           path: ./README.md
           if-no-files-found: error
       - name: Cache the moments
-        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         if: always()
         with:
           path: ./dist
@@ -110,7 +110,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Restore cached snapshots
-        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: ./dist
           key: snapshots-${{ github.sha }}
