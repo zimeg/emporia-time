@@ -8,6 +8,7 @@ to [Semantic Versioning][semver].
 ## [Unreleased]
 
 ### Maintenance
+- Migrate nix dependent workflows to use self hosted runner machines
 
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
