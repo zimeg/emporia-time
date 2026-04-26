@@ -145,7 +145,7 @@ jobs:
     name: Distribute a release
     needs: version
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    runs-on: self-hosted
+    runs-on: tim
     permissions:
       contents: write
     env:
