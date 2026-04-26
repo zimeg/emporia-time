@@ -10,6 +10,7 @@ to [Semantic Versioning][semver].
 ### Maintenance
 
 - Group updates to the authentication configuration providers
+- Run Nix-based automation on self-hosted runners without installer setup
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
 - Avoid erroring test retries with repeated packaging updates
