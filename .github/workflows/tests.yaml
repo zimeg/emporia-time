@@ -23,11 +23,17 @@ jobs:
         run: nix develop -c make build
       - name: Run tests
         run: nix develop -c make coverage
+      - name: Locate Codecov
+        id: codecov
+        run: echo "binary=$(command -v codecovcli)" >> "$GITHUB_OUTPUT"
       - name: Upload coverage results
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
+          binary: ${{ steps.codecov.outputs.binary }}
           disable_search: true
           files: coverage/coverage.txt
+          override_commit: ${{ github.sha }}
+          slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: coverage
           verbose: true
@@ -35,8 +41,11 @@ jobs:
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
+          binary: ${{ steps.codecov.outputs.binary }}
           disable_search: true
           files: coverage/coverage.xml
+          override_commit: ${{ github.sha }}
+          slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
           verbose: true
