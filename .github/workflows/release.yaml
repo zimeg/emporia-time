@@ -32,7 +32,7 @@ jobs:
     name: Save a snapshot
     needs: version
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       contents: read
     env:
@@ -86,7 +86,7 @@ jobs:
     needs:
       - snapshot
       - version
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       contents: read
     env:

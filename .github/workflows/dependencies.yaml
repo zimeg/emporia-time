@@ -9,7 +9,7 @@ jobs:
   dependabot:
     name: Merge automatic pull requests
     if: github.actor == 'dependabot[bot]'
-    runs-on: self-hosted
+    runs-on: tom
     timeout-minutes: 12
     permissions:
       actions: write
@@ -126,7 +126,7 @@ jobs:
   flake:
     name: Freeze the latest lockfile
     if: github.event_name != 'pull_request'
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       actions: write
       contents: write

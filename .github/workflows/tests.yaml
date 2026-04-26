@@ -6,7 +6,7 @@ on:
 jobs:
   checkup:
     name: Inspect the code health
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       contents: read
     steps:
@@ -52,7 +52,7 @@ jobs:
   measurement:
     name: Monitor energy usage
     needs: checkup
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       contents: read
     steps:
