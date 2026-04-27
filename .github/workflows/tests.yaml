@@ -6,7 +6,7 @@ on:
 jobs:
   checkup:
     name: Inspect the code health
-    runs-on: ubuntu-latest
+    runs-on: tom
     permissions:
       contents: read
     steps:
@@ -15,8 +15,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
       - name: Install dependencies
         run: nix develop -c go get
       - name: Check formatting
@@ -25,11 +23,17 @@ jobs:
         run: nix develop -c make build
       - name: Run tests
         run: nix develop -c make coverage
+      - name: Locate Codecov
+        id: codecov
+        run: echo "binary=$(command -v codecovcli)" >> "$GITHUB_OUTPUT"
       - name: Upload coverage results
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
+          binary: ${{ steps.codecov.outputs.binary }}
           disable_search: true
           files: coverage/coverage.txt
+          override_commit: ${{ github.sha }}
+          slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: coverage
           verbose: true
@@ -37,15 +41,18 @@ jobs:
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
+          binary: ${{ steps.codecov.outputs.binary }}
           disable_search: true
           files: coverage/coverage.xml
+          override_commit: ${{ github.sha }}
+          slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
           verbose: true
   measurement:
     name: Monitor energy usage
     needs: checkup
-    runs-on: self-hosted
+    runs-on: tom
     permissions:
       contents: read
     steps:
@@ -54,13 +61,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Reflect existing Nix
-        id: nixos
-        continue-on-error: true
-        run: uname -a | grep NixOS
-      - name: Install a flaked Nix
-        if: steps.nixos.outcome != 'success'
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
       - name: Clean the environment
         run: nix develop -c make clean
       - name: Sleep for a short while

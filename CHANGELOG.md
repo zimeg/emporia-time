@@ -16,6 +16,7 @@ to [Semantic Versioning][semver].
 - Remove prior indirect dependencies after updating packaging
 - Replace a deprecated test result measurement with the recent
 - Detect the host platform for nix builds with current tooling
+- Package releases and other checks on managed infrastructure
 
 ## [1.1.3] - 2025-08-16
 

@@ -32,7 +32,7 @@ jobs:
     name: Save a snapshot
     needs: version
     if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
-    runs-on: ubuntu-latest
+    runs-on: tom
     permissions:
       contents: read
     env:
@@ -43,8 +43,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
       - name: Create snapshots
         run: nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Mark logged changes
@@ -88,7 +86,7 @@ jobs:
     needs:
       - snapshot
       - version
-    runs-on: ubuntu-latest
+    runs-on: tom
     permissions:
       contents: read
     env:
@@ -147,7 +145,7 @@ jobs:
     name: Distribute a release
     needs: version
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    runs-on: macos-latest
+    runs-on: tim
     permissions:
       contents: write
     env:
@@ -158,8 +156,6 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Install a flaked Nix
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
       - name: Create releases
         run: |
           nix develop .#tom -c sops exec-env vault.release.json 'goreleaser release --clean --config .goreleaser.release.yaml'
