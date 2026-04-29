@@ -48,53 +48,26 @@ jobs:
           git push -u origin "$GH_REF"
         env:
           GH_REF: ${{ github.head_ref }}
-      - name: Start the tests
+      - name: Inspect the code health
         run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
-             -f "ref=$GH_REF"
-        env:
-          GH_REF: ${{ github.head_ref }}
-          GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
-      - name: Take a snapshot
+          nix develop -c go get
+          nix develop -c make check
+          nix develop -c make build
+          nix develop -c make coverage
+      - name: Monitor energy usage
         run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/release.yaml/dispatches" \
-             -f "ref=$GH_REF"
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 4'
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 12'
+          set +e
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# dream'
+          STATUS=$?
+          echo $STATUS
+          [ "$STATUS" -eq 127 ] || exit 1
         env:
-          GH_REF: ${{ github.head_ref }}
-          GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
-      - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@9312864dfbc9fd208e9c0417843430751c042800 # v1.7.0
-        with:
-          check-name: "Inspect the code health"
-          ref: ${{ github.head_ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-      - name: Wait for a testing benchmark
-        uses: lewagon/wait-on-check-action@9312864dfbc9fd208e9c0417843430751c042800 # v1.7.0
-        with:
-          check-name: "Monitor energy usage"
-          ref: ${{ github.head_ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          allowed-conclusions: success
-      - name: Wait for packaging to pass
-        uses: lewagon/wait-on-check-action@9312864dfbc9fd208e9c0417843430751c042800 # v1.7.0
-        with:
-          check-name: "Save a snapshot"
-          ref: ${{ github.head_ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          allowed-conclusions: success
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}
+      - name: Save a snapshot
+        run: |
+          nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Merge requests from the kind dependabot
         if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: gh pr merge --auto --squash "$PR_URL"
@@ -161,35 +134,29 @@ jobs:
           git switch --force-create update origin/main
           git commit --all --message "chore(deps): automatic version bump to the most recent packages"
           git push -f origin update
-      - name: Start the tests
+      - name: Inspect the code health
         if: steps.diff.outputs.changed == 'true'
         run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GH_REPO/actions/workflows/tests.yaml/dispatches" \
-             -f "ref=update"
+          nix develop -c go get
+          nix develop -c make check
+          nix develop -c make build
+          nix develop -c make coverage
+      - name: Monitor energy usage
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 4'
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# sleep 12'
+          set +e
+          nix develop .#tom -c sops exec-env vault.testing.json 'nix run .# dream'
+          STATUS=$?
+          echo $STATUS
+          [ "$STATUS" -eq 127 ] || exit 1
         env:
-          GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
-      - name: Wait for tests to succeed
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}
+      - name: Save a snapshot
         if: steps.diff.outputs.changed == 'true'
-        uses: lewagon/wait-on-check-action@9312864dfbc9fd208e9c0417843430751c042800 # v1.7.0
-        with:
-          check-name: "Inspect the code health"
-          ref: update
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-      - name: Wait for a testing benchmark
-        if: steps.diff.outputs.changed == 'true'
-        uses: lewagon/wait-on-check-action@9312864dfbc9fd208e9c0417843430751c042800 # v1.7.0
-        with:
-          check-regexp: "Monitor energy usage"
-          ref: update
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          allowed-conclusions: success
+        run: |
+          nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Save changed version
         if: steps.diff.outputs.changed == 'true'
         run: |

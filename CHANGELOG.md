@@ -17,6 +17,7 @@ to [Semantic Versioning][semver].
 - Replace a deprecated test result measurement with the recent
 - Detect the host platform for nix builds with current tooling
 - Package releases and other checks on managed infrastructure
+- Test updates to dependencies inline to avoid multiple runner
 
 ## [1.1.3] - 2025-08-16
 
