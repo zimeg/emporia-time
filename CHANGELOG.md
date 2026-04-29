@@ -9,6 +9,7 @@ to [Semantic Versioning][semver].
 
 ### Maintenance
 
+- Test dependency updates inline to avoid overhead of multiple pending runner at once.
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
