@@ -9,7 +9,6 @@ to [Semantic Versioning][semver].
 
 ### Maintenance
 
-- Test dependency updates inline to avoid overhead of multiple pending runner at once.
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
@@ -18,6 +17,7 @@ to [Semantic Versioning][semver].
 - Replace a deprecated test result measurement with the recent
 - Detect the host platform for nix builds with current tooling
 - Package releases and other checks on managed infrastructure
+- Test updates to dependencies inline to avoid multiple runner
 
 ## [1.1.3] - 2025-08-16
 

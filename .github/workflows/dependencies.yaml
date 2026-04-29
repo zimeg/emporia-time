@@ -153,6 +153,10 @@ jobs:
           [ "$STATUS" -eq 127 ] || exit 1
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_TESTING_KEY }}
+      - name: Save a snapshot
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          nix develop -c goreleaser release --clean --snapshot --skip=publish --config .goreleaser.staging.yaml
       - name: Save changed version
         if: steps.diff.outputs.changed == 'true'
         run: |
