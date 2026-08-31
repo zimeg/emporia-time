@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.33.1
-	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.69.1
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.70.0
 	github.com/charmbracelet/log v1.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.12.1
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/xo/terminfo v1.0.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/exp v0.0.0-20260820142414-ca536658362e // indirect
+	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 	golang.org/x/text v0.41.0 // indirect
