@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.33.6
-	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.74.1
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.75.0
 	github.com/charmbracelet/log v1.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.12.1
@@ -36,7 +36,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.1 // indirect
-	github.com/mattn/go-colorable v0.1.15 // indirect
+	github.com/mattn/go-colorable v0.1.16 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/mattn/go-runewidth v0.0.30 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
@@ -45,7 +45,7 @@ require (
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/xo/terminfo v1.2.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba // indirect
+	golang.org/x/exp v0.0.0-20261005173118-76772065c9b0 // indirect
 	golang.org/x/sys v0.48.0 // indirect
 	golang.org/x/term v0.46.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
