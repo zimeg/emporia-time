@@ -9,6 +9,7 @@ to [Semantic Versioning][semver].
 
 ### Maintenance
 
+- Preserve default error wrapper checks when adding test helpers
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
