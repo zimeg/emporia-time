@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go-v2/config v1.33.9
-	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.75.3
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider v1.75.4
 	github.com/charmbracelet/log v1.0.0
 	github.com/spf13/afero v1.15.0
 	github.com/stretchr/testify v1.12.1
