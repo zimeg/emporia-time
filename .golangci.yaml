@@ -15,7 +15,7 @@ linters:
     - wrapcheck
   settings:
     wrapcheck:
-      ignore-sigs:
+      extra-ignore-sigs:
         - "func (github.com/stretchr/testify/mock.Arguments).Error(index int) error"
 formatters:
   enable:
