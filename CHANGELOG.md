@@ -9,7 +9,6 @@ to [Semantic Versioning][semver].
 
 ### Maintenance
 
-- Preserve default error wrapper checks when adding test helpers
 - Group updates to the authentication configuration providers
 - Use variables in function return statements to be more clear
 - Update indirect dependencies alongside latest package change
@@ -20,6 +19,7 @@ to [Semantic Versioning][semver].
 - Package releases and other checks on managed infrastructure
 - Test updates to dependencies inline to avoid multiple runner
 - Checkout code before test updates to CI script dependencies
+- Preserve default error wrapper checks for added test helpers
 
 ## [1.1.3] - 2025-08-16
 
